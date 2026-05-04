@@ -110,13 +110,108 @@
         .wa-badge { position: absolute; top: -5px; right: -5px; background: #ff3b30; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; border: 2px solid #fff; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        /* ===== MEGA PROMO MODAL (CENTER) ===== */
-        .promo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13,27,42,0.92); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px); padding: 20px; }
-        .promo-card { background: #fff; color: var(--nv); width: 100%; max-width: 1200px; height: 90vh; border-radius: 40px; overflow-y: auto; position: relative; box-shadow: 0 50px 120px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes modalPop { from { transform: translateY(50px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        /* ===== MEGA PROMO MODAL — PREMIUM SPLIT DESIGN ===== */
+        .promo-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,15,30,0.95); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); padding: 20px; }
+        @keyframes modalPop { from { transform: translateY(60px) scale(0.92); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes shimmer { 0%,100% { opacity:.06; } 50% { opacity:.13; } }
 
-        .promo-card .close-promo { position: absolute; top: 25px; right: 25px; color: #fff; cursor: pointer; font-size: 24px; transition: 0.3s; z-index: 100; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .promo-card .close-promo:hover { background: var(--or); color: #fff; transform: rotate(90deg); }
+        .promo-card {
+            display: grid; grid-template-columns: 340px 1fr;
+            width: 100%; max-width: 1100px; max-height: 88vh;
+            border-radius: 28px; overflow: hidden; position: relative;
+            box-shadow: 0 60px 140px rgba(0,0,0,0.6), 0 0 0 1px rgba(244,124,32,0.3);
+            animation: modalPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* LEFT PANEL */
+        .promo-left {
+            background: linear-gradient(160deg, #0d1b2a 0%, #1a3050 60%, #0d1b2a 100%);
+            padding: 50px 36px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; overflow: hidden;
+        }
+        .promo-left::before {
+            content:''; position:absolute; top:-80px; left:-80px; width:320px; height:320px;
+            background: radial-gradient(circle, rgba(244,124,32,0.25) 0%, transparent 70%);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+        .promo-left::after {
+            content:''; position:absolute; bottom:-60px; right:-60px; width:240px; height:240px;
+            background: radial-gradient(circle, rgba(244,124,32,0.15) 0%, transparent 70%);
+            animation: shimmer 4s ease-in-out infinite reverse;
+        }
+        .promo-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(244,124,32,0.15); border: 1px solid rgba(244,124,32,0.4);
+            color: var(--or); font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+            text-transform: uppercase; padding: 7px 14px; border-radius: 50px;
+            width: fit-content; margin-bottom: 28px; position: relative; z-index:2;
+        }
+        .promo-badge span { width:6px; height:6px; background:var(--or); border-radius:50%; animation: pulse 1.5s infinite; }
+        .promo-left h2 { font-size: 30px; font-weight: 900; color: #fff; line-height: 1.25; margin-bottom: 16px; position: relative; z-index:2; }
+        .promo-left h2 em { color: var(--or); font-style: normal; display:block; }
+        .promo-left p { font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.75; margin-bottom: 30px; position: relative; z-index:2; }
+        .promo-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; z-index:2; }
+        .promo-stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 14px; text-align: center; }
+        .promo-stat strong { display:block; font-size: 20px; font-weight: 900; color: var(--or); }
+        .promo-stat span { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+        .promo-trust { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.4); font-size:11px; margin-top:24px; position:relative; z-index:2; }
+        .promo-trust i { color: var(--or); }
+
+        /* RIGHT PANEL */
+        .promo-right {
+            background: #f7f8fa; overflow-y: auto; position: relative;
+            scrollbar-width: thin; scrollbar-color: var(--or) #eee;
+        }
+        .promo-right::-webkit-scrollbar { width: 6px; }
+        .promo-right::-webkit-scrollbar-track { background: #eee; }
+        .promo-right::-webkit-scrollbar-thumb { background: var(--or); border-radius: 10px; }
+        .promo-right-inner { padding: 36px 32px; }
+
+        .promo-close-btn {
+            position: absolute; top: 18px; right: 18px; z-index: 100;
+            background: rgba(13,27,42,0.08); border: none; width: 36px; height: 36px;
+            border-radius: 50%; display: flex; align-items:center; justify-content:center;
+            cursor: pointer; font-size: 16px; color: var(--nv); transition: all 0.3s;
+        }
+        .promo-close-btn:hover { background: var(--or); color: #fff; transform: rotate(90deg); }
+
+        /* PACKAGE CARDS inside popup */
+        .promo-pkg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+        .promo-pkg { background:#fff; border:1.5px solid #e8ecf0; border-radius:18px; padding:20px 18px; position:relative; cursor:pointer; transition: all 0.3s; display:flex; flex-direction:column; }
+        .promo-pkg:hover { border-color: var(--or); box-shadow: 0 12px 35px rgba(244,124,32,0.12); transform: translateY(-3px); }
+        .promo-pkg.pop { border-color: var(--or); box-shadow: 0 8px 25px rgba(244,124,32,0.15); }
+        .promo-pkg-tag { position:absolute; top:12px; right:12px; background:var(--of); color:var(--nv); font-size:9px; font-weight:800; padding:3px 10px; border-radius:50px; text-transform:uppercase; letter-spacing:1px; }
+        .promo-pkg.pop .promo-pkg-tag { background:var(--or); color:#fff; }
+        .promo-pkg h4 { font-size:14px; font-weight:800; color:var(--nv); margin-bottom:4px; }
+        .promo-pkg-price { font-size:20px; font-weight:900; color:var(--nv); margin-bottom:12px; }
+        .promo-pkg-price span { font-size:11px; color:var(--gy); font-weight:500; }
+        .promo-pkg ul { list-style:none; padding:0; margin:0 0 16px; flex:1; }
+        .promo-pkg ul li { font-size:11.5px; color:var(--gy); margin-bottom:6px; display:flex; align-items:center; gap:7px; }
+        .promo-pkg ul li i { color:var(--or); font-size:9px; }
+        .promo-pkg-btn { background:var(--nv); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer; width:100%; transition:all 0.3s; }
+        .promo-pkg-btn.or { background:var(--or); }
+        .promo-pkg-btn:hover { background:#000; }
+
+        .promo-toggle { display:flex; background:#fff; border-radius:50px; padding:5px; border:1px solid #e8ecf0; margin-bottom:20px; width:fit-content; }
+        .promo-toggle-btn { padding:8px 22px; border:none; background:transparent; font-weight:700; font-size:12.5px; color:var(--gy); cursor:pointer; border-radius:50px; transition:all 0.3s; }
+        .promo-toggle-btn.active { background:var(--nv); color:#fff; box-shadow:0 4px 12px rgba(13,27,42,0.2); }
+
+        .promo-section-title { font-size:11px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--gy); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+        .promo-section-title::before { content:''; width:20px; height:2px; background:var(--or); border-radius:2px; }
+
+        .promo-addons { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+        .promo-addon { background:#fff; border:1.5px solid #e8ecf0; border-radius:14px; padding:14px 12px; text-align:center; cursor:pointer; transition:all 0.3s; }
+        .promo-addon:hover { border-color:var(--or); }
+        .promo-addon h5 { font-size:12px; color:var(--nv); margin-bottom:4px; }
+        .promo-addon-price { font-size:14px; font-weight:800; color:var(--or); }
+
+        @media(max-width:820px){
+            .promo-card { grid-template-columns: 1fr; max-height: 92vh; }
+            .promo-left { padding: 30px 24px; }
+            .promo-stats { grid-template-columns: repeat(4,1fr); }
+            .promo-pkg-grid { grid-template-columns: 1fr; }
+            .promo-addons { grid-template-columns: 1fr 1fr; }
+        }
 
         /* MIGRATE SERVICES CSS */
         .toggle-btn { padding: 12px 35px; border: none; background: transparent; color: var(--gy); font-weight: 700; font-size: 15px; cursor: pointer; border-radius: 50px; transition: all 0.3s; }
@@ -188,167 +283,154 @@
 </head>
 <body>
 
-<!-- MEGA PROMO MODAL -->
+<!-- MEGA PROMO MODAL — HOME PAGE ONLY -->
+@if(request()->routeIs('home'))
 <div class="promo-overlay" id="megaPromo">
-    <div class="promo-card" style="padding: 0;">
-        <span class="close-promo" onclick="closePromo()"><i class="fas fa-times"></i></span>
-        
-        <!-- INNER HERO IN MODAL -->
-        <section style="background: var(--nv); padding: 80px 40px; color: #fff; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
-            <div style="position: relative; z-index: 2; text-align: center;">
-                <div class="lbl c" style="color: var(--or);">Special Offer</div>
-                <h2 style="color: #fff; margin-bottom: 10px; font-size: 36px;">Choose Your <span style="color: var(--or);">Tracking Package</span></h2>
-                <p style="color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto; font-size: 15px;">Our Services, Our Best  Reliable Security for Your Vehicle.</p>
+    <!-- LEFT PANEL — Branding -->
+    <div class="promo-left">
+        <div>
+            <div class="promo-badge"><span></span> Special Offer — 2025</div>
+            <h2>Choose Your<em>Tracking Package</em></h2>
+            <p>Pakistan's most trusted GPS vehicle tracking since 2009. Real-time monitoring, 24/7 support — your vehicle's safety is our priority.</p>
+            <div class="promo-stats">
+                <div class="promo-stat"><strong>15+</strong><span>Years Active</span></div>
+                <div class="promo-stat"><strong>5000+</strong><span>Vehicles</span></div>
+                <div class="promo-stat"><strong>24/7</strong><span>Monitoring</span></div>
+                <div class="promo-stat"><strong>100%</strong><span>Secure</span></div>
             </div>
-        </section>
+            <div class="promo-trust"><i class="fas fa-shield-alt"></i> ESS-TRACK by ESSPL — Certified & Trusted</div>
+        </div>
+        <a href="{{ route('services') }}" onclick="closePromo()" style="margin-top:28px; display:inline-flex; align-items:center; gap:8px; background:var(--or); color:#fff; padding:13px 24px; border-radius:12px; font-weight:700; font-size:13px; text-decoration:none; transition:all 0.3s; position:relative; z-index:2;">
+            View All Packages <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
 
-        <div style="padding: 50px 40px; background: #f8f9fa;">
-            <!-- Toggle Switch -->
-            <div style="display: flex; justify-content: center; margin-bottom: 40px;">
-                <div style="background: #fff; padding: 8px; border-radius: 50px; display: flex; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;">
-                    <button id="modalRentalBtn" class="toggle-btn active" onclick="showModalPackages('rental')">Rental Packages</button>
-                    <button id="modalDeviceBtn" class="toggle-btn" onclick="showModalPackages('device')">With Device Packages</button>
-                </div>
+    <!-- RIGHT PANEL — Packages -->
+    <div class="promo-right">
+        <button class="promo-close-btn" onclick="closePromo()"><i class="fas fa-times"></i></button>
+        <div class="promo-right-inner">
+
+            <!-- Toggle -->
+            <div class="promo-toggle">
+                <button id="promoRentalBtn" class="promo-toggle-btn active" onclick="showPromoPackages('rental')">Rental</button>
+                <button id="promoDeviceBtn" class="promo-toggle-btn" onclick="showPromoPackages('device')">With Device</button>
             </div>
 
-            <!-- RENTAL PACKAGES GRID -->
-            <div id="modalRentalGrid" class="pkg-grid">
-                <!-- Silver -->
-                <div class="pkg-card" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-badge">Starter</div>
-                    <div class="pkg-card-head">
-                        <h3>Basic / Silver</h3>
-                        <div class="pkg-price">PKR 14,500<span>/Total</span></div>
+            <!-- RENTAL GRID -->
+            <div id="promoRentalGrid">
+                <p class="promo-section-title">Rental Packages</p>
+                <div class="promo-pkg-grid">
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Starter</div>
+                        <h4>Basic / Silver</h4>
+                        <div class="promo-pkg-price">PKR 14,500<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> 24/7 Control Room</li>
+                            <li><i class="fas fa-check"></i> Geo Fence Alerts</li>
+                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
+                            <li><i class="fas fa-check"></i> Data Plan Included</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Basic / Silver Rental')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-check"></i> 24/7 Control Room Monitoring</li>
-                        <li><i class="fas fa-check"></i> Call on Geo Fence Alerts</li>
-                        <li><i class="fas fa-check"></i> Vehicle Recovery Help</li>
-                        <li><i class="fas fa-check"></i> Remote Vehicle Shutdown</li>
-                        <li><i class="fas fa-check"></i> Data plan included</li>
-                    </ul>
-                    <button class="book-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Basic / Silver Rental')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-
-                <!-- Gold -->
-                <div class="pkg-card popular" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-badge">Most Popular</div>
-                    <div class="pkg-card-head">
-                        <h3>Standard / Gold</h3>
-                        <div class="pkg-price">PKR 18,500<span>/Total</span></div>
+                    <div class="promo-pkg pop" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Most Popular</div>
+                        <h4>Standard / Gold</h4>
+                        <div class="promo-pkg-price">PKR 18,500<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-plus"></i> All Silver Features</li>
+                            <li><i class="fas fa-check"></i> European Software</li>
+                            <li><i class="fas fa-check"></i> Live Map Status</li>
+                            <li><i class="fas fa-check"></i> Mobile App FREE</li>
+                        </ul>
+                        <button class="promo-pkg-btn or" onclick="event.stopPropagation(); closePromo(); openBookingModal('Standard / Gold Rental')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-plus"></i> All Silver Features</li>
-                        <li><i class="fas fa-check"></i> European Tech Software</li>
-                        <li><i class="fas fa-check"></i> Live Status on Map</li>
-                        <li><i class="fas fa-check"></i> Engine ON/OFF Alerts</li>
-                        <li><i class="fas fa-check"></i> Mobile App (FREE)</li>
-                    </ul>
-                    <button class="book-btn orange" onclick="event.stopPropagation(); closePromo(); openBookingModal('Standard / Gold Rental')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-
-                <!-- Platinum -->
-                <div class="pkg-card" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-badge">Advanced</div>
-                    <div class="pkg-card-head">
-                        <h3>Premium / Platinum</h3>
-                        <div class="pkg-price">PKR 35,000<span>/Total</span></div>
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Advanced</div>
+                        <h4>Premium / Platinum</h4>
+                        <div class="promo-pkg-price">PKR 35,000<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-plus"></i> All Gold Features</li>
+                            <li><i class="fas fa-check"></i> Auto Calls Alert</li>
+                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
+                            <li><i class="fas fa-check"></i> Maintenance Alerts</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Premium / Platinum Rental')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-plus"></i> All Gold Features</li>
-                        <li><i class="fas fa-check"></i> Auto Calls Alert (Bonnet/Engine)</li>
-                        <li><i class="fas fa-check"></i> Customer Access Shutdown</li>
-                        <li><i class="fas fa-check"></i> Maintenance Reminders</li>
-                        <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
-                    </ul>
-                    <button class="book-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Premium / Platinum Rental')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-
-                <!-- Corporate -->
-                <div class="pkg-card" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-badge">Bulk Fleet</div>
-                    <div class="pkg-card-head">
-                        <h3>Corporate Fleet</h3>
-                        <div class="pkg-price">PKR 18,500<span>/Vehicle</span></div>
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Bulk Fleet</div>
+                        <h4>Corporate Fleet</h4>
+                        <div class="promo-pkg-price">PKR 18,500<span>/Vehicle</span></div>
+                        <ul>
+                            <li><i class="fas fa-snowflake"></i> Reefer Trucks</li>
+                            <li><i class="fas fa-check"></i> Temp Monitoring</li>
+                            <li><i class="fas fa-check"></i> Custom Dashboards</li>
+                            <li><i class="fas fa-check"></i> Staff Training</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Corporate Fleet Rental')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-snowflake"></i> Reefer Truck Solution</li>
-                        <li><i class="fas fa-thermometer-half"></i> Temp Monitoring</li>
-                        <li><i class="fas fa-check"></i> SLA-Based Support</li>
-                        <li><i class="fas fa-check"></i> Custom Dashboards</li>
-                        <li><i class="fas fa-check"></i> Staff Training</li>
-                    </ul>
-                    <button class="book-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Corporate Fleet Rental')">Book Now <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- WITH DEVICE PACKAGES GRID (HIDDEN BY DEFAULT) -->
-            <div id="modalDeviceGrid" class="pkg-grid" style="display: none;">
-                 <!-- Silver Device -->
-                 <div class="pkg-card" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-card-head">
-                        <h3>Basic / Silver</h3>
-                        <div class="pkg-price">PKR 27,000<span>/Total</span></div>
+            <!-- DEVICE GRID -->
+            <div id="promoDeviceGrid" style="display:none;">
+                <p class="promo-section-title">With Device Packages</p>
+                <div class="promo-pkg-grid">
+                    <div class="promo-pkg">
+                        <h4>Basic / Silver</h4>
+                        <div class="promo-pkg-price">PKR 27,000<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Full Device Ownership</li>
+                            <li><i class="fas fa-check"></i> 24/7 Monitoring</li>
+                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Basic / Silver Device')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-check"></i> Full Device Ownership</li>
-                        <li><i class="fas fa-check"></i> 24/7 Monitoring</li>
-                        <li><i class="fas fa-check"></i> Remote Shutdown</li>
-                    </ul>
-                    <button class="book-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Basic / Silver Device')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-
-                <!-- Gold Device -->
-                <div class="pkg-card popular" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-card-head">
-                        <h3>Standard / Gold</h3>
-                        <div class="pkg-price">PKR 31,000<span>/Total</span></div>
+                    <div class="promo-pkg pop">
+                        <h4>Standard / Gold</h4>
+                        <div class="promo-pkg-price">PKR 31,000<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> European Software</li>
+                            <li><i class="fas fa-check"></i> Engine Alerts</li>
+                            <li><i class="fas fa-check"></i> Trip History</li>
+                        </ul>
+                        <button class="promo-pkg-btn or" onclick="closePromo(); openBookingModal('Standard / Gold Device')">Book Now</button>
                     </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-check"></i> European Tech Software</li>
-                        <li><i class="fas fa-check"></i> Engine ON/OFF Alerts</li>
-                        <li><i class="fas fa-check"></i> Trip History</li>
-                    </ul>
-                    <button class="book-btn orange" onclick="event.stopPropagation(); closePromo(); openBookingModal('Standard / Gold Device')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-
-                <!-- Platinum Device -->
-                <div class="pkg-card" style="cursor:pointer" onclick="window.location.href='{{ route('services') }}'">
-                    <div class="pkg-card-head">
-                        <h3>Premium / Platinum</h3>
-                        <div class="pkg-price">PKR 36,500<span>/Total</span></div>
-                    </div>
-                    <ul class="pkg-list">
-                        <li><i class="fas fa-check"></i> Voice Monitoring</li>
-                        <li><i class="fas fa-check"></i> Dedicated Manager</li>
-                        <li><i class="fas fa-check"></i> Access Shutdown</li>
-                    </ul>
-                    <button class="book-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Premium / Platinum Device')">Book Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
-
-            <!-- Add-ons Section -->
-            <div style="margin-top: 60px;">
-                <h4 style="margin-bottom: 30px;">Add-on Devices</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div class="add-on-box" onclick="closePromo(); openBookingModal('Dash Cam Tracker Add-on')">
-                        <h4>Dash Cam</h4>
-                        <div class="add-on-price">PKR 45,000</div>
-                    </div>
-                    <div class="add-on-box" onclick="closePromo(); openBookingModal('AI Dash Cam Add-on')">
-                        <h4>AI Dash Cam</h4>
-                        <div class="add-on-price">PKR 120,000</div>
-                    </div>
-                    <div class="add-on-box" onclick="closePromo(); openBookingModal('Temperature Sensor Add-on')">
-                        <h4>Temp Sensor</h4>
-                        <div class="add-on-price">PKR 6,500</div>
+                    <div class="promo-pkg">
+                        <h4>Premium / Platinum</h4>
+                        <div class="promo-pkg-price">PKR 36,500<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Voice Monitoring</li>
+                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
+                            <li><i class="fas fa-check"></i> Access Shutdown</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Premium / Platinum Device')">Book Now</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Add-ons -->
+            <div style="margin-top:24px;">
+                <p class="promo-section-title">Add-on Devices</p>
+                <div class="promo-addons">
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Dash Cam Tracker Add-on')">
+                        <h5>Dash Cam</h5>
+                        <div class="promo-addon-price">PKR 45,000</div>
+                    </div>
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('AI Dash Cam Add-on')">
+                        <h5>AI Dash Cam</h5>
+                        <div class="promo-addon-price">PKR 120,000</div>
+                    </div>
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Temperature Sensor Add-on')">
+                        <h5>Temp Sensor</h5>
+                        <div class="promo-addon-price">PKR 6,500</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+@endif
 
 
 <div class="topbar">
@@ -1021,24 +1103,27 @@
         document.body.style.overflow = 'auto';
     }
 
-    function showModalPackages(type) {
-        const rentalGrid = document.getElementById('modalRentalGrid');
-        const deviceGrid = document.getElementById('modalDeviceGrid');
-        const rentalBtn = document.getElementById('modalRentalBtn');
-        const deviceBtn = document.getElementById('modalDeviceBtn');
-
+    function showPromoPackages(type) {
+        const rentalGrid = document.getElementById('promoRentalGrid');
+        const deviceGrid = document.getElementById('promoDeviceGrid');
+        const rentalBtn = document.getElementById('promoRentalBtn');
+        const deviceBtn = document.getElementById('promoDeviceBtn');
+        if (!rentalGrid) return;
         if (type === 'rental') {
-            rentalGrid.style.display = 'grid';
+            rentalGrid.style.display = 'block';
             deviceGrid.style.display = 'none';
             rentalBtn.classList.add('active');
             deviceBtn.classList.remove('active');
         } else {
             rentalGrid.style.display = 'none';
-            deviceGrid.style.display = 'grid';
+            deviceGrid.style.display = 'block';
             rentalBtn.classList.remove('active');
             deviceBtn.classList.add('active');
         }
     }
+
+    // Keep old function for compatibility (services page may use it)
+    function showModalPackages(type) { showPromoPackages(type); }
 
     // Booking Modal Logic
     function openBookingModal(pkgName) {
@@ -1197,8 +1282,13 @@
         btn.style.display = window.pageYOffset > 200 ? 'block' : 'none';
     };
 
-    // Auto-open after 1.5 seconds
-    setTimeout(openPromo, 1500);
+    // Auto-open on Home page — 2 seconds after page is ready
+    @if(request()->routeIs('home'))
+    setTimeout(function() {
+        var promo = document.getElementById('megaPromo');
+        if (promo) { openPromo(); }
+    }, 2000);
+    @endif
 </script>
 </body>
 </html>
