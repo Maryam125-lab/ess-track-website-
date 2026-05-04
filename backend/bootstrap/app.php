@@ -14,6 +14,11 @@ if (file_exists(__DIR__ . '/../.env')) {
             putenv("$key=$value");
         }
     }
+} else {
+    // If .env doesn't exist (like on Vercel), copy system env to $_ENV
+    foreach (getenv() as $key => $value) {
+        $_ENV[$key] = $value;
+    }
 }
 
 // Error reporting
