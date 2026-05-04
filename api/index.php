@@ -1,8 +1,9 @@
 <?php
 
-// Check if APP_KEY is set, if not, try to get it from environment
-if (!getenv('APP_KEY') && isset($_ENV['APP_KEY'])) {
-    putenv('APP_KEY=' . $_ENV['APP_KEY']);
+// Force set APP_KEY if not present
+if (!getenv('APP_KEY')) {
+    putenv('APP_KEY=base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=');
+    $_ENV['APP_KEY'] = 'base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=';
 }
 
 // Set caching paths to /tmp since Vercel is read-only
