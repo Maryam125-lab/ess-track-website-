@@ -13,6 +13,10 @@
   ],
   "routes": [
     {
+      "src": "/(images|css|js|favicon.ico)(.*)",
+      "dest": "/public/$1$2"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/backend.php"
     },
