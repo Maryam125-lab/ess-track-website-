@@ -68,11 +68,11 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                             <div>
                                 <label style="display: block; font-size: 13px; font-weight: 700; color: var(--nv); margin-bottom: 8px; text-transform: uppercase;">First Name</label>
-                                <input type="text" name="first_name" placeholder="Your first name" required style="width: 100%; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
+                                <input type="text" name="first_name" placeholder="Your first name" required oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')" style="width: 100%; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
                             </div>
                             <div>
                                 <label style="display: block; font-size: 13px; font-weight: 700; color: var(--nv); margin-bottom: 8px; text-transform: uppercase;">Last Name</label>
-                                <input type="text" name="last_name" placeholder="Your last name" required style="width: 100%; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
+                                <input type="text" name="last_name" placeholder="Your last name" required oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')" style="width: 100%; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
                             </div>
                         </div>
 
@@ -84,7 +84,7 @@
                         <div style="margin-bottom: 20px;">
                             <label style="display: block; font-size: 13px; font-weight: 700; color: var(--nv); margin-bottom: 8px; text-transform: uppercase;">Phone Number</label>
                             <div style="display: flex; gap: 10px;">
-                                <input type="tel" name="phone" id="contactPhone" placeholder="e.g. 03001234567" required style="flex: 1; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
+                                <input type="tel" name="phone" id="contactPhone" placeholder="e.g. 03001234567" required oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="flex: 1; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
                                 <button type="button" id="btnSendOtp" onclick="handleContactOtp()" class="bn" style="padding: 0 20px; font-size: 12px; white-space: nowrap;">Get OTP</button>
                             </div>
                         </div>

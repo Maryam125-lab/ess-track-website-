@@ -538,11 +538,11 @@
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
                     <div>
                         <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">Customer Details:</h4>
-                        <div class="form-group"><label class="req">Name</label><input type="text" name="name" required placeholder="Full Name" onkeypress="return allowOnlyAlphabets(event)"></div>
+                        <div class="form-group"><label class="req">Name</label><input type="text" name="name" required placeholder="Full Name" oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')"></div>
                         <div class="form-group"><label class="req">Vehicle No</label><input type="text" name="vehicle_no" required placeholder="ABC-1234"></div>
                         <div class="form-group"><label class="req">Residential Address</label><input type="text" name="res_address" required placeholder="Full Address"></div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <div class="form-group"><label>Postal Code</label><input type="text" name="postal_code" onkeypress="return allowOnlyNumbers(event)"></div>
+                            <div class="form-group"><label>Postal Code</label><input type="text" name="postal_code" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
                             <div class="form-group"><label>Vehicle Type</label>
                                 <div style="display: flex; gap: 10px; font-size: 12px; align-items: center; height: 40px;">
                                     <input type="radio" name="v_type" value="Private" checked> Private
@@ -555,12 +555,12 @@
                     </div>
                     <div>
                         <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">Customer Numbers:</h4>
-                        <div class="form-group"><label>Home</label><input type="tel" name="num_home" onkeypress="return allowOnlyNumbers(event)"></div>
-                        <div class="form-group"><label>Office</label><input type="tel" name="num_office" onkeypress="return allowOnlyNumbers(event)"></div>
+                        <div class="form-group"><label>Home</label><input type="tel" name="num_home" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
+                        <div class="form-group"><label>Office</label><input type="tel" name="num_office" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
                         <div class="form-group">
                             <label class="req">Mobile</label>
                             <div style="display: flex; gap: 8px;">
-                                <input type="tel" name="mobile" id="custMobile" required placeholder="03xx-xxxxxxx" style="flex: 1;" onkeypress="return allowOnlyNumbers(event)">
+                                <input type="tel" name="mobile" id="custMobile" required placeholder="03xx-xxxxxxx" style="flex: 1;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                                 <button type="button" onclick="showOTPOptions()" class="bn" style="padding: 10px 15px; font-size: 11px; white-space: nowrap;">Get OTP</button>
                             </div>
                         </div>
@@ -615,12 +615,12 @@
                             @for($i=1; $i<=7; $i++)
                             <tr>
                                 <td style="border: 1px solid #ddd; padding: 5px;">C{{$i}}</td>
-                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_name" style="border:none; padding:5px; width:100%;" onkeypress="return allowOnlyAlphabets(event)"></td>
-                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_rel" style="border:none; padding:5px; width:100%;" onkeypress="return allowOnlyAlphabets(event)"></td>
+                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_name" style="border:none; padding:5px; width:100%;" oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')"></td>
+                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_rel" style="border:none; padding:5px; width:100%;" oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')"></td>
                                 <td style="border: 1px solid #ddd; padding: 5px;"><select name="c{{$i}}_key" style="border:none;"><option>Yes</option><option>No</option></select></td>
                                 <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_res" style="border:none; padding:5px; width:100%;"></td>
                                 <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_off" style="border:none; padding:5px; width:100%;"></td>
-                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_mob" style="border:none; padding:5px; width:100%;" onkeypress="return allowOnlyNumbers(event)"></td>
+                                <td style="border: 1px solid #ddd; padding: 5px;"><input type="text" name="c{{$i}}_mob" style="border:none; padding:5px; width:100%;" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></td>
                             </tr>
                             @endfor
                         </tbody>
@@ -1178,7 +1178,7 @@
     function allowOnlyNumbers(e) {
         const charCode = (e.which) ? e.which : e.keyCode;
         if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            showValidationTip(e.target, "Numbers use karein! Please fill requirements properly.");
+            showValidationTip(e.target, "Sirf Numbers use karein! Please fill requirements properly.");
             e.preventDefault();
             return false;
         }
