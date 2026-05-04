@@ -155,7 +155,7 @@
 </section>
 @section('scripts')
 <script>
-    const contactBackendUrl = "{{ env('VITE_BACKEND_API_URL') }}";
+    const contactBackendUrl = "{{ env('VITE_BACKEND_API_URL') }}" || "/api";
     let isContactOtpVerified = false;
 
     async function handleContactOtp() {

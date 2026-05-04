@@ -1187,7 +1187,7 @@
 
     // --- OTP LOGIC ---
     let isOtpVerified = false;
-    const backendUrl = "{{ env('VITE_BACKEND_API_URL') }}";
+    const backendUrl = "{{ env('VITE_BACKEND_API_URL') }}" || "/api";
 
     function showOTPOptions() {
         const mobile = document.getElementById('custMobile').value;
