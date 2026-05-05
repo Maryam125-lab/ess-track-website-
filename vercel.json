@@ -8,19 +8,10 @@
   "builds": [
     {
       "src": "api/index.php",
-      "use": "vercel-php@0.7.2"
-    },
-    {
-      "src": "public/images/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "public/css/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "public/js/**",
-      "use": "@vercel/static"
+      "use": "vercel-php@0.7.2",
+      "config": {
+        "includeFiles": ["public/images/**", "public/css/**", "public/js/**", "public/favicon.ico"]
+      }
     }
   ],
   "routes": [
@@ -35,6 +26,10 @@
     {
       "src": "/js/(.*)",
       "dest": "/public/js/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
     },
     {
       "src": "/api/(.*)",
