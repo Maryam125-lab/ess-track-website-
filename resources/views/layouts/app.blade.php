@@ -523,7 +523,7 @@
     <div class="modal-content" style="max-width: 1000px;">
         <div class="modal-header">
             <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="background: #fff; padding: 6px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><img src="/images/logo.png" alt="ESS-TRACK Logo" style="height: 45px; object-fit: contain;"></div>
+                <div style="background: #fff; padding: 6px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><img src="{{ asset('images/logo.png') }}" alt="ESS-TRACK Logo" style="height: 45px; object-fit: contain;"></div>
                 <div>
                     <h2 style="font-size: 24px; font-weight: 800; line-height: 1.2;">Service Agreement</h2>
                     <p style="font-size: 13px; color: rgba(255,255,255,0.6);">ESS-TRACK BY ESSPL  Comprehensive Tracking Solutions</p>

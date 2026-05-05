@@ -3,7 +3,7 @@
   "env": {
     "APP_KEY": "base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=",
     "APP_ENV": "production",
-    "APP_DEBUG": "true"
+    "APP_DEBUG": "false"
   },
   "builds": [
     {
@@ -13,7 +13,7 @@
   ],
   "routes": [
     {
-      "src": "/(images|css|js|favicon.ico)(.*)",
+      "src": "/(css|js|images|favicon.ico)(.*)",
       "dest": "/public/$1$2"
     },
     {

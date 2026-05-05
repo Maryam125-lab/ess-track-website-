@@ -7,7 +7,7 @@
     <!-- Background Video -->
     <div id="videoSlider" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
         <video autoplay muted loop playsinline class="hero-video active" id="video1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
-            <source src="/images/hero-video.mp4" type="video/mp4">
+            <source src="{{ asset('images/hero-video.mp4') }}" type="video/mp4">
         </video>
     </div>
     
@@ -165,7 +165,7 @@
     <div class="wrap">
         <div style="background: var(--lt); border-radius: 40px; padding: 60px; display: flex; align-items: center; gap: 60px; flex-wrap: wrap-reverse;">
             <div style="flex: 0.7; text-align: center;" data-aos="fade-up">
-                <img src="/images/app-interface.png" alt="App Interface" style="max-width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.25); border: 8px solid #fff;">
+                <img src="{{ asset('images/app-interface.png') }}" alt="App Interface" style="max-width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.25); border: 8px solid #fff;">
             </div>
             <div style="flex: 1.3;" data-aos="fade-left">
                 <div class="lbl">Mobile Control</div>
