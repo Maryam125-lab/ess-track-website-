@@ -10,10 +10,10 @@ class Database {
     public $conn;
 
     public function __construct() {
-        $this->host = $_ENV['DB_HOST'] ?? 'localhost';
-        $this->db_name = $_ENV['DB_NAME'] ?? 'ess-track-backend-db';
-        $this->username = $_ENV['DB_USER'] ?? 'root';
-        $this->password = $_ENV['DB_PASS'] ?? '';
+        $this->host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? 'localhost');
+        $this->db_name = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? 'ess-track-backend-db');
+        $this->username = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? 'root');
+        $this->password = getenv('DB_PASS') ?: ($_ENV['DB_PASS'] ?? '');
     }
 
     public function getConnection() {
@@ -32,7 +32,7 @@ class Database {
                 $this->username, 
                 $this->password, 
                 $this->db_name,
-                $_ENV['DB_PORT'] ?? 4000,
+                getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? 4000),
                 null,
                 MYSQLI_CLIENT_SSL
             );

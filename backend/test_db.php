@@ -4,7 +4,7 @@ require_once __DIR__ . '/bootstrap/app.php';
 require_once __DIR__ . '/config/database.php';
 
 try {
-    $db = new \Database();
+    $db = new \Config\Database();
     $conn = $db->getConnection();
     echo "Database connected successfully!\n";
     echo "Host: " . $conn->host_info . "\n";

@@ -17,9 +17,22 @@
           "vendor/**"
         ]
       }
+    },
+    {
+      "src": "backend/public/index.php",
+      "use": "vercel-php@0.7.2",
+      "config": {
+        "includeFiles": [
+          "backend/**"
+        ]
+      }
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/public/index.php"
+    },
     {
       "src": "/(.*)",
       "dest": "/public/index.php"

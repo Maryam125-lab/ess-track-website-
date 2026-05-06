@@ -107,19 +107,42 @@ class OtpService {
     }
 
     public function sendOtpSms($phone, $otp) {
-        // For now, we'll just log the OTP (in production, integrate with SMS service)
         $message = "Your ESS Tracker verification code is: $otp\nValid for 5 minutes.";
-
-        // Log the OTP for testing
         error_log("OTP SMS to $phone: $otp");
 
-        // In production, you would integrate with SMS service like:
-        // - Twilio
-        // - AWS SNS
-        // - Firebase
-        // - etc.
+        // Advanced API Ready System: 
+        // When you purchase an SMS/WhatsApp API, add OTP_API_KEY and OTP_API_URL to Vercel Env Variables
+        $apiKey = getenv('OTP_API_KEY') ?: ($_ENV['OTP_API_KEY'] ?? null);
+        $apiUrl = getenv('OTP_API_URL') ?: ($_ENV['OTP_API_URL'] ?? null);
 
-        return true; // Assume success for now
+        if ($apiKey && $apiUrl) {
+            try {
+                // Example integration code (ready to be uncommented/modified when API is purchased)
+                /*
+                $data = [
+                    'api_key' => $apiKey,
+                    'phone' => $phone,
+                    'message' => $message
+                ];
+                $options = [
+                    'http' => [
+                        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                        'method'  => 'POST',
+                        'content' => http_build_query($data)
+                    ]
+                ];
+                $context  = stream_context_create($options);
+                $result = file_get_contents($apiUrl, false, $context);
+                if ($result === FALSE) {
+                    error_log("Failed to send SMS via API");
+                }
+                */
+            } catch (\Exception $e) {
+                error_log("SMS API Error: " . $e->getMessage());
+            }
+        }
+
+        return true; // Always return true for now to allow local testing
     }
 
     private function cleanupExpiredOtps($phone) {
