@@ -10,7 +10,14 @@
       "src": "api/index.php",
       "use": "vercel-php@0.7.2",
       "config": {
-        "includeFiles": ["public/images/**", "public/css/**", "public/js/**", "public/favicon.ico"]
+        "includeFiles": [
+          "public/images/**",
+          "public/css/**",
+          "public/js/**",
+          "public/favicon.ico",
+          "resources/css/**",
+          "resources/js/**"
+        ]
       }
     }
   ],
@@ -30,10 +37,6 @@
     {
       "src": "/favicon.ico",
       "dest": "/public/favicon.ico"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/backend.php"
     },
     {
       "src": "/(.*)",
