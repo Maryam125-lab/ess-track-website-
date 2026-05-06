@@ -6,33 +6,34 @@ if (!getenv('APP_KEY')) {
 }
 
 $tmpDir = '/tmp';
-putenv("APP_CONFIG_CACHE=$tmpDir/config.php");
-putenv("APP_EVENTS_CACHE=$tmpDir/events.php");
-putenv("APP_PACKAGES_CACHE=$tmpDir/packages.php");
-putenv("APP_ROUTES_CACHE=$tmpDir/routes.php");
-putenv("APP_SERVICES_CACHE=$tmpDir/services.php");
-putenv("VIEW_COMPILED_PATH=$tmpDir");
-putenv("APP_BOOTSTRAP_CACHE=$tmpDir");
 
-// Fix bootstrap/cache
-$bootstrapCache = __DIR__ . '/../bootstrap/cache';
-if (!is_dir($bootstrapCache)) {
-    mkdir($bootstrapCache, 0775, true);
-}
-
-// Fix storage directories
-$storageDirs = [
-    '/tmp/storage/framework/sessions',
-    '/tmp/storage/framework/views',
-    '/tmp/storage/framework/cache',
-    '/tmp/storage/logs',
+// Create all required directories in /tmp
+$dirs = [
+    $tmpDir . '/bootstrap/cache',
+    $tmpDir . '/storage/framework/sessions',
+    $tmpDir . '/storage/framework/views',
+    $tmpDir . '/storage/framework/cache/data',
+    $tmpDir . '/storage/logs',
 ];
-foreach ($storageDirs as $dir) {
+
+foreach ($dirs as $dir) {
     if (!is_dir($dir)) {
         mkdir($dir, 0775, true);
     }
 }
 
-putenv("APP_STORAGE_PATH=/tmp/storage");
+putenv("APP_CONFIG_CACHE=$tmpDir/bootstrap/cache/config.php");
+putenv("APP_EVENTS_CACHE=$tmpDir/bootstrap/cache/events.php");
+putenv("APP_PACKAGES_CACHE=$tmpDir/bootstrap/cache/packages.php");
+putenv("APP_ROUTES_CACHE=$tmpDir/bootstrap/cache/routes.php");
+putenv("APP_SERVICES_CACHE=$tmpDir/bootstrap/cache/services.php");
+putenv("VIEW_COMPILED_PATH=$tmpDir/storage/framework/views");
+putenv("APP_STORAGE_PATH=$tmpDir/storage");
+
+// Symlink bootstrap/cache to /tmp/bootstrap/cache
+$bootstrapCache = __DIR__ . '/../bootstrap/cache';
+if (!is_dir($bootstrapCache)) {
+    symlink($tmpDir . '/bootstrap/cache', $bootstrapCache);
+}
 
 require __DIR__ . '/../public/index.php';
