@@ -34,6 +34,10 @@
       "dest": "/backend/public/index.php"
     },
     {
+      "src": "/(css|images)/(.*)",
+      "dest": "/public/$1/$2"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }
