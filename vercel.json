@@ -1,46 +1,32 @@
 {
   "version": 2,
-  "env": {
-    "APP_KEY": "base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=",
-    "APP_ENV": "production",
-    "APP_DEBUG": "false"
-  },
   "builds": [
     {
       "src": "api/index.php",
       "use": "vercel-php@0.7.2",
       "config": {
         "includeFiles": [
-          "public/images/**",
-          "public/css/**",
-          "public/js/**",
-          "public/favicon.ico",
-          "resources/css/**",
-          "resources/js/**"
+          "public/**",
+          "resources/**",
+          "storage/**",
+          "bootstrap/**",
+          "config/**",
+          "routes/**",
+          "app/**",
+          "lang/**"
         ]
       }
     }
   ],
   "routes": [
     {
-      "src": "/images/(.*)",
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/public/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/public/js/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
-    },
-    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }
-  ]
+  ],
+  "env": {
+    "APP_KEY": "base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false"
+  }
 }
