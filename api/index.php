@@ -5,12 +5,6 @@ if (!getenv('APP_KEY')) {
     $_ENV['APP_KEY'] = 'base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=';
 }
 
-// Create bootstrap/cache as actual directory in project
-$bootstrapCache = __DIR__ . '/../bootstrap/cache';
-if (!file_exists($bootstrapCache)) {
-    mkdir($bootstrapCache, 0777, true);
-}
-
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 putenv("APP_EVENTS_CACHE=/tmp/events.php");
 putenv("APP_PACKAGES_CACHE=/tmp/packages.php");
