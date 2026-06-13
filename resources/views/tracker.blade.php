@@ -1,15 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Vehicle Tracker — ESS-TRACK BY ESSPL')
+@section('title', $seo['meta_title'] ?? 'Vehicle Tracker — ESS-TRACK BY ESSPL')
 
 @section('content')
+@php
+    $pc = fn($key, $default = '') => $pageContent[$key] ?? $default;
+@endphp
 <!-- INNER HERO -->
 <section style="background: var(--nv); padding: 160px 0 100px; color: #fff; position: relative; overflow: hidden;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
     <div class="wrap" style="position: relative; z-index: 2; text-align: center;">
-        <div class="lbl c" style="color: var(--or);">Advanced Monitoring</div>
-        <h2 class="ttl" style="color: #fff; margin-bottom: 20px;">Elite Vehicle <span style="color: var(--or);">Tracker</span></h2>
-        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 700px; margin: 0 auto;">Experience the next generation of GPS tracking with real-time analytics, theft prevention, and fleet optimization tools.</p>
+        <div class="lbl c" style="color: var(--or);">{{ $pc('hero_label', 'Advanced Monitoring') }}</div>
+        <h2 class="ttl" style="color: #fff; margin-bottom: 20px;">{!! $pc('hero_title_html', 'Elite Vehicle <span style="color: var(--or);">Tracker</span>') !!}</h2>
+        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 700px; margin: 0 auto;">{{ $pc('hero_description', 'Experience the next generation of GPS tracking with real-time analytics, theft prevention, and fleet optimization tools.') }}</p>
     </div>
 </section>
 
@@ -19,9 +22,9 @@
         <div style="background: #fff; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.12); padding: 40px; position: relative; z-index: 5;" data-aos="fade-up">
             <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: center;">
                 <div style="flex: 1; min-width: 300px;">
-                    <div class="lbl">Smart Monitoring</div>
-                    <h2 class="ttl" style="font-size: 32px;">Real-Time Control Panel</h2>
-                    <p class="dsc" style="margin-bottom: 30px;">Our web and mobile interface allows you to stay connected to your vehicle 24/7. Watch movements as they happen, check ignition status, and set custom boundaries.</p>
+                    <div class="lbl">{{ $pc('control_label', 'Smart Monitoring') }}</div>
+                    <h2 class="ttl" style="font-size: 32px;">{{ $pc('control_title', 'Real-Time Control Panel') }}</h2>
+                    <p class="dsc" style="margin-bottom: 30px;">{{ $pc('control_description', 'Our web and mobile interface allows you to stay connected to your vehicle 24/7. Watch movements as they happen, check ignition status, and set custom boundaries.') }}</p>
                     
                     <ul style="list-style: none; padding: 0; margin-bottom: 35px;">
                         <li style="margin-bottom: 18px; display: flex; align-items: center; gap: 15px;">
@@ -47,10 +50,10 @@
                         </li>
                     </ul>
                     
-                    <a href="{{ route('contact') }}" class="bo">Request Demo</a>
+                    <a href="{{ route('contact') }}" class="bo">{{ $pc('demo_button', 'Request Demo') }}</a>
                 </div>
                 <div style="flex: 1.2; min-width: 300px; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1000&auto=format&fit=crop" alt="Tracker UI" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);">
+                    <img src="{{ $pc('control_image_url', 'https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1000&auto=format&fit=crop') }}" alt="Tracker UI" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);">
                 </div>
             </div>
         </div>
@@ -61,9 +64,9 @@
 <section style="background: var(--of);">
     <div class="wrap">
         <div class="tc" style="margin-bottom: 60px;" data-aos="fade-up">
-            <div class="lbl c">Specifications</div>
-            <h2 class="ttl">The Hardware Excellence</h2>
-            <p class="dsc">We use the most reliable tracking hardware in Pakistan, tested for extreme conditions.</p>
+            <div class="lbl c">{{ $pc('specs_label', 'Specifications') }}</div>
+            <h2 class="ttl">{{ $pc('specs_title', 'The Hardware Excellence') }}</h2>
+            <p class="dsc">{{ $pc('specs_description', 'We use the most reliable tracking hardware in Pakistan, tested for extreme conditions.') }}</p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
@@ -96,16 +99,16 @@
     <div class="wrap">
         <div style="display: flex; gap: 60px; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1;" data-aos="fade-right">
-                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000&auto=format&fit=crop" alt="Car Security" style="width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+                <img src="{{ $pc('installation_image_url', 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000&auto=format&fit=crop') }}" alt="Car Security" style="width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
             </div>
             <div style="flex: 1.2;" data-aos="fade-left">
-                <div class="lbl">Installation</div>
-                <h2 class="ttl">Professional Setup</h2>
-                <p class="dsc" style="margin-bottom: 30px;">Our expert technicians provide seamless and covert installation at your doorstep or our authorized service centers. We ensure no wiring is visible and your warranty remains intact.</p>
+                <div class="lbl">{{ $pc('installation_label', 'Installation') }}</div>
+                <h2 class="ttl">{{ $pc('installation_title', 'Professional Setup') }}</h2>
+                <p class="dsc" style="margin-bottom: 30px;">{{ $pc('installation_description', 'Our expert technicians provide seamless and covert installation at your doorstep or our authorized service centers. We ensure no wiring is visible and your warranty remains intact.') }}</p>
                 
                 <div style="background: var(--lt); padding: 30px; border-radius: 20px; border-left: 5px solid var(--or);">
-                    <p style="font-size: 15px; color: var(--nv); font-weight: 600; font-style: italic;">"The installation was quick, clean, and the app started working immediately. Truly professional service."</p>
-                    <div style="margin-top: 15px; font-size: 13px; font-weight: 700; color: var(--gy);">— Arsalan Ahmed, Fleet Manager</div>
+                    <p style="font-size: 15px; color: var(--nv); font-weight: 600; font-style: italic;">"{{ $pc('quote_text', 'The installation was quick, clean, and the app started working immediately. Truly professional service.') }}"</p>
+                    <div style="margin-top: 15px; font-size: 13px; font-weight: 700; color: var(--gy);">{{ $pc('quote_author', 'Arsalan Ahmed, Fleet Manager') }}</div>
                 </div>
             </div>
         </div>
@@ -115,8 +118,8 @@
 <!-- TRACKER CTA -->
 <section style="background: var(--nv); padding: 100px 0; text-align: center;">
     <div class="wrap">
-        <h2 class="ttl" style="color: #fff; margin-bottom: 30px;">Get Your Advanced Tracker Installed Today</h2>
-        <a href="{{ route('contact') }}" class="bo" style="padding: 18px 45px;">Book Installation Now</a>
+        <h2 class="ttl" style="color: #fff; margin-bottom: 30px;">{{ $pc('cta_title', 'Get Your Advanced Tracker Installed Today') }}</h2>
+        <a href="{{ route('contact') }}" class="bo" style="padding: 18px 45px;">{{ $pc('cta_button', 'Book Installation Now') }}</a>
     </div>
 </section>
 @endsection

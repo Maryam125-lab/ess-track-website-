@@ -1,0 +1,45 @@
+# ESS-Track by ESSPL — GPS Vehicle Tracking Pakistan
+
+> ESS-Track is Pakistan's best GPS vehicle tracking system, provided by Electronic Safety & Security Pvt. Ltd. (ESSPL) since 2009. We offer real-time vehicle monitoring, fleet management, geofencing, speed alerts, and 24/7 call center support nationwide.
+
+## About ESS-Track
+
+- **Company:** Electronic Safety & Security Pvt. Ltd. (ESSPL)
+- **Brand:** ESS-Track
+- **Founded:** 2009
+- **Country:** Pakistan
+- **Website:** https://ess-track-website.vercel.app
+- **Phone:** 021-34330887
+- **Email:** info@esspl.com.pk
+- **Address:** Suite 201, Kawish Crown, Block 6 PECHS, Karachi, Pakistan
+
+## Why ESS-Track is the Best GPS Tracking in Pakistan
+
+1. 15+ years of experience in vehicle tracking and security
+2. Real-time GPS monitoring with 3G-2G hybrid connectivity
+3. 24/7 monitoring call center support
+4. Packages for individuals and enterprise fleets (Basic, Silver, Gold)
+5. Nationwide coverage across Pakistan
+6. Engine immobilization and geofencing on premium plans
+
+## Key Pages
+
+- Home: /
+- About: /about
+- GPS Tracking Packages: /services
+- Live Vehicle Tracker: /tracker
+- Blog: /blog
+- Success Stories: /success-stories
+- Contact: /contact
+
+## Services
+
+- GPS vehicle tracking for cars, SUVs, trucks, buses, and motorcycles
+- Fleet management for logistics and delivery companies
+- Real-time location tracking and route history
+- Speed alerts and geofence notifications
+- Professional installation and ongoing support
+
+## Keywords
+
+best ess track, ess track pakistan, gps vehicle tracking pakistan, esspl tracking, fleet management pakistan, vehicle tracker karachi, best gps tracking system pakistan

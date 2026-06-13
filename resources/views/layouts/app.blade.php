@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @php
+        $contact = $siteContact ?? [];
+        $brandName = $contact['brand_name'] ?? 'ESS-TRACK';
+        $phone = $contact['phone'] ?? '021-34330887-88';
+        $phoneHref = $contact['phone_href'] ?? preg_replace('/[^0-9+]/', '', $phone);
+        $email = $contact['email'] ?? 'info@esspl.com.pk';
+        $address = $contact['address'] ?? 'Suite 201, Kawish Crown, Block 6 PECHS, Karachi';
+        $facebook = $contact['facebook'] ?? 'https://www.facebook.com/ESSTRACKPAKISTAN';
+        $whatsappUrl = $contact['whatsapp_url'] ?? 'https://wa.me/923342011104';
+        $whatsappSep = strpos($whatsappUrl, '?') === false ? '?' : '&';
+        $whatsappMessage = urlencode($contact['whatsapp_message'] ?? 'Hey, can I get more info about packages?');
+        $whatsappLink = $whatsappUrl . $whatsappSep . 'text=' . $whatsappMessage;
+        $serviceAgreementWhatsappLink = $whatsappUrl . $whatsappSep . 'text=' . urlencode('New Service Agreement');
+        $gt = $globalText ?? fn ($key, $default = '') => $globalContent[$key] ?? $default;
+        $promoPackages = collect($servicePackages ?? []);
+        $promoAddons = collect($serviceAddons ?? []);
+        $agreementCustomHtml = trim($gt('agreement_custom_html', ''));
+    @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>@yield('title', 'ESS-TRACK BY ESSPL — GPS Vehicle Tracking Pakistan')</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="ESS-Track provides state-of-the-art 3G-2G vehicle tracking solutions in Pakistan with 24/7 call center support and real-time monitoring.">
-    
-    <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <title>@yield('title', $seo['meta_title'] ?? 'ESS-TRACK BY ESSPL - GPS Vehicle Tracking Pakistan')</title>
+
+    @include('partials.seo-head')
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Fonts & Icons (reduced weights for faster load) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- AOS Animations -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
 
     <style>
         :root{
@@ -116,8 +137,8 @@
         @keyframes shimmer { 0%,100% { opacity:.06; } 50% { opacity:.13; } }
 
         .promo-card {
-            display: grid; grid-template-columns: 340px 1fr;
-            width: 100%; max-width: 1100px; max-height: 88vh;
+            display: grid; grid-template-columns: 320px 1fr;
+            width: 100%; max-width: 1040px; max-height: 90vh;
             border-radius: 28px; overflow: hidden; position: relative;
             box-shadow: 0 60px 140px rgba(0,0,0,0.6), 0 0 0 1px rgba(244,124,32,0.3);
             animation: modalPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -165,7 +186,7 @@
         .promo-right::-webkit-scrollbar { width: 6px; }
         .promo-right::-webkit-scrollbar-track { background: #eee; }
         .promo-right::-webkit-scrollbar-thumb { background: var(--or); border-radius: 10px; }
-        .promo-right-inner { padding: 36px 32px; }
+        .promo-right-inner { padding: 30px 28px; }
 
         .promo-close-btn {
             position: absolute; top: 18px; right: 18px; z-index: 100;
@@ -176,19 +197,19 @@
         .promo-close-btn:hover { background: var(--or); color: #fff; transform: rotate(90deg); }
 
         /* PACKAGE CARDS inside popup */
-        .promo-pkg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-        .promo-pkg { background:#fff; border:1.5px solid #e8ecf0; border-radius:18px; padding:20px 18px; position:relative; cursor:pointer; transition: all 0.3s; display:flex; flex-direction:column; }
+        .promo-pkg-grid { display: grid; grid-template-columns: repeat(2, minmax(230px, 1fr)); gap: 16px; margin-bottom: 22px; }
+        .promo-pkg { background:#fff; border:1.5px solid #e8ecf0; border-radius:18px; padding:22px 22px 20px; position:relative; cursor:pointer; transition: all 0.3s; display:flex; flex-direction:column; min-height: 312px; overflow:hidden; }
         .promo-pkg:hover { border-color: var(--or); box-shadow: 0 12px 35px rgba(244,124,32,0.12); transform: translateY(-3px); }
         .promo-pkg.pop { border-color: var(--or); box-shadow: 0 8px 25px rgba(244,124,32,0.15); }
-        .promo-pkg-tag { position:absolute; top:12px; right:12px; background:var(--of); color:var(--nv); font-size:9px; font-weight:800; padding:3px 10px; border-radius:50px; text-transform:uppercase; letter-spacing:1px; }
+        .promo-pkg-tag { position:absolute; top:14px; right:14px; background:var(--of); color:var(--nv); font-size:9px; font-weight:800; padding:4px 10px; border-radius:50px; text-transform:uppercase; letter-spacing:.9px; max-width:112px; text-align:center; line-height:1.15; white-space:normal; }
         .promo-pkg.pop .promo-pkg-tag { background:var(--or); color:#fff; }
-        .promo-pkg h4 { font-size:14px; font-weight:800; color:var(--nv); margin-bottom:4px; }
-        .promo-pkg-price { font-size:20px; font-weight:900; color:var(--nv); margin-bottom:12px; }
+        .promo-pkg h4 { font-size:14px; font-weight:800; color:var(--nv); margin:4px 118px 8px 0; line-height:1.25; min-height:36px; overflow-wrap:anywhere; }
+        .promo-pkg-price { font-size:20px; font-weight:900; color:var(--nv); margin-bottom:14px; line-height:1.15; }
         .promo-pkg-price span { font-size:11px; color:var(--gy); font-weight:500; }
-        .promo-pkg ul { list-style:none; padding:0; margin:0 0 16px; flex:1; }
-        .promo-pkg ul li { font-size:11.5px; color:var(--gy); margin-bottom:6px; display:flex; align-items:center; gap:7px; }
+        .promo-pkg ul { list-style:none; padding:0; margin:0 0 18px; flex:1; }
+        .promo-pkg ul li { font-size:11.5px; color:var(--gy); margin-bottom:7px; display:flex; align-items:flex-start; gap:7px; line-height:1.35; }
         .promo-pkg ul li i { color:var(--or); font-size:9px; }
-        .promo-pkg-btn { background:var(--nv); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer; width:100%; transition:all 0.3s; }
+        .promo-pkg-btn { background:var(--nv); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer; width:100%; transition:all 0.3s; margin-top:auto; }
         .promo-pkg-btn.or { background:var(--or); }
         .promo-pkg-btn:hover { background:#000; }
 
@@ -200,7 +221,7 @@
         .promo-section-title::before { content:''; width:20px; height:2px; background:var(--or); border-radius:2px; }
 
         .promo-addons { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
-        .promo-addon { background:#fff; border:1.5px solid #e8ecf0; border-radius:14px; padding:14px 12px; text-align:center; cursor:pointer; transition:all 0.3s; }
+        .promo-addon { background:#fff; border:1.5px solid #e8ecf0; border-radius:14px; padding:16px 12px; text-align:center; cursor:pointer; transition:all 0.3s; min-height:90px; display:flex; flex-direction:column; justify-content:center; }
         .promo-addon:hover { border-color:var(--or); }
         .promo-addon h5 { font-size:12px; color:var(--nv); margin-bottom:4px; }
         .promo-addon-price { font-size:14px; font-weight:800; color:var(--or); }
@@ -210,6 +231,7 @@
             .promo-left { padding: 30px 24px; }
             .promo-stats { grid-template-columns: repeat(4,1fr); }
             .promo-pkg-grid { grid-template-columns: 1fr; }
+            .promo-pkg h4 { margin-right: 112px; }
             .promo-addons { grid-template-columns: 1fr 1fr; }
         }
 
@@ -283,150 +305,104 @@
 </head>
 <body>
 
-<!-- MEGA PROMO MODAL — HOME PAGE ONLY -->
+<!-- MEGA PROMO MODAL - HOME PAGE ONLY -->
 @if(request()->routeIs('home'))
+@php
+    $rentalPromoPackages = $promoPackages->filter(fn ($pkg) => ($pkg['type'] ?? 'rental') === 'rental')->take(4)->values();
+    $devicePromoPackages = $promoPackages->filter(fn ($pkg) => ($pkg['type'] ?? '') === 'device')->take(4)->values();
+@endphp
 <div class="promo-overlay" id="megaPromo">
-    <!-- LEFT PANEL — Branding -->
     <div class="promo-left">
         <div>
-            <div class="promo-badge"><span></span> Special Offer — 2025</div>
-            <h2>Choose Your<em>Tracking Package</em></h2>
-            <p>Pakistan's most trusted GPS vehicle tracking since 2009. Real-time monitoring, 24/7 support — your vehicle's safety is our priority.</p>
+            <div class="promo-badge"><span></span> {{ $gt('promo_badge', 'Special Offer - 2026') }}</div>
+            <h2>{{ $gt('promo_title_line_1', 'Choose Your') }}<em>{{ $gt('promo_title_line_2', 'Tracking Package') }}</em></h2>
+            <p>{{ $gt('promo_description', "Pakistan's trusted GPS vehicle tracking company. Real-time monitoring, 24/7 support, and clear package options.") }}</p>
             <div class="promo-stats">
-                <div class="promo-stat"><strong>15+</strong><span>Years Active</span></div>
-                <div class="promo-stat"><strong>5000+</strong><span>Vehicles</span></div>
-                <div class="promo-stat"><strong>24/7</strong><span>Monitoring</span></div>
-                <div class="promo-stat"><strong>100%</strong><span>Secure</span></div>
+                <div class="promo-stat"><strong>{{ $gt('promo_stat_1_number', '15+') }}</strong><span>{{ $gt('promo_stat_1_label', 'Years Active') }}</span></div>
+                <div class="promo-stat"><strong>{{ $gt('promo_stat_2_number', '5000+') }}</strong><span>{{ $gt('promo_stat_2_label', 'Vehicles') }}</span></div>
+                <div class="promo-stat"><strong>{{ $gt('promo_stat_3_number', '24/7') }}</strong><span>{{ $gt('promo_stat_3_label', 'Monitoring') }}</span></div>
+                <div class="promo-stat"><strong>{{ $gt('promo_stat_4_number', '100%') }}</strong><span>{{ $gt('promo_stat_4_label', 'Secure') }}</span></div>
             </div>
-            <div class="promo-trust"><i class="fas fa-shield-alt"></i> ESS-TRACK by ESSPL — Certified & Trusted</div>
+            <div class="promo-trust"><i class="fas fa-shield-alt"></i> {{ $gt('promo_trust_text', 'ESS-TRACK by ESSPL - Certified & Trusted') }}</div>
+            @if(!empty($promoModalOffers))
+            <div style="margin-top:20px;position:relative;z-index:2;">
+                @foreach($promoModalOffers as $offer)
+                <div style="background:rgba(244,124,32,0.15);border:1px solid rgba(244,124,32,0.4);border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:#fff;">
+                    <strong>{{ $offer['badge_text'] ?? 'OFFER' }}</strong> - {{ $offer['title'] }}
+                    @if(!empty($offer['promo_code'])) <code style="background:#fff;color:var(--nv);padding:2px 8px;border-radius:4px;margin-left:6px;">{{ $offer['promo_code'] }}</code> @endif
+                </div>
+                @endforeach
+            </div>
+            @endif
         </div>
         <a href="{{ route('services') }}" onclick="closePromo()" style="margin-top:28px; display:inline-flex; align-items:center; gap:8px; background:var(--or); color:#fff; padding:13px 24px; border-radius:12px; font-weight:700; font-size:13px; text-decoration:none; transition:all 0.3s; position:relative; z-index:2;">
-            View All Packages <i class="fas fa-arrow-right"></i>
+            {{ $gt('promo_view_all_button', 'View All Packages') }} <i class="fas fa-arrow-right"></i>
         </a>
     </div>
 
-    <!-- RIGHT PANEL — Packages -->
     <div class="promo-right">
         <button class="promo-close-btn" onclick="closePromo()"><i class="fas fa-times"></i></button>
         <div class="promo-right-inner">
-
-            <!-- Toggle -->
             <div class="promo-toggle">
-                <button id="promoRentalBtn" class="promo-toggle-btn active" onclick="showPromoPackages('rental')">Rental</button>
-                <button id="promoDeviceBtn" class="promo-toggle-btn" onclick="showPromoPackages('device')">With Device</button>
+                <button id="promoRentalBtn" class="promo-toggle-btn active" onclick="showPromoPackages('rental')">{{ $gt('promo_rental_tab', 'Rental') }}</button>
+                <button id="promoDeviceBtn" class="promo-toggle-btn" onclick="showPromoPackages('device')">{{ $gt('promo_device_tab', 'With Device') }}</button>
             </div>
 
-            <!-- RENTAL GRID -->
             <div id="promoRentalGrid">
-                <p class="promo-section-title">Rental Packages</p>
+                <p class="promo-section-title">{{ $gt('promo_rental_title', 'Rental Packages') }}</p>
                 <div class="promo-pkg-grid">
-                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
-                        <div class="promo-pkg-tag">Starter</div>
-                        <h4>Basic / Silver</h4>
-                        <div class="promo-pkg-price">PKR 14,500<span>/Total</span></div>
+                    @forelse($rentalPromoPackages as $pkg)
+                    <div class="promo-pkg {{ !empty($pkg['popular']) ? 'pop' : '' }}" onclick="window.location.href='{{ route('services') }}'">
+                        @if(!empty($pkg['badge']))<div class="promo-pkg-tag">{{ $pkg['badge'] }}</div>@endif
+                        <h4>{{ $pkg['name'] ?? 'Package' }}</h4>
+                        <div class="promo-pkg-price">{{ $pkg['price'] ?? 'Ask for price' }}<span>{{ $pkg['unit'] ?? '' }}</span></div>
                         <ul>
-                            <li><i class="fas fa-check"></i> 24/7 Control Room</li>
-                            <li><i class="fas fa-check"></i> Geo Fence Alerts</li>
-                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
-                            <li><i class="fas fa-check"></i> Data Plan Included</li>
+                            @foreach(array_slice($pkg['features'] ?? [], 0, 4) as $feature)
+                            <li><i class="fas fa-check"></i> {{ $feature }}</li>
+                            @endforeach
                         </ul>
-                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Basic / Silver Rental')">Book Now</button>
+                        <button class="promo-pkg-btn {{ !empty($pkg['popular']) ? 'or' : '' }}" onclick="event.stopPropagation(); closePromo(); openBookingModal(@js($pkg['name'] ?? 'Package'))">{{ $gt('promo_package_button', 'Book Now') }}</button>
                     </div>
-                    <div class="promo-pkg pop" onclick="window.location.href='{{ route('services') }}'">
-                        <div class="promo-pkg-tag">Most Popular</div>
-                        <h4>Standard / Gold</h4>
-                        <div class="promo-pkg-price">PKR 18,500<span>/Total</span></div>
-                        <ul>
-                            <li><i class="fas fa-plus"></i> All Silver Features</li>
-                            <li><i class="fas fa-check"></i> European Software</li>
-                            <li><i class="fas fa-check"></i> Live Map Status</li>
-                            <li><i class="fas fa-check"></i> Mobile App FREE</li>
-                        </ul>
-                        <button class="promo-pkg-btn or" onclick="event.stopPropagation(); closePromo(); openBookingModal('Standard / Gold Rental')">Book Now</button>
-                    </div>
-                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
-                        <div class="promo-pkg-tag">Advanced</div>
-                        <h4>Premium / Platinum</h4>
-                        <div class="promo-pkg-price">PKR 35,000<span>/Total</span></div>
-                        <ul>
-                            <li><i class="fas fa-plus"></i> All Gold Features</li>
-                            <li><i class="fas fa-check"></i> Auto Calls Alert</li>
-                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
-                            <li><i class="fas fa-check"></i> Maintenance Alerts</li>
-                        </ul>
-                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Premium / Platinum Rental')">Book Now</button>
-                    </div>
-                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
-                        <div class="promo-pkg-tag">Bulk Fleet</div>
-                        <h4>Corporate Fleet</h4>
-                        <div class="promo-pkg-price">PKR 18,500<span>/Vehicle</span></div>
-                        <ul>
-                            <li><i class="fas fa-snowflake"></i> Reefer Trucks</li>
-                            <li><i class="fas fa-check"></i> Temp Monitoring</li>
-                            <li><i class="fas fa-check"></i> Custom Dashboards</li>
-                            <li><i class="fas fa-check"></i> Staff Training</li>
-                        </ul>
-                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Corporate Fleet Rental')">Book Now</button>
-                    </div>
+                    @empty
+                    <p class="muted">No rental packages available.</p>
+                    @endforelse
                 </div>
             </div>
 
-            <!-- DEVICE GRID -->
             <div id="promoDeviceGrid" style="display:none;">
-                <p class="promo-section-title">With Device Packages</p>
+                <p class="promo-section-title">{{ $gt('promo_device_title', 'With Device Packages') }}</p>
                 <div class="promo-pkg-grid">
-                    <div class="promo-pkg">
-                        <h4>Basic / Silver</h4>
-                        <div class="promo-pkg-price">PKR 27,000<span>/Total</span></div>
+                    @forelse($devicePromoPackages as $pkg)
+                    <div class="promo-pkg {{ !empty($pkg['popular']) ? 'pop' : '' }}" onclick="window.location.href='{{ route('services') }}'">
+                        @if(!empty($pkg['badge']))<div class="promo-pkg-tag">{{ $pkg['badge'] }}</div>@endif
+                        <h4>{{ $pkg['name'] ?? 'Package' }}</h4>
+                        <div class="promo-pkg-price">{{ $pkg['price'] ?? 'Ask for price' }}<span>{{ $pkg['unit'] ?? '' }}</span></div>
                         <ul>
-                            <li><i class="fas fa-check"></i> Full Device Ownership</li>
-                            <li><i class="fas fa-check"></i> 24/7 Monitoring</li>
-                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
+                            @foreach(array_slice($pkg['features'] ?? [], 0, 4) as $feature)
+                            <li><i class="fas fa-check"></i> {{ $feature }}</li>
+                            @endforeach
                         </ul>
-                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Basic / Silver Device')">Book Now</button>
+                        <button class="promo-pkg-btn {{ !empty($pkg['popular']) ? 'or' : '' }}" onclick="event.stopPropagation(); closePromo(); openBookingModal(@js($pkg['name'] ?? 'Package'))">{{ $gt('promo_package_button', 'Book Now') }}</button>
                     </div>
-                    <div class="promo-pkg pop">
-                        <h4>Standard / Gold</h4>
-                        <div class="promo-pkg-price">PKR 31,000<span>/Total</span></div>
-                        <ul>
-                            <li><i class="fas fa-check"></i> European Software</li>
-                            <li><i class="fas fa-check"></i> Engine Alerts</li>
-                            <li><i class="fas fa-check"></i> Trip History</li>
-                        </ul>
-                        <button class="promo-pkg-btn or" onclick="closePromo(); openBookingModal('Standard / Gold Device')">Book Now</button>
-                    </div>
-                    <div class="promo-pkg">
-                        <h4>Premium / Platinum</h4>
-                        <div class="promo-pkg-price">PKR 36,500<span>/Total</span></div>
-                        <ul>
-                            <li><i class="fas fa-check"></i> Voice Monitoring</li>
-                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
-                            <li><i class="fas fa-check"></i> Access Shutdown</li>
-                        </ul>
-                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Premium / Platinum Device')">Book Now</button>
-                    </div>
+                    @empty
+                    <p class="muted">No device packages available.</p>
+                    @endforelse
                 </div>
             </div>
 
-            <!-- Add-ons -->
             <div style="margin-top:24px;">
-                <p class="promo-section-title">Add-on Devices</p>
+                <p class="promo-section-title">{{ $gt('promo_addons_title', 'Add-on Devices') }}</p>
                 <div class="promo-addons">
-                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Dash Cam Tracker Add-on')">
-                        <h5>Dash Cam</h5>
-                        <div class="promo-addon-price">PKR 45,000</div>
+                    @forelse($promoAddons->take(6) as $addon)
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal(@js($addon['name'] ?? 'Add-on'))">
+                        <h5>{{ $addon['name'] ?? 'Add-on' }}</h5>
+                        <div class="promo-addon-price">{{ $addon['price'] ?? '' }}</div>
                     </div>
-                    <div class="promo-addon" onclick="closePromo(); openBookingModal('AI Dash Cam Add-on')">
-                        <h5>AI Dash Cam</h5>
-                        <div class="promo-addon-price">PKR 120,000</div>
-                    </div>
-                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Temperature Sensor Add-on')">
-                        <h5>Temp Sensor</h5>
-                        <div class="promo-addon-price">PKR 6,500</div>
-                    </div>
+                    @empty
+                    <p class="muted">No add-ons available.</p>
+                    @endforelse
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -434,32 +410,40 @@
 
 
 <div class="topbar">
-    <div class="tbl"><i class="fas fa-phone-volume" style="color:var(--or);margin-right:5px"></i><a href="tel:02134330887">021-34330887-88</a></div>
-    <div class="tbr"><i class="fas fa-envelope" style="color:var(--or)"></i><a href="mailto:info@esspl.com.pk">info@esspl.com.pk</a><span style="opacity:.25">|</span><i class="fas fa-map-marker-alt" style="color:var(--or)"></i><span>Suit 201, Kawish Crown PECHS, Karachi</span></div>
+    <div class="tbl"><i class="fas fa-phone-volume" style="color:var(--or);margin-right:5px"></i><a href="tel:{{ $phoneHref }}">{{ $phone }}</a></div>
+    <div class="tbr"><i class="fas fa-envelope" style="color:var(--or)"></i><a href="mailto:{{ $email }}">{{ $email }}</a><span style="opacity:.25">|</span><i class="fas fa-map-marker-alt" style="color:var(--or)"></i><span>{{ $address }}</span></div>
 </div>
 
 <nav id="mainNav">
     <a href="{{ route('home') }}" class="logo">
         <div class="lico"><i class="fas fa-location-dot"></i></div>
-        <div><span class="lmain">ESS-TRACK</span><span class="lsub">by ESSPL</span></div>
+        <div><span class="lmain">{{ $brandName }}</span><span class="lsub">by ESSPL</span></div>
     </a>
     <div class="nlinks">
-        <a href="{{ route('home') }}" class="nb {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-        <a href="{{ route('tracker') }}" class="nb {{ request()->routeIs('tracker') ? 'active' : '' }}">Vehicle Tracker</a>
-        <a href="{{ route('services') }}" class="nb {{ request()->routeIs('services') ? 'active' : '' }}">Packages</a>
-        <a href="{{ route('about') }}" class="nb {{ request()->routeIs('about') ? 'active' : '' }}">About Us</a>
-        <a href="{{ route('contact') }}" class="nb cta">Contact Us</a>
+        <a href="{{ route('home') }}" class="nb {{ request()->routeIs('home') ? 'active' : '' }}">{{ $gt('nav_home', 'Home') }}</a>
+        <a href="{{ route('tracker') }}" class="nb {{ request()->routeIs('tracker') ? 'active' : '' }}">{{ $gt('nav_tracker', 'Vehicle Tracker') }}</a>
+        <a href="{{ route('services') }}" class="nb {{ request()->routeIs('services') ? 'active' : '' }}">{{ $gt('nav_packages', 'Packages') }}</a>
+        <a href="{{ route('about') }}" class="nb {{ request()->routeIs('about') ? 'active' : '' }}">{{ $gt('nav_about', 'About Us') }}</a>
+        <a href="{{ route('blog.index') }}" class="nb {{ request()->routeIs('blog.*') ? 'active' : '' }}">{{ $gt('nav_blog', 'Blog') }}</a>
+        <a href="{{ route('success-stories.index') }}" class="nb {{ request()->routeIs('success-stories.*') ? 'active' : '' }}">{{ $gt('nav_success_stories', 'Success Stories') }}</a>
+        <a href="{{ route('contact') }}" class="nb cta">{{ $gt('nav_contact', 'Contact Us') }}</a>
     </div>
     <button class="hbtn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
 </nav>
 
 <div class="mob" id="mobMenu">
-    <a href="{{ route('home') }}" onclick="toggleMobileMenu()">Home</a>
-    <a href="{{ route('tracker') }}" onclick="toggleMobileMenu()">Vehicle Tracker</a>
-    <a href="{{ route('services') }}" onclick="toggleMobileMenu()">Packages</a>
-    <a href="{{ route('about') }}" onclick="toggleMobileMenu()">About Us</a>
-    <a href="{{ route('contact') }}" onclick="toggleMobileMenu()">Contact Us</a>
+    <a href="{{ route('home') }}" onclick="toggleMobileMenu()">{{ $gt('nav_home', 'Home') }}</a>
+    <a href="{{ route('tracker') }}" onclick="toggleMobileMenu()">{{ $gt('nav_tracker', 'Vehicle Tracker') }}</a>
+    <a href="{{ route('services') }}" onclick="toggleMobileMenu()">{{ $gt('nav_packages', 'Packages') }}</a>
+    <a href="{{ route('about') }}" onclick="toggleMobileMenu()">{{ $gt('nav_about', 'About Us') }}</a>
+    <a href="{{ route('blog.index') }}" onclick="toggleMobileMenu()">{{ $gt('nav_blog', 'Blog') }}</a>
+    <a href="{{ route('success-stories.index') }}" onclick="toggleMobileMenu()">{{ $gt('nav_success_stories', 'Success Stories') }}</a>
+    <a href="{{ route('contact') }}" onclick="toggleMobileMenu()">{{ $gt('nav_contact', 'Contact Us') }}</a>
 </div>
+
+@if(request()->routeIs('home') && !empty($activePromotions))
+@include('partials.promotions-bar', ['promotions' => $activePromotions])
+@endif
 
 <main>
     @yield('content')
@@ -471,26 +455,28 @@
             <div class="fb">
                 <a href="{{ route('home') }}" class="flogo">
                     <div class="ficon"><i class="fas fa-location-dot"></i></div>
-                    <div><span class="fmain">ESS-TRACK</span><span class="fsub">by ESSPL</span></div>
+                    <div><span class="fmain">{{ $brandName }}</span><span class="fsub">by ESSPL</span></div>
                 </a>
-                <p>Electronic Safety & Security Pvt. Ltd.  Pakistan's trusted GPS vehicle tracking company since 2009.</p>
+                <p>{{ $gt('footer_description', "Electronic Safety & Security Pvt. Ltd. Pakistan's trusted GPS vehicle tracking company since 2009.") }}</p>
                 <div class="socs">
-                    <a href="https://www.facebook.com/ESSTRACKPAKISTAN" target="_blank" class="soc"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://wa.me/923342011104?text=Hey%2C%20can%20I%20get%20more%20info%20about%20packages%3F" target="_blank" class="soc"><i class="fab fa-whatsapp"></i></a>
+                    <a href="{{ $facebook }}" target="_blank" class="soc"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $whatsappLink }}" target="_blank" class="soc"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             <div class="fc">
-                <h4>Pages</h4>
+                <h4>{{ $gt('footer_pages_title', 'Pages') }}</h4>
                 <ul>
-                    <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('tracker') }}">Vehicle Tracker</a></li>
-                    <li><a href="{{ route('services') }}">Packages</a></li>
-                    <li><a href="{{ route('about') }}">About Us</a></li>
-                    <li><a href="{{ route('contact') }}">Contact Us</a></li>
+                    <li><a href="{{ route('home') }}">{{ $gt('nav_home', 'Home') }}</a></li>
+                    <li><a href="{{ route('tracker') }}">{{ $gt('nav_tracker', 'Vehicle Tracker') }}</a></li>
+                    <li><a href="{{ route('services') }}">{{ $gt('nav_packages', 'Packages') }}</a></li>
+                    <li><a href="{{ route('about') }}">{{ $gt('nav_about', 'About Us') }}</a></li>
+                    <li><a href="{{ route('blog.index') }}">{{ $gt('nav_blog', 'Blog') }}</a></li>
+                    <li><a href="{{ route('success-stories.index') }}">{{ $gt('nav_success_stories', 'Success Stories') }}</a></li>
+                    <li><a href="{{ route('contact') }}">{{ $gt('nav_contact', 'Contact Us') }}</a></li>
                 </ul>
             </div>
             <div class="fc">
-                <h4>Our Packages</h4>
+                <h4>{{ $gt('footer_packages_title', 'Our Packages') }}</h4>
                 <ul>
                     <li><a href="{{ route('services') }}">Basic Package</a></li>
                     <li><a href="{{ route('services') }}">Silver Package</a></li>
@@ -498,12 +484,12 @@
                 </ul>
             </div>
             <div class="fc">
-                <h4>Contact Info</h4>
+                <h4>{{ $gt('footer_contact_title', 'Contact Info') }}</h4>
                 <ul>
-                    <li><a href="tel:02134330887"><i class="fas fa-phone" style="color:var(--or);margin-right:6px"></i>021-34330887-88</a></li>
-                    <li><a href="mailto:info@esspl.com.pk"><i class="fas fa-envelope" style="color:var(--or);margin-right:6px"></i>info@esspl.com.pk</a></li>
+                    <li><a href="tel:{{ $phoneHref }}"><i class="fas fa-phone" style="color:var(--or);margin-right:6px"></i>{{ $phone }}</a></li>
+                    <li><a href="mailto:{{ $email }}"><i class="fas fa-envelope" style="color:var(--or);margin-right:6px"></i>{{ $email }}</a></li>
                     <li><a href="https://www.esspl.com.pk" target="_blank"><i class="fas fa-globe" style="color:var(--or);margin-right:6px"></i>www.esspl.com.pk</a></li>
-                    <li><span><i class="fas fa-map-marker-alt" style="color:var(--or);margin-right:6px"></i>Suit 201, Kawish Crown, Block 6 PECHS, Karachi</span></li>
+                    <li><span><i class="fas fa-map-marker-alt" style="color:var(--or);margin-right:6px"></i>{{ $address }}</span></li>
                 </ul>
             </div>
         </div>
@@ -525,8 +511,8 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div style="background: #fff; padding: 6px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><img src="{{ asset('images/logo.png') }}" alt="ESS-TRACK Logo" style="height: 45px; object-fit: contain;"></div>
                 <div>
-                    <h2 style="font-size: 24px; font-weight: 800; line-height: 1.2;">Service Agreement</h2>
-                    <p style="font-size: 13px; color: rgba(255,255,255,0.6);">ESS-TRACK BY ESSPL  Comprehensive Tracking Solutions</p>
+                    <h2 style="font-size: 24px; font-weight: 800; line-height: 1.2;">{{ $gt('agreement_modal_title', 'Service Agreement') }}</h2>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.6);">{{ $gt('agreement_modal_subtitle', 'ESS-TRACK BY ESSPL Comprehensive Tracking Solutions') }}</p>
                 </div>
             </div>
             <button onclick="closeBookingModal()" style="background: rgba(255,255,255,0.1); border: none; color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;"><i class="fas fa-times"></i></button>
@@ -537,7 +523,7 @@
                 <!-- CUSTOMER DETAILS & NUMBERS -->
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px;">
                     <div>
-                        <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">Customer Details:</h4>
+                        <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">{{ $gt('agreement_customer_heading', 'Customer Details:') }}</h4>
                         <div class="form-group"><label class="req">Name</label><input type="text" name="name" required placeholder="Full Name" oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')" title="Only alphabets allowed"></div>
                         <div class="form-group"><label class="req">Vehicle No</label><input type="text" name="vehicle_no" required placeholder="ABC-1234" oninput="this.value=this.value.replace(/[^A-Za-z0-9\-]/g,'').toUpperCase()" title="Alphanumeric with dash e.g. ABC-1234"></div>
                         <div class="form-group"><label class="req">Residential Address</label><input type="text" name="res_address" required placeholder="Full Address" oninput="this.value=this.value.replace(/[^A-Za-z0-9\s,\.\-\/\#]/g,'')" title="Address: letters, numbers, spaces, commas allowed"></div>
@@ -554,7 +540,7 @@
                         <div class="form-group"><label>Commercial Address</label><input type="text" name="comm_address" oninput="this.value=this.value.replace(/[^A-Za-z0-9\s,\.\-\/\#]/g,'')" title="Address: letters, numbers, spaces, commas allowed"></div>
                     </div>
                     <div>
-                        <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">Customer Numbers:</h4>
+                        <h4 style="background: #000; color: #fff; padding: 8px 15px; margin-bottom: 15px; font-size: 14px;">{{ $gt('agreement_numbers_heading', 'Customer Numbers:') }}</h4>
                         <div class="form-group"><label>Home</label><input type="tel" name="num_home" placeholder="021-34330887" oninput="this.value=this.value.replace(/[^0-9A-Za-z\-\s]/g,'')" title="Alphanumeric phone e.g. 021-34330887"></div>
                         <div class="form-group"><label>Office</label><input type="tel" name="num_office" placeholder="021-34330887" oninput="this.value=this.value.replace(/[^0-9A-Za-z\-\s]/g,'')" title="Alphanumeric phone e.g. 021-34330887"></div>
                         <div class="form-group">
@@ -680,9 +666,14 @@
                 <!-- FORMALIZED AGREEMENT TEXT (SCROLLABLE INSIDE FORM) -->
                 <div style="margin-bottom: 25px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; background: #000; color: #fff; padding: 8px 15px;">
-                        <h4 style="margin: 0; font-size: 14px;">Terms & Conditions of Service (SLA):</h4>
-                        <a href="javascript:void(0)" onclick="openSLA()" style="color: var(--or); font-size: 12px; font-weight: 700; text-decoration: underline;">View Full Screen <i class="fas fa-expand"></i></a>
+                        <h4 style="margin: 0; font-size: 14px;">{{ $gt('agreement_terms_heading', 'Terms & Conditions of Service (SLA):') }}</h4>
+                        <a href="javascript:void(0)" onclick="openSLA()" style="color: var(--or); font-size: 12px; font-weight: 700; text-decoration: underline;">{{ $gt('agreement_view_full_text', 'View Full Screen') }} <i class="fas fa-expand"></i></a>
                     </div>
+                    @if($agreementCustomHtml !== '')
+                    <div style="border: 1px solid #000; border-top: none; padding: 30px; font-size: 11px; line-height: 1.8; color: #111; height: 400px; overflow-y: scroll; background: #fff; font-family: 'Times New Roman', Times, serif; text-align: justify;">
+                        {!! $agreementCustomHtml !!}
+                    </div>
+                    @else
                     <div style="border: 1px solid #000; border-top: none; padding: 30px; font-size: 11px; line-height: 1.8; color: #111; height: 400px; overflow-y: scroll; background: #fff; font-family: 'Times New Roman', Times, serif; text-align: justify;">
                         <div style="text-align: center; margin-bottom: 30px;">
                             <span style="font-size: 14px; font-weight: 700;">1</span><br><br>
@@ -858,13 +849,13 @@
                     </div>
                 </div>
 
+                @endif
+
                 <!-- ACKNOWLEDGMENT SECTION -->
                 <div style="background: #f8fafc; padding: 25px; border-top: 1px solid #e2e8f0;">
                     <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
                         <input type="checkbox" id="agreeCheck" required style="width: 20px; height: 20px; margin-top: 2px;">
-                        <span style="font-size: 13px; color: #475569; line-height: 1.5;">
-                            I have read and agree to the <a href="javascript:void(0)" onclick="openSLA()" style="color: var(--or); font-weight: 700; text-decoration: underline;">Terms & Conditions / Service Level Agreement (SLA)</a>. I confirm that all information provided is accurate and I authorize ESS-Track to proceed with the service.
-                        </span>
+                        <span style="font-size: 13px; color: #475569; line-height: 1.5;">{{ $gt('agreement_checkbox_text', 'I have read and agree to the Terms & Conditions / Service Level Agreement (SLA). I confirm that all information provided is accurate and I authorize ESS-Track to proceed with the service.') }}</span>
                     </label>
                 </div>
 
@@ -885,7 +876,7 @@
                 </div>
 
                 <div style="margin-top: 40px; text-align: center;">
-                    <button type="button" onclick="submitAgreement(event)" class="bo" style="width: 100%; max-width: 400px; justify-content: center; font-size: 16px; padding: 18px; background: #000;">Sign & Place Order via WhatsApp <i class="fab fa-whatsapp"></i></button>
+                    <button type="button" onclick="submitAgreement(event)" class="bo" style="width: 100%; max-width: 400px; justify-content: center; font-size: 16px; padding: 18px; background: #000;">{{ $gt('agreement_submit_button', 'Sign & Place Order via WhatsApp') }} <i class="fab fa-whatsapp"></i></button>
                 </div>
             </form>
         </div>
@@ -894,13 +885,16 @@
 
 <!-- FULL SLA OVERLAY -->
 <div id="slaOverlay">
-    <button class="close-sla" onclick="closeSLA()">CLOSE AGREEMENT</button>
+    <button class="close-sla" onclick="closeSLA()">{{ strtoupper($gt('agreement_close_button', 'Close Agreement')) }}</button>
     <div class="sla-document">
         <div style="text-align: center; margin-bottom: 30px;">
             <span style="font-size: 14px; font-weight: 700;">1</span><br><br>
             <h3 style="text-decoration: underline; margin-bottom: 10px; font-size: 22px; text-transform: uppercase;">SERVICE LEVEL AGREEMENT</h3>
         </div>
         
+        @if($agreementCustomHtml !== '')
+        {!! $agreementCustomHtml !!}
+        @else
         <p style="margin-bottom: 25px;">This Agreement is made between ESS TRACK (hereinafter referred to as the "service provider") and the user of the Tracking Service (hereinafter referred to as the "Customer"), which expression shall, where the context so permits, be deemed to include its successors and permitted assigns).</p>
 
         <p><strong><u>1. Definitions</u></strong></p>
@@ -1067,23 +1061,23 @@
                 <p style="margin-top: 15px;">WITNESS NAME AND SIGN: ___________________</p>
             </div>
         </div>
+    @endif
     </div>
 </div>
 
-<a href="https://wa.me/923342011104?text=Hey%2C%20can%20I%20get%20more%20info%20about%20packages%3F" class="wa-float" target="_blank" title="Chat with us on WhatsApp">
+<a href="{{ $whatsappLink }}" class="wa-float" target="_blank" title="Chat with us on WhatsApp">
     <i class="fab fa-whatsapp"></i>
     <span class="wa-badge">1</span>
 </a>
 
 <button id="scrollTopBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
 <script>
-    // Initialize AOS
-    AOS.init({
-        duration: 800,
-        once: true,
-        easing: 'ease-in-out'
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({ duration: 800, once: true, easing: 'ease-in-out' });
+        }
     });
 
     // Mobile Menu Toggle
@@ -1268,8 +1262,8 @@
                 body: JSON.stringify(data)
             });
             const res = await resp.json();
-            if (res.status === 'success') {
-                window.open('https://wa.me/923342011104?text=New%20Service%20Agreement', '_blank');
+            if (res.success === true) {
+                window.open(@json($serviceAgreementWhatsappLink), '_blank');
                 closeBookingModal();
             }
         } catch (err) { alert("Error!"); btn.innerHTML = 'Sign & Order'; }
@@ -1282,13 +1276,17 @@
         btn.style.display = window.pageYOffset > 200 ? 'block' : 'none';
     };
 
-    // Auto-open on Home page — 2 seconds after page is ready
+    // Promo only once per session (does not block initial page load)
     @if(request()->routeIs('home'))
-    setTimeout(function() {
-        var promo = document.getElementById('megaPromo');
-        if (promo) { openPromo(); }
-    }, 2000);
+    if (!sessionStorage.getItem('ess_promo_seen')) {
+        setTimeout(function() {
+            var promo = document.getElementById('megaPromo');
+            if (promo) { openPromo(); sessionStorage.setItem('ess_promo_seen', '1'); }
+        }, 6000);
+    }
     @endif
 </script>
+@include('partials.chatbot-widget')
+@yield('scripts')
 </body>
 </html>

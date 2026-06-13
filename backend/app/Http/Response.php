@@ -8,6 +8,7 @@ class Response {
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success'   => $success,
+            'status'    => $success ? 'success' : 'error',
             'message'   => $message,
             'timestamp' => date('Y-m-d H:i:s'),
             'data'      => $data

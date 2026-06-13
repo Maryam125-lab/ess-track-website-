@@ -1,15 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Vehicle Tracking Packages — ESS-TRACK BY ESSPL')
+@section('title', $seo['meta_title'] ?? 'Vehicle Tracking Packages — ESS-TRACK BY ESSPL')
 
 @section('content')
+@php
+    $pc = fn($key, $default = '') => $pageContent[$key] ?? $default;
+    $defaultPackages = [
+        ['type' => 'rental', 'badge' => 'Starter', 'name' => 'Basic / Silver', 'price' => 'PKR 14,500', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU Unit', 'PKR 0'], ['Installation', 'PKR 2,500'], ['Connection Fee', 'PKR 1,000'], ['Commissioning', 'PKR 1,000'], ['Annual Monitoring', 'PKR 10,000']], 'features' => ['24/7 Control Room Monitoring', 'Call on Geo Fence Alerts', 'Vehicle Recovery Help (Police)', 'System Upgrades', 'Remote Vehicle Shutdown', 'Data plan included']],
+        ['type' => 'rental', 'badge' => 'Most Popular', 'name' => 'Standard / Gold', 'price' => 'PKR 18,500', 'unit' => '/Total', 'popular' => true, 'breakdown' => [['VTU Unit', 'PKR 0'], ['Installation', 'PKR 2,500'], ['Connection Fee', 'PKR 2,000'], ['Commissioning', 'PKR 2,000'], ['Annual Monitoring', 'PKR 12,000']], 'features' => ['All Silver Features', 'European Technology Software', 'Live Status on Map', 'Mileage Registration', 'Engine ON/OFF Alerts', '30 Days Data Storage', 'Mobile Application (FREE)']],
+        ['type' => 'rental', 'badge' => 'Advanced', 'name' => 'Premium / Platinum', 'price' => 'PKR 35,000', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU (Microphone)', 'PKR 15,500'], ['Installation', 'PKR 2,500'], ['Connection Fee', 'PKR 2,000'], ['Commissioning', 'PKR 2,000'], ['Annual Monitoring', 'PKR 13,000']], 'features' => ['All Gold Features', 'Auto Calls Alert (Bonnet Open)', 'Auto Calls Alert (Engine ON)', 'Customer Access Shutdown', 'Maintenance Reminders', 'Dedicated Account Manager']],
+        ['type' => 'rental', 'badge' => 'Bulk Fleet', 'name' => 'Corporate Fleet', 'price' => 'PKR 18,500', 'unit' => '/Vehicle', 'popular' => false, 'breakdown' => [['Multi-Vehicle Unit', 'PKR 0'], ['Installation (On-site)', 'PKR 2,500'], ['Service Setup', 'PKR 4,000'], ['Annual Monitoring', 'PKR 12,000']], 'features' => ['100+ Vehicles Management', 'Refrigerated / Reefer Truck Solution', 'Temperature Monitoring (Real-time)', 'SLA-Based Dedicated Support', 'Custom Reports & Dashboards', 'Priority Help Desk', 'Training for Staff']],
+        ['type' => 'device', 'badge' => '', 'name' => 'Basic / Silver', 'price' => 'PKR 27,000', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU Unit', 'PKR 13,000'], ['Battery 12v', 'PKR 1,500'], ['Installation', 'PKR 2,500'], ['Monitoring', 'PKR 8,000']], 'features' => ['24/7 Control Room Monitoring', 'Geo Fence Alerts', 'Vehicle Recovery Assistance', 'Remote Vehicle Shutdown', 'Data plan included']],
+        ['type' => 'device', 'badge' => '', 'name' => 'Standard / Gold', 'price' => 'PKR 31,000', 'unit' => '/Total', 'popular' => true, 'breakdown' => [['VTU Unit', 'PKR 13,000'], ['Battery 12v', 'PKR 1,500'], ['Monitoring', 'PKR 10,000'], ['Setup Fees', 'PKR 6,500']], 'features' => ['All Silver Features', 'European Technology Software', 'Engine ON/OFF Alerts', '30 Days Trip History', 'Mobile App Integration']],
+        ['type' => 'device', 'badge' => '', 'name' => 'Premium / Platinum', 'price' => 'PKR 36,500', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU (Microphone)', 'PKR 15,500'], ['Battery 12v', 'PKR 1,500'], ['Monitoring', 'PKR 11,000'], ['Setup Fees', 'PKR 8,500']], 'features' => ['All Gold Features', 'Voice Monitoring Support', 'Customer Access Shutdown', 'Dedicated Manager']],
+        ['type' => 'device', 'badge' => '', 'name' => 'Corporate Fleet', 'price' => 'PKR 33,000', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU Unit', 'PKR 13,000'], ['Battery 12v', 'PKR 1,500'], ['Monitoring', 'PKR 12,000'], ['Service Setup', 'PKR 6,500']], 'features' => ['100+ Vehicles Support', 'SLA-based Priority Support', 'Custom API Integration']],
+        ['type' => 'device', 'badge' => '', 'name' => 'Self-Monitoring', 'price' => 'PKR 25,000', 'unit' => '/Total', 'popular' => false, 'breakdown' => [['VTU Unit', 'PKR 13,000'], ['Battery 12v', 'PKR 1,500'], ['Installation', 'PKR 2,500'], ['Annual Hosting', 'PKR 4,000']], 'features' => ['Direct Mobile Control', 'No Control Room Needed', 'European Tech Access', 'Remote Shutdown Access']],
+    ];
+    $defaultAddons = [
+        ['name' => 'Dash Cam Tracker', 'price' => 'PKR 45,000', 'description' => 'Audio/Video Monitoring'],
+        ['name' => 'AI Dash Cam', 'price' => 'PKR 120,000', 'description' => 'Advanced AI Monitoring'],
+        ['name' => 'Temperature Sensor', 'price' => 'PKR 6,500', 'description' => 'For cold chain logistics'],
+    ];
+    $decodedPackages = json_decode($pc('packages_json', json_encode($defaultPackages)), true);
+    $decodedAddons = json_decode($pc('addons_json', json_encode($defaultAddons)), true);
+    $packages = is_array($decodedPackages) && count($decodedPackages) ? $decodedPackages : $defaultPackages;
+    $addons = is_array($decodedAddons) && count($decodedAddons) ? $decodedAddons : $defaultAddons;
+@endphp
+@include('partials.promotions-bar', ['promotions' => $servicePromotions ?? []])
 <!-- INNER HERO -->
 <section style="background: var(--nv); padding: 160px 0 100px; color: #fff; position: relative; overflow: hidden;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
     <div class="wrap" style="position: relative; z-index: 2; text-align: center;">
-        <div class="lbl c" style="color: var(--or);">Pricing Plans</div>
-        <h1 class="ttl" style="color: #fff; margin-bottom: 20px;">Choose Your <span style="color: var(--or);">Tracking Package</span></h1>
-        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 750px; margin: 0 auto;">Select the perfect plan for your vehicle security and fleet management needs. Transparent pricing with no hidden charges.</p>
+        <div class="lbl c" style="color: var(--or);">{{ $pc('hero_label', 'Pricing Plans') }}</div>
+        <h1 class="ttl" style="color: #fff; margin-bottom: 20px;">{!! $pc('hero_title_html', 'Choose Your <span style="color: var(--or);">Tracking Package</span>') !!}</h1>
+        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 750px; margin: 0 auto;">{{ $pc('hero_description', 'Select the perfect plan for your vehicle security and fleet management needs. Transparent pricing with no hidden charges.') }}</p>
     </div>
 </section>
 
@@ -20,251 +44,99 @@
         <!-- Toggle Switch -->
         <div style="display: flex; justify-content: center; margin-bottom: 60px;" data-aos="fade-down">
             <div style="background: #fff; padding: 8px; border-radius: 50px; display: flex; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;">
-                <button id="rentalBtn" class="toggle-btn active" onclick="showPackages('rental')">Rental Packages</button>
-                <button id="deviceBtn" class="toggle-btn" onclick="showPackages('device')">With Device Packages</button>
+                <button id="rentalBtn" class="toggle-btn active" onclick="showPackages('rental')">{{ $pc('rental_button', 'Rental Packages') }}</button>
+                <button id="deviceBtn" class="toggle-btn" onclick="showPackages('device')">{{ $pc('device_button', 'With Device Packages') }}</button>
             </div>
         </div>
 
         <!-- RENTAL PACKAGES GRID -->
         <div id="rentalGrid" class="pkg-grid">
-            
-            <!-- 1. Silver Rental -->
-            <div class="pkg-card" data-aos="fade-up" onclick="openBookingModal('Basic / Silver Rental')">
-                <div class="pkg-badge">Starter</div>
-                <div class="pkg-card-head">
-                    <h3>Basic / Silver</h3>
-                    <div class="pkg-price">PKR 14,500<span>/Total</span></div>
+            @foreach(collect($packages)->where('type', 'rental')->values() as $package)
+                @php
+                    $packageName = $package['name'] ?? 'Package';
+                    $discountName = strtolower($packageName);
+                    $discountKey = str_contains($discountName, 'silver') || str_contains($discountName, 'basic') ? 'silver' : (str_contains($discountName, 'gold') || str_contains($discountName, 'standard') ? 'gold' : (str_contains($discountName, 'platinum') || str_contains($discountName, 'premium') ? 'platinum' : (str_contains($discountName, 'fleet') || str_contains($discountName, 'corporate') ? 'fleet' : null)));
+                    $bookingName = $packageName . ' Rental';
+                    $breakdown = is_array($package['breakdown'] ?? null) ? $package['breakdown'] : [];
+                    $features = is_array($package['features'] ?? null) ? $package['features'] : [];
+                @endphp
+                <div class="pkg-card {{ !empty($package['popular']) ? 'popular' : '' }}" data-aos="fade-up" onclick="openBookingModal(@js($bookingName))" style="position:relative;">
+                    @include('partials.package-discount', ['promo' => $discountKey ? ($packageDiscounts[$discountKey] ?? null) : null])
+                    @if(!empty($package['badge']))<div class="pkg-badge">{{ $package['badge'] }}</div>@endif
+                    <div class="pkg-card-head">
+                        <h3>{{ $packageName }}</h3>
+                        <div class="pkg-price">{{ $package['price'] ?? '' }}<span>{{ $package['unit'] ?? '' }}</span></div>
+                    </div>
+                    @if($breakdown)
+                        <div class="pkg-breakdown">
+                            @foreach($breakdown as $row)
+                                <div class="br-row"><span>{{ $row[0] ?? '' }}</span><span>{{ $row[1] ?? '' }}</span></div>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($features)
+                        <ul class="pkg-list">
+                            @foreach($features as $feature)
+                                <li><i class="fas fa-check"></i> {{ $feature }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                    <button class="book-btn {{ !empty($package['popular']) ? 'orange' : '' }}" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
                 </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 0</span></div>
-                    <div class="br-row"><span>Installation</span><span>PKR 2,500</span></div>
-                    <div class="br-row"><span>Connection Fee</span><span>PKR 1,000</span></div>
-                    <div class="br-row"><span>Commissioning</span><span>PKR 1,000</span></div>
-                    <div class="br-row"><span>Annual Monitoring</span><span>PKR 10,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-check"></i> 24/7 Control Room Monitoring</li>
-                    <li><i class="fas fa-check"></i> Call on Geo Fence Alerts</li>
-                    <li><i class="fas fa-check"></i> Vehicle Recovery Help (Police)</li>
-                    <li><i class="fas fa-check"></i> System Upgrades</li>
-                    <li><i class="fas fa-check"></i> Remote Vehicle Shutdown</li>
-                    <li><i class="fas fa-check"></i> Data plan included</li>
-                </ul>
-                <button class="book-btn" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
-            </div>
-
-            <!-- 2. Gold Rental -->
-            <div class="pkg-card popular" data-aos="fade-up" data-aos-delay="100" onclick="openBookingModal('Standard / Gold Rental')">
-                <div class="pkg-badge">Most Popular</div>
-                <div class="pkg-card-head">
-                    <h3>Standard / Gold</h3>
-                    <div class="pkg-price">PKR 18,500<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 0</span></div>
-                    <div class="br-row"><span>Installation</span><span>PKR 2,500</span></div>
-                    <div class="br-row"><span>Connection Fee</span><span>PKR 2,000</span></div>
-                    <div class="br-row"><span>Commissioning</span><span>PKR 2,000</span></div>
-                    <div class="br-row"><span>Annual Monitoring</span><span>PKR 12,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-plus"></i> All Silver Features</li>
-                    <li><i class="fas fa-check"></i> European Technology Software</li>
-                    <li><i class="fas fa-check"></i> Live Status on Map</li>
-                    <li><i class="fas fa-check"></i> Mileage Registration</li>
-                    <li><i class="fas fa-check"></i> Engine ON/OFF Alerts</li>
-                    <li><i class="fas fa-check"></i> 30 Days Data Storage</li>
-                    <li><i class="fas fa-check"></i> Mobile Application (FREE)</li>
-                </ul>
-                <button class="book-btn orange" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
-            </div>
-
-            <!-- 3. Platinum Rental -->
-            <div class="pkg-card" data-aos="fade-up" data-aos-delay="200" onclick="openBookingModal('Premium / Platinum Rental')">
-                <div class="pkg-badge">Advanced</div>
-                <div class="pkg-card-head">
-                    <h3>Premium / Platinum</h3>
-                    <div class="pkg-price">PKR 35,000<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU (Microphone)</span><span>PKR 15,500</span></div>
-                    <div class="br-row"><span>Installation</span><span>PKR 2,500</span></div>
-                    <div class="br-row"><span>Connection Fee</span><span>PKR 2,000</span></div>
-                    <div class="br-row"><span>Commissioning</span><span>PKR 2,000</span></div>
-                    <div class="br-row"><span>Annual Monitoring</span><span>PKR 13,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-plus"></i> All Gold Features</li>
-                    <li><i class="fas fa-check"></i> Auto Calls Alert (Bonnet Open)</li>
-                    <li><i class="fas fa-check"></i> Auto Calls Alert (Engine ON)</li>
-                    <li><i class="fas fa-check"></i> Customer Access Shutdown</li>
-                    <li><i class="fas fa-check"></i> Maintenance Reminders</li>
-                    <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
-                </ul>
-                <button class="book-btn" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
-            </div>
-
-            <!-- 4. Enterprise Rental -->
-            <div class="pkg-card" data-aos="fade-up" data-aos-delay="300" onclick="openBookingModal('Corporate Fleet Rental')">
-                <div class="pkg-badge">Bulk Fleet</div>
-                <div class="pkg-card-head">
-                    <h3>Corporate Fleet</h3>
-                    <div class="pkg-price">PKR 18,500<span>/Vehicle</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>Multi-Vehicle Unit</span><span>PKR 0</span></div>
-                    <div class="br-row"><span>Installation (On-site)</span><span>PKR 2,500</span></div>
-                    <div class="br-row"><span>Service Setup</span><span>PKR 4,000</span></div>
-                    <div class="br-row"><span>Annual Monitoring</span><span>PKR 12,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-check"></i> 100+ Vehicles Management</li>
-                    <li><i class="fas fa-snowflake"></i> Refrigerated / Reefer Truck Solution</li>
-                    <li><i class="fas fa-thermometer-half"></i> Temperature Monitoring (Real-time)</li>
-                    <li><i class="fas fa-check"></i> SLA-Based Dedicated Support</li>
-                    <li><i class="fas fa-check"></i> Custom Reports & Dashboards</li>
-                    <li><i class="fas fa-check"></i> Priority Help Desk</li>
-                    <li><i class="fas fa-check"></i> Training for Staff</li>
-                </ul>
-                <button class="book-btn" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
-            </div>
+            @endforeach
         </div>
 
         <!-- WITH DEVICE PACKAGES GRID (HIDDEN BY DEFAULT) -->
         <div id="deviceGrid" class="pkg-grid" style="display: none;">
-            
-            <!-- 1. Silver Device -->
-            <div class="pkg-card">
-                <div class="pkg-card-head">
-                    <h3>Basic / Silver</h3>
-                    <div class="pkg-price">PKR 27,000<span>/Total</span></div>
+            @foreach(collect($packages)->where('type', 'device')->values() as $package)
+                @php
+                    $packageName = $package['name'] ?? 'Package';
+                    $bookingName = $packageName . ' Device';
+                    $breakdown = is_array($package['breakdown'] ?? null) ? $package['breakdown'] : [];
+                    $features = is_array($package['features'] ?? null) ? $package['features'] : [];
+                @endphp
+                <div class="pkg-card {{ !empty($package['popular']) ? 'popular' : '' }}" onclick="openBookingModal(@js($bookingName))" style="position:relative;">
+                    @if(!empty($package['badge']))<div class="pkg-badge">{{ $package['badge'] }}</div>@endif
+                    <div class="pkg-card-head">
+                        <h3>{{ $packageName }}</h3>
+                        <div class="pkg-price">{{ $package['price'] ?? '' }}<span>{{ $package['unit'] ?? '' }}</span></div>
+                    </div>
+                    @if($breakdown)
+                        <div class="pkg-breakdown">
+                            @foreach($breakdown as $row)
+                                <div class="br-row"><span>{{ $row[0] ?? '' }}</span><span>{{ $row[1] ?? '' }}</span></div>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($features)
+                        <ul class="pkg-list">
+                            @foreach($features as $feature)
+                                <li><i class="fas fa-check"></i> {{ $feature }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                    <button class="book-btn {{ !empty($package['popular']) ? 'orange' : '' }}" style="border:none; width:100%;">Book Now <i class="fas fa-arrow-right"></i></button>
                 </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 13,000</span></div>
-                    <div class="br-row"><span>Battery 12v</span><span>PKR 1,500</span></div>
-                    <div class="br-row"><span>Installation</span><span>PKR 2,500</span></div>
-                    <div class="br-row"><span>Monitoring</span><span>PKR 8,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-check"></i> 24/7 Control Room Monitoring</li>
-                    <li><i class="fas fa-check"></i> Geo Fence Alerts</li>
-                    <li><i class="fas fa-check"></i> Vehicle Recovery Assistance</li>
-                    <li><i class="fas fa-check"></i> Remote Vehicle Shutdown</li>
-                    <li><i class="fas fa-check"></i> Data plan included</li>
-                </ul>
-                <a href="/contact" class="book-btn">Book Now <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- 2. Gold Device -->
-            <div class="pkg-card">
-                <div class="pkg-card-head">
-                    <h3>Standard / Gold</h3>
-                    <div class="pkg-price">PKR 31,000<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 13,000</span></div>
-                    <div class="br-row"><span>Battery 12v</span><span>PKR 1,500</span></div>
-                    <div class="br-row"><span>Monitoring</span><span>PKR 10,000</span></div>
-                    <div class="br-row"><span>Setup Fees</span><span>PKR 6,500</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-plus"></i> All Silver Features</li>
-                    <li><i class="fas fa-check"></i> European Technology Software</li>
-                    <li><i class="fas fa-check"></i> Engine ON/OFF Alerts</li>
-                    <li><i class="fas fa-check"></i> 30 Days Trip History</li>
-                    <li><i class="fas fa-check"></i> Mobile App Integration</li>
-                </ul>
-                <a href="/contact" class="book-btn orange">Book Now <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- 3. Platinum Device -->
-            <div class="pkg-card">
-                <div class="pkg-card-head">
-                    <h3>Premium / Platinum</h3>
-                    <div class="pkg-price">PKR 36,500<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU (Microphone)</span><span>PKR 15,500</span></div>
-                    <div class="br-row"><span>Battery 12v</span><span>PKR 1,500</span></div>
-                    <div class="br-row"><span>Monitoring</span><span>PKR 11,000</span></div>
-                    <div class="br-row"><span>Setup Fees</span><span>PKR 8,500</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-plus"></i> All Gold Features</li>
-                    <li><i class="fas fa-check"></i> Voice Monitoring Support</li>
-                    <li><i class="fas fa-check"></i> Customer Access Shutdown</li>
-                    <li><i class="fas fa-check"></i> Dedicated Manager</li>
-                </ul>
-                <a href="/contact" class="book-btn">Book Now <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- 4. Enterprise Device -->
-            <div class="pkg-card">
-                <div class="pkg-card-head">
-                    <h3>Corporate Fleet</h3>
-                    <div class="pkg-price">PKR 33,000<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 13,000</span></div>
-                    <div class="br-row"><span>Battery 12v</span><span>PKR 1,500</span></div>
-                    <div class="br-row"><span>Monitoring</span><span>PKR 12,000</span></div>
-                    <div class="br-row"><span>Service Setup</span><span>PKR 6,500</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-check"></i> 100+ Vehicles Support</li>
-                    <li><i class="fas fa-check"></i> SLA-based Priority Support</li>
-                    <li><i class="fas fa-check"></i> Custom API Integration</li>
-                </ul>
-                <a href="/contact" class="book-btn">Book Now <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <!-- 5. Self Monitoring -->
-            <div class="pkg-card">
-                <div class="pkg-card-head">
-                    <h3>Self-Monitoring</h3>
-                    <div class="pkg-price">PKR 25,000<span>/Total</span></div>
-                </div>
-                <div class="pkg-breakdown">
-                    <div class="br-row"><span>VTU Unit</span><span>PKR 13,000</span></div>
-                    <div class="br-row"><span>Battery 12v</span><span>PKR 1,500</span></div>
-                    <div class="br-row"><span>Installation</span><span>PKR 2,500</span></div>
-                    <div class="br-row) hosting"><span>Annual Hosting</span><span>PKR 4,000</span></div>
-                </div>
-                <ul class="pkg-list">
-                    <li><i class="fas fa-check"></i> Direct Mobile Control</li>
-                    <li><i class="fas fa-check"></i> No Control Room Needed</li>
-                    <li><i class="fas fa-check"></i> European Tech Access</li>
-                    <li><i class="fas fa-check"></i> Remote Shutdown Access</li>
-                </ul>
-                <a href="/contact" class="book-btn">Book Now <i class="fas fa-arrow-right"></i></a>
-            </div>
+            @endforeach
         </div>
-
         <!-- Add-ons Section -->
         <div style="margin-top: 100px; text-align: center;" data-aos="fade-up">
             <h2 class="ttl">Add-on Devices & Services</h2>
             <p class="dsc" style="margin-bottom: 40px;">Customize your package with additional sensors and advanced services.</p>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
-                <div class="add-on-box" onclick="openBookingModal('Dash Cam Tracker Add-on')">
-                    <h4>Dash Cam Tracker</h4>
-                    <div class="add-on-price">PKR 45,000</div>
-                    <p>Audio/Video Monitoring</p>
-                </div>
-                <div class="add-on-box" onclick="openBookingModal('AI Dash Cam Add-on')">
-                    <h4>AI Dash Cam</h4>
-                    <div class="add-on-price">PKR 120,000</div>
-                    <p>Advanced AI Monitoring</p>
-                </div>
-                <div class="add-on-box" onclick="openBookingModal('Temperature Sensor Add-on')">
-                    <h4>Temperature Sensor</h4>
-                    <div class="add-on-price">PKR 6,500</div>
-                    <p>For cold chain logistics</p>
-                </div>
+                @foreach($addons as $addon)
+                    @php $addonName = $addon['name'] ?? 'Add-on'; @endphp
+                    <div class="add-on-box" onclick="openBookingModal(@js($addonName . ' Add-on'))">
+                        <h4>{{ $addonName }}</h4>
+                        <div class="add-on-price">{{ $addon['price'] ?? '' }}</div>
+                        <p>{{ $addon['description'] ?? '' }}</p>
+                    </div>
+                @endforeach
             </div>
 
-            <div style="margin-top: 50px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;">
-                <h4 style="color: var(--nv); margin-bottom: 20px;">Enterprise Custom Solutions</h4>
+            <div style="margin-top: 50px; background: #fff;' padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                <h4 style="color: var(--nv); margin-bottom: 20px;">{{ $pc('custom_title', 'Enterprise Custom Solutions') }}</h4>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; color: var(--gy); font-size: 15px;">
                     <span><i class="fas fa-cog"></i> Custom Geo Fencing</span>
                     <span><i class="fas fa-code"></i> White-label Solutions</span>
@@ -272,7 +144,7 @@
                     <span><i class="fas fa-chart-line"></i> Fleet Dashboards</span>
                 </div>
                 <div style="margin-top: 30px;">
-                    <a href="/contact" class="bo">Request Custom Quote</a>
+                    <a href="/contact" class="bo">{{ $pc('custom_button', 'Request Custom Quote') }}</a>
                 </div>
             </div>
         </div>

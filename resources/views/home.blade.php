@@ -1,13 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Home — ESS-TRACK BY ESSPL')
+@section('title', 'ESS-TRACK BY ESSPL — GPS Vehicle Tracking Pakistan')
+@section('meta_description', 'ESS-Track by ESSPL — Pakistan\'s leading GPS vehicle tracking company since 2009. Real-time monitoring, 24/7 call center support, remote shutdown & geo-fencing.')
+@section('meta_keywords', 'GPS tracking Pakistan, vehicle tracker Karachi, ESS-Track, ESSPL, real-time vehicle tracking, fleet management Pakistan')
+@section('og_title', 'ESS-TRACK BY ESSPL — Pakistan\'s #1 GPS Vehicle Tracking')
+@section('og_description', 'Real-time GPS vehicle tracking across Pakistan with 24/7 monitoring, geo-fencing and remote shutdown. Trusted by 5000+ vehicles since 2009.')
+
 @section('content')
+@php
+    $pc = fn($key, $default = '') => $pageContent[$key] ?? $default;
+    $contact = $siteContact ?? [];
+    $phonePrimary = $contact['phone_primary'] ?? ($siteSettings['phone_primary'] ?? '021-34330887-88');
+    $phoneHref = $contact['phone_href'] ?? preg_replace('/[^0-9+]/', '', $phonePrimary);
+@endphp
 <!-- HERO SECTION -->
 <section style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center;">
     <!-- Background Video -->
     <div id="videoSlider" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
         <video autoplay muted loop playsinline class="hero-video active" id="video1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
-            <source src="{{ asset('images/hero-video.mp4') }}" type="video/mp4">
+            <source src="{{ $pc('hero_video_url', asset('images/hero-video.mp4')) }}" type="video/mp4">
         </video>
     </div>
     
@@ -16,28 +27,28 @@
 
     <div id="heroContent" class="wrap" style="display: flex; align-items: center; gap: 50px; position: relative; z-index: 3; padding-top: 140px; padding-bottom: 100px; width: 100%;">
         <div style="flex: 1.2;" data-aos="fade-right">
-            <div class="lbl" style="color: var(--or);">Expert Tracking Solutions</div>
-            <h1 class="ttl" style="margin-bottom: 22px; color: #fff; font-size: clamp(32px, 4vw, 54px);">Precision <span style="color:var(--or);">Vehicle Tracking</span> System Expert</h1>
-            <p class="dsc" style="margin-bottom: 40px; font-size: 17px; color: rgba(255,255,255,0.75); max-width: 550px;">ESS-TRACK BY ESSPL provides state-of-the-art surveillance and tracking facilities across Pakistan, utilizing advanced 3G-2G communication platforms.</p>
+            <div class="lbl" style="color: var(--or);">{{ $pc('hero_label', 'Expert Tracking Solutions') }}</div>
+            <h1 class="ttl" style="margin-bottom: 22px; color: #fff; font-size: clamp(32px, 4vw, 54px);">{!! $pc('hero_title_html', 'Precision <span style="color:var(--or);">Vehicle Tracking</span> System Expert') !!}</h1>
+            <p class="dsc" style="margin-bottom: 40px; font-size: 17px; color: rgba(255,255,255,0.75); max-width: 550px;">{{ $pc('hero_description', 'ESS-TRACK BY ESSPL provides state-of-the-art surveillance and tracking facilities across Pakistan, utilizing advanced 3G-2G communication platforms.') }}</p>
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <a href="{{ route('tracker') }}" class="bo" style="padding: 16px 32px; font-size: 15px;">View Tracker <i class="fas fa-arrow-right"></i></a>
-                <a href="{{ route('services') }}" class="bw-white" style="padding: 15px 30px; font-size: 15px; display: inline-flex; align-items: center; gap: 9px; border-radius: 8px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; transition: all .25s;">Our Packages</a>
+                <a href="{{ route('tracker') }}" class="bo" style="padding: 16px 32px; font-size: 15px;">{{ $pc('hero_primary_button', 'View Tracker') }} <i class="fas fa-arrow-right"></i></a>
+                <a href="{{ route('services') }}" class="bw-white" style="padding: 15px 30px; font-size: 15px; display: inline-flex; align-items: center; gap: 9px; border-radius: 8px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; transition: all .25s;">{{ $pc('hero_secondary_button', 'Our Packages') }}</a>
             </div>
             
             <div style="margin-top: 55px; display: flex; gap: 40px; align-items: center;">
                 <div>
-                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">15+</div>
-                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">Years Exp</div>
+                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">{{ $pc('stat_1_number', '15+') }}</div>
+                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">{{ $pc('stat_1_label', 'Years Exp') }}</div>
                 </div>
                 <div style="width: 1px; height: 40px; background: rgba(255,255,255,.15);"></div>
                 <div>
-                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">50k+</div>
-                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">Tracked</div>
+                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">{{ $pc('stat_2_number', '50k+') }}</div>
+                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">{{ $pc('stat_2_label', 'Tracked') }}</div>
                 </div>
                 <div style="width: 1px; height: 40px; background: rgba(255,255,255,.15);"></div>
                 <div>
-                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">24/7</div>
-                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">Support</div>
+                    <div style="font-size: 32px; font-weight: 800; color: #fff; line-height: 1;">{{ $pc('stat_3_number', '24/7') }}</div>
+                    <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px;">{{ $pc('stat_3_label', 'Support') }}</div>
                 </div>
             </div>
         </div>
@@ -87,31 +98,31 @@
 <section style="background: #fff; padding-bottom: 120px;">
     <div class="wrap">
         <div class="tc" style="margin-bottom: 70px;" data-aos="fade-up">
-            <div class="lbl c">Advanced Capabilities</div>
-            <h2 class="ttl">Premium Tracking Features</h2>
-            <p class="dsc">Our ecosystem is built to give you total control and peace of mind with enterprise-grade security.</p>
+            <div class="lbl c">{{ $pc('features_label', 'Advanced Capabilities') }}</div>
+            <h2 class="ttl">{{ $pc('features_title', 'Premium Tracking Features') }}</h2>
+            <p class="dsc">{{ $pc('features_description', 'Our ecosystem is built to give you total control and peace of mind with enterprise-grade security.') }}</p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px;">
             <!-- Feature 1 -->
             <div class="hover-lift" style="padding: 45px; border-radius: 24px; background: var(--of); border: 1px solid rgba(0,0,0,.04); transition: all 0.3s ease;" data-aos="fade-up" data-aos-delay="100">
                 <div style="width: 65px; height: 65px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--or); margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.04);"><i class="fas fa-location-crosshairs"></i></div>
-                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">Real-Time Tracking</h3>
-                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">Get pinpoint accuracy of your vehicle's location on live maps with 24/7 monitoring capabilities.</p>
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">{{ $pc('feature_1_title', 'Real-Time Tracking') }}</h3>
+                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">{{ $pc('feature_1_text', "Get pinpoint accuracy of your vehicle's location on live maps with 24/7 monitoring capabilities.") }}</p>
             </div>
             
             <!-- Feature 2 -->
             <div class="hover-lift" style="padding: 45px; border-radius: 24px; background: var(--of); border: 1px solid rgba(0,0,0,.04); transition: all 0.3s ease;" data-aos="fade-up" data-aos-delay="200">
                 <div style="width: 65px; height: 65px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--or); margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.04);"><i class="fas fa-bell"></i></div>
-                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">Proactive Alerts</h3>
-                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">Immediate notifications for battery tampering, ignition status, and geofence boundary crossings.</p>
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">{{ $pc('feature_2_title', 'Proactive Alerts') }}</h3>
+                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">{{ $pc('feature_2_text', 'Immediate notifications for battery tampering, ignition status, and geofence boundary crossings.') }}</p>
             </div>
             
             <!-- Feature 3 -->
             <div class="hover-lift" style="padding: 45px; border-radius: 24px; background: var(--of); border: 1px solid rgba(0,0,0,.04); transition: all 0.3s ease;" data-aos="fade-up" data-aos-delay="300">
                 <div style="width: 65px; height: 65px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--or); margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.04);"><i class="fas fa-history"></i></div>
-                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">Detailed History</h3>
-                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">Access 90 days of route history with speed analysis, stop duration, and trip reports.</p>
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--nv); margin-bottom: 15px;">{{ $pc('feature_3_title', 'Detailed History') }}</h3>
+                <p style="font-size: 15px; color: var(--gy); line-height: 1.8;">{{ $pc('feature_3_text', 'Access 90 days of route history with speed analysis, stop duration, and trip reports.') }}</p>
             </div>
         </div>
     </div>
@@ -123,9 +134,9 @@
     <div class="wrap">
         <div style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
             <div style="flex: 1.2;" data-aos="fade-right">
-                <div class="lbl" style="color: var(--or);">24/7 Command Center</div>
-                <h2 class="ttl" style="color: #fff; margin-bottom: 25px;">Always Guarding <br>What Matters To You</h2>
-                <p class="dsc" style="color: rgba(255,255,255,0.7); margin-bottom: 35px;">Our dedicated support team is always ready. In case of any violation or theft attempt, we reach out to you immediately to ensure your vehicle's safety.</p>
+                <div class="lbl" style="color: var(--or);">{{ $pc('support_label', '24/7 Command Center') }}</div>
+                <h2 class="ttl" style="color: #fff; margin-bottom: 25px;">{!! $pc('support_title_html', 'Always Guarding <br>What Matters To You') !!}</h2>
+                <p class="dsc" style="color: rgba(255,255,255,0.7); margin-bottom: 35px;">{{ $pc('support_description', "Our dedicated support team is always ready. In case of any violation or theft attempt, we reach out to you immediately to ensure your vehicle's safety.") }}</p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
                     <div style="display: flex; align-items: center; gap: 12px;">
@@ -146,14 +157,14 @@
                     </div>
                 </div>
                 
-                <a href="tel:02134330887" class="bo">Contact Our Center <i class="fas fa-headset" style="margin-left: 8px;"></i></a>
+                <a href="tel:{{ $phoneHref }}" class="bo">Contact Our Center <i class="fas fa-headset" style="margin-left: 8px;"></i></a>
             </div>
             <div style="flex: 0.8;" data-aos="fade-left">
                 <div class="glass-card" style="padding: 45px 40px; border-radius: 30px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);">
                     <div style="font-size: 54px; color: var(--or); margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(244,124,32,0.3));"><i class="fas fa-phone-volume"></i></div>
-                    <h4 style="font-size: 24px; margin-bottom: 12px; font-weight: 700; color: #fff;">Emergency Hotline</h4>
-                    <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 30px; font-weight: 300;">Call us anytime for instant support</p>
-                    <div style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">021-34330887</div>
+                    <h4 style="font-size: 24px; margin-bottom: 12px; font-weight: 700; color: #fff;">{{ $pc('emergency_title', 'Emergency Hotline') }}</h4>
+                    <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 30px; font-weight: 300;">{{ $pc('emergency_text', 'Call us anytime for instant support') }}</p>
+                    <div style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">{{ $phonePrimary }}</div>
                 </div>
             </div>
         </div>
@@ -165,12 +176,12 @@
     <div class="wrap">
         <div style="background: var(--lt); border-radius: 40px; padding: 60px; display: flex; align-items: center; gap: 60px; flex-wrap: wrap-reverse;">
             <div style="flex: 0.7; text-align: center;" data-aos="fade-up">
-                <img src="{{ asset('images/app-interface.png') }}" alt="App Interface" style="max-width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.25); border: 8px solid #fff;">
+                <img src="{{ $pc('app_image_url', asset('images/app-interface.png')) }}" alt="App Interface" style="max-width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.25); border: 8px solid #fff;">
             </div>
             <div style="flex: 1.3;" data-aos="fade-left">
-                <div class="lbl">Mobile Control</div>
-                <h2 class="ttl">Track Your Vehicle <br>On The Go</h2>
-                <p class="dsc" style="margin-bottom: 35px;">Download our mobile application to get real-time location, speed reports, and instant notifications right in your pocket. Compatible with Android & iOS.</p>
+                <div class="lbl">{{ $pc('app_label', 'Mobile Control') }}</div>
+                <h2 class="ttl">{!! $pc('app_title_html', 'Track Your Vehicle <br>On The Go') !!}</h2>
+                <p class="dsc" style="margin-bottom: 35px;">{{ $pc('app_description', 'Download our mobile application to get real-time location, speed reports, and instant notifications right in your pocket. Compatible with Android & iOS.') }}</p>
                 <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                     <a href="https://play.google.com/store/apps/details?id=com.esspl.tracking&hl=en" target="_blank" style="padding: 12px 24px; background: #000; color: #fff; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none;" class="hover-lift">
                         <i class="fab fa-apple" style="font-size: 28px;"></i>
@@ -196,9 +207,9 @@
 <section style="background: #fff; padding: 120px 0;">
     <div class="wrap tc">
         <div data-aos="zoom-in">
-            <h2 class="ttl" style="margin-bottom: 25px;">Ready To Experience The Best Tracking?</h2>
-            <p class="dsc" style="margin-bottom: 45px;">Contact us today for a free demonstration and customized fleet solutions.</p>
-            <a href="{{ route('contact') }}" class="bo" style="padding: 18px 45px; font-size: 16px;">Get Started Now</a>
+            <h2 class="ttl" style="margin-bottom: 25px;">{{ $pc('cta_title', 'Ready To Experience The Best Tracking?') }}</h2>
+            <p class="dsc" style="margin-bottom: 45px;">{{ $pc('cta_description', 'Contact us today for a free demonstration and customized fleet solutions.') }}</p>
+            <a href="{{ route('contact') }}" class="bo" style="padding: 18px 45px; font-size: 16px;">{{ $pc('cta_button', 'Get Started Now') }}</a>
         </div>
     </div>
 </section>

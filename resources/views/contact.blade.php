@@ -1,15 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us — ESS-TRACK BY ESSPL')
+@section('title', $seo['meta_title'] ?? 'Contact Us — ESS-TRACK BY ESSPL')
 
 @section('content')
+@php
+    $pc = fn($key, $default = '') => $pageContent[$key] ?? $default;
+    $setting = fn($key, $default = '') => $siteSettings[$key] ?? $default;
+@endphp
 <!-- INNER HERO -->
 <section style="background: var(--nv); padding: 160px 0 100px; color: #fff; position: relative; overflow: hidden;">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');"></div>
     <div class="wrap" style="position: relative; z-index: 2; text-align: center;">
-        <div class="lbl c" style="color: var(--or);">Get In Touch</div>
-        <h2 class="ttl" style="color: #fff; margin-bottom: 20px;">We Are <span style="color: var(--or);">Here To Help</span></h2>
-        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 700px; margin: 0 auto;">Have questions about our tracking systems or need technical support? Reach out to our expert team anytime.</p>
+        <div class="lbl c" style="color: var(--or);">{{ $pc('hero_label', 'Get In Touch') }}</div>
+        <h2 class="ttl" style="color: #fff; margin-bottom: 20px;">{!! $pc('hero_title_html', 'We Are <span style="color: var(--or);">Here To Help</span>') !!}</h2>
+        <p class="dsc" style="color: rgba(255,255,255,0.7); max-width: 700px; margin: 0 auto;">{{ $pc('hero_description', 'Have questions about our tracking systems or need technical support? Reach out to our expert team anytime.') }}</p>
     </div>
 </section>
 
@@ -21,13 +25,13 @@
             <!-- Contact Info -->
             <div style="flex: 0.8; min-width: 300px;" data-aos="fade-right">
                 <div style="background: var(--nv); color: #fff; padding: 50px; border-radius: 30px; height: 100%; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.2);">
-                    <h3 style="font-size: 24px; margin-bottom: 30px;">Contact Information</h3>
+                    <h3 style="font-size: 24px; margin-bottom: 30px;">{{ $pc('info_title', 'Contact Information') }}</h3>
                     
                     <div style="margin-bottom: 35px; display: flex; align-items: flex-start; gap: 20px;">
                         <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.05); color: var(--or); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><i class="fas fa-map-marker-alt"></i></div>
                         <div>
                             <div style="font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Our Office</div>
-                            <div style="font-size: 15px; line-height: 1.6;">Suit 201, Kawish Crown, Block 6 PECHS, Karachi, Pakistan.</div>
+                            <div style="font-size: 15px; line-height: 1.6;">{{ $setting('address', 'Suite 201, Kawish Crown, Block 6 PECHS, Karachi, Pakistan.') }}</div>
                         </div>
                     </div>
                     
@@ -35,7 +39,7 @@
                         <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.05); color: var(--or); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><i class="fas fa-phone-alt"></i></div>
                         <div>
                             <div style="font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Phone Number</div>
-                            <div style="font-size: 15px;">021-34330887-88</div>
+                            <div style="font-size: 15px;">{{ $setting('phone', '021-34330887-88') }}</div>
                         </div>
                     </div>
                     
@@ -43,15 +47,15 @@
                         <div style="width: 45px; height: 45px; background: rgba(255,255,255,0.05); color: var(--or); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><i class="fas fa-envelope"></i></div>
                         <div>
                             <div style="font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Email Address</div>
-                            <div style="font-size: 15px;">info@esspl.com.pk</div>
+                            <div style="font-size: 15px;">{{ $setting('email', 'info@esspl.com.pk') }}</div>
                         </div>
                     </div>
                     
                     <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
                         <div style="font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Follow Us</div>
                         <div style="display: flex; gap: 12px;">
-                            <a href="https://www.facebook.com/ESSTRACKPAKISTAN" target="_blank" class="soc"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://wa.me/923342011104?text=Hey%2C%20can%20I%20get%20more%20info%20about%20packages%3F" target="_blank" class="soc"><i class="fab fa-whatsapp"></i></a>
+                            <a href="{{ $setting('facebook', 'https://www.facebook.com/ESSTRACKPAKISTAN') }}" target="_blank" class="soc"><i class="fab fa-facebook-f"></i></a>
+                            <a href="{{ $siteWhatsappLink ?? $setting('whatsapp', '#') }}" target="_blank" class="soc"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>
@@ -60,8 +64,8 @@
             <!-- Contact Form -->
             <div style="flex: 1.2; min-width: 300px;" data-aos="fade-left">
                 <div style="background: #fff; padding: 50px; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05);">
-                    <h3 style="font-size: 24px; color: var(--nv); margin-bottom: 10px;">Send Us a Message</h3>
-                    <p style="font-size: 14px; color: var(--gy); margin-bottom: 35px;">Fill out the form and our team will get back to you within 24 hours.</p>
+                    <h3 style="font-size: 24px; color: var(--nv); margin-bottom: 10px;">{{ $pc('form_title', 'Send Us a Message') }}</h3>
+                    <p style="font-size: 14px; color: var(--gy); margin-bottom: 35px;">{{ $pc('form_intro', 'Fill out the form and our team will get back to you within 24 hours.') }}</p>
                     
                     <form id="contactForm">
                         @csrf
@@ -146,8 +150,8 @@
         <!-- Placeholder for Map -->
         <div style="text-align: center; color: var(--gy);">
             <div style="font-size: 40px; margin-bottom: 10px;"><i class="fas fa-map-marked-alt"></i></div>
-            <p style="font-weight: 600;">Google Maps Integration Here</p>
-            <p style="font-size: 12px;">Suit 201, Kawish Crown, Block 6 PECHS, Karachi</p>
+            <p style="font-weight: 600;">{{ $pc('map_title', 'Google Maps Integration Here') }}</p>
+            <p style="font-size: 12px;">{{ $setting('address', 'Suite 201, Kawish Crown, Block 6 PECHS, Karachi') }}</p>
         </div>
         <!-- Real map would go here in production -->
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.641604169!2d67.0664!3d24.8719!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33ef3b8398b1b%3A0xa193d9282362b53b!2sKawish%20Crown!5e0!3m2!1sen!2s!4v1714000000000!5m2!1sen!2s" width="100%" height="100%" style="border:0; position: absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
