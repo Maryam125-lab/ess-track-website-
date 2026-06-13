@@ -305,104 +305,150 @@
 </head>
 <body>
 
-<!-- MEGA PROMO MODAL - HOME PAGE ONLY -->
+<!-- MEGA PROMO MODAL — HOME PAGE ONLY -->
 @if(request()->routeIs('home'))
-@php
-    $rentalPromoPackages = $promoPackages->filter(fn ($pkg) => ($pkg['type'] ?? 'rental') === 'rental')->take(4)->values();
-    $devicePromoPackages = $promoPackages->filter(fn ($pkg) => ($pkg['type'] ?? '') === 'device')->take(4)->values();
-@endphp
 <div class="promo-overlay" id="megaPromo">
+    <!-- LEFT PANEL — Branding -->
     <div class="promo-left">
         <div>
-            <div class="promo-badge"><span></span> {{ $gt('promo_badge', 'Special Offer - 2026') }}</div>
-            <h2>{{ $gt('promo_title_line_1', 'Choose Your') }}<em>{{ $gt('promo_title_line_2', 'Tracking Package') }}</em></h2>
-            <p>{{ $gt('promo_description', "Pakistan's trusted GPS vehicle tracking company. Real-time monitoring, 24/7 support, and clear package options.") }}</p>
+            <div class="promo-badge"><span></span> Special Offer — 2025</div>
+            <h2>Choose Your<em>Tracking Package</em></h2>
+            <p>Pakistan's most trusted GPS vehicle tracking since 2009. Real-time monitoring, 24/7 support — your vehicle's safety is our priority.</p>
             <div class="promo-stats">
-                <div class="promo-stat"><strong>{{ $gt('promo_stat_1_number', '15+') }}</strong><span>{{ $gt('promo_stat_1_label', 'Years Active') }}</span></div>
-                <div class="promo-stat"><strong>{{ $gt('promo_stat_2_number', '5000+') }}</strong><span>{{ $gt('promo_stat_2_label', 'Vehicles') }}</span></div>
-                <div class="promo-stat"><strong>{{ $gt('promo_stat_3_number', '24/7') }}</strong><span>{{ $gt('promo_stat_3_label', 'Monitoring') }}</span></div>
-                <div class="promo-stat"><strong>{{ $gt('promo_stat_4_number', '100%') }}</strong><span>{{ $gt('promo_stat_4_label', 'Secure') }}</span></div>
+                <div class="promo-stat"><strong>15+</strong><span>Years Active</span></div>
+                <div class="promo-stat"><strong>5000+</strong><span>Vehicles</span></div>
+                <div class="promo-stat"><strong>24/7</strong><span>Monitoring</span></div>
+                <div class="promo-stat"><strong>100%</strong><span>Secure</span></div>
             </div>
-            <div class="promo-trust"><i class="fas fa-shield-alt"></i> {{ $gt('promo_trust_text', 'ESS-TRACK by ESSPL - Certified & Trusted') }}</div>
-            @if(!empty($promoModalOffers))
-            <div style="margin-top:20px;position:relative;z-index:2;">
-                @foreach($promoModalOffers as $offer)
-                <div style="background:rgba(244,124,32,0.15);border:1px solid rgba(244,124,32,0.4);border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:#fff;">
-                    <strong>{{ $offer['badge_text'] ?? 'OFFER' }}</strong> - {{ $offer['title'] }}
-                    @if(!empty($offer['promo_code'])) <code style="background:#fff;color:var(--nv);padding:2px 8px;border-radius:4px;margin-left:6px;">{{ $offer['promo_code'] }}</code> @endif
-                </div>
-                @endforeach
-            </div>
-            @endif
+            <div class="promo-trust"><i class="fas fa-shield-alt"></i> ESS-TRACK by ESSPL — Certified & Trusted</div>
         </div>
         <a href="{{ route('services') }}" onclick="closePromo()" style="margin-top:28px; display:inline-flex; align-items:center; gap:8px; background:var(--or); color:#fff; padding:13px 24px; border-radius:12px; font-weight:700; font-size:13px; text-decoration:none; transition:all 0.3s; position:relative; z-index:2;">
-            {{ $gt('promo_view_all_button', 'View All Packages') }} <i class="fas fa-arrow-right"></i>
+            View All Packages <i class="fas fa-arrow-right"></i>
         </a>
     </div>
 
+    <!-- RIGHT PANEL — Packages -->
     <div class="promo-right">
         <button class="promo-close-btn" onclick="closePromo()"><i class="fas fa-times"></i></button>
         <div class="promo-right-inner">
+
+            <!-- Toggle -->
             <div class="promo-toggle">
-                <button id="promoRentalBtn" class="promo-toggle-btn active" onclick="showPromoPackages('rental')">{{ $gt('promo_rental_tab', 'Rental') }}</button>
-                <button id="promoDeviceBtn" class="promo-toggle-btn" onclick="showPromoPackages('device')">{{ $gt('promo_device_tab', 'With Device') }}</button>
+                <button id="promoRentalBtn" class="promo-toggle-btn active" onclick="showPromoPackages('rental')">Rental</button>
+                <button id="promoDeviceBtn" class="promo-toggle-btn" onclick="showPromoPackages('device')">With Device</button>
             </div>
 
+            <!-- RENTAL GRID -->
             <div id="promoRentalGrid">
-                <p class="promo-section-title">{{ $gt('promo_rental_title', 'Rental Packages') }}</p>
+                <p class="promo-section-title">Rental Packages</p>
                 <div class="promo-pkg-grid">
-                    @forelse($rentalPromoPackages as $pkg)
-                    <div class="promo-pkg {{ !empty($pkg['popular']) ? 'pop' : '' }}" onclick="window.location.href='{{ route('services') }}'">
-                        @if(!empty($pkg['badge']))<div class="promo-pkg-tag">{{ $pkg['badge'] }}</div>@endif
-                        <h4>{{ $pkg['name'] ?? 'Package' }}</h4>
-                        <div class="promo-pkg-price">{{ $pkg['price'] ?? 'Ask for price' }}<span>{{ $pkg['unit'] ?? '' }}</span></div>
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Starter</div>
+                        <h4>Basic / Silver</h4>
+                        <div class="promo-pkg-price">PKR 14,500<span>/Total</span></div>
                         <ul>
-                            @foreach(array_slice($pkg['features'] ?? [], 0, 4) as $feature)
-                            <li><i class="fas fa-check"></i> {{ $feature }}</li>
-                            @endforeach
+                            <li><i class="fas fa-check"></i> 24/7 Control Room</li>
+                            <li><i class="fas fa-check"></i> Geo Fence Alerts</li>
+                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
+                            <li><i class="fas fa-check"></i> Data Plan Included</li>
                         </ul>
-                        <button class="promo-pkg-btn {{ !empty($pkg['popular']) ? 'or' : '' }}" onclick="event.stopPropagation(); closePromo(); openBookingModal(@js($pkg['name'] ?? 'Package'))">{{ $gt('promo_package_button', 'Book Now') }}</button>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Basic / Silver Rental')">Book Now</button>
                     </div>
-                    @empty
-                    <p class="muted">No rental packages available.</p>
-                    @endforelse
+                    <div class="promo-pkg pop" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Most Popular</div>
+                        <h4>Standard / Gold</h4>
+                        <div class="promo-pkg-price">PKR 18,500<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-plus"></i> All Silver Features</li>
+                            <li><i class="fas fa-check"></i> European Software</li>
+                            <li><i class="fas fa-check"></i> Live Map Status</li>
+                            <li><i class="fas fa-check"></i> Mobile App FREE</li>
+                        </ul>
+                        <button class="promo-pkg-btn or" onclick="event.stopPropagation(); closePromo(); openBookingModal('Standard / Gold Rental')">Book Now</button>
+                    </div>
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Advanced</div>
+                        <h4>Premium / Platinum</h4>
+                        <div class="promo-pkg-price">PKR 35,000<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-plus"></i> All Gold Features</li>
+                            <li><i class="fas fa-check"></i> Auto Calls Alert</li>
+                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
+                            <li><i class="fas fa-check"></i> Maintenance Alerts</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Premium / Platinum Rental')">Book Now</button>
+                    </div>
+                    <div class="promo-pkg" onclick="window.location.href='{{ route('services') }}'">
+                        <div class="promo-pkg-tag">Bulk Fleet</div>
+                        <h4>Corporate Fleet</h4>
+                        <div class="promo-pkg-price">PKR 18,500<span>/Vehicle</span></div>
+                        <ul>
+                            <li><i class="fas fa-snowflake"></i> Reefer Trucks</li>
+                            <li><i class="fas fa-check"></i> Temp Monitoring</li>
+                            <li><i class="fas fa-check"></i> Custom Dashboards</li>
+                            <li><i class="fas fa-check"></i> Staff Training</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="event.stopPropagation(); closePromo(); openBookingModal('Corporate Fleet Rental')">Book Now</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- DEVICE GRID -->
             <div id="promoDeviceGrid" style="display:none;">
-                <p class="promo-section-title">{{ $gt('promo_device_title', 'With Device Packages') }}</p>
+                <p class="promo-section-title">With Device Packages</p>
                 <div class="promo-pkg-grid">
-                    @forelse($devicePromoPackages as $pkg)
-                    <div class="promo-pkg {{ !empty($pkg['popular']) ? 'pop' : '' }}" onclick="window.location.href='{{ route('services') }}'">
-                        @if(!empty($pkg['badge']))<div class="promo-pkg-tag">{{ $pkg['badge'] }}</div>@endif
-                        <h4>{{ $pkg['name'] ?? 'Package' }}</h4>
-                        <div class="promo-pkg-price">{{ $pkg['price'] ?? 'Ask for price' }}<span>{{ $pkg['unit'] ?? '' }}</span></div>
+                    <div class="promo-pkg">
+                        <h4>Basic / Silver</h4>
+                        <div class="promo-pkg-price">PKR 27,000<span>/Total</span></div>
                         <ul>
-                            @foreach(array_slice($pkg['features'] ?? [], 0, 4) as $feature)
-                            <li><i class="fas fa-check"></i> {{ $feature }}</li>
-                            @endforeach
+                            <li><i class="fas fa-check"></i> Full Device Ownership</li>
+                            <li><i class="fas fa-check"></i> 24/7 Monitoring</li>
+                            <li><i class="fas fa-check"></i> Remote Shutdown</li>
                         </ul>
-                        <button class="promo-pkg-btn {{ !empty($pkg['popular']) ? 'or' : '' }}" onclick="event.stopPropagation(); closePromo(); openBookingModal(@js($pkg['name'] ?? 'Package'))">{{ $gt('promo_package_button', 'Book Now') }}</button>
+                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Basic / Silver Device')">Book Now</button>
                     </div>
-                    @empty
-                    <p class="muted">No device packages available.</p>
-                    @endforelse
+                    <div class="promo-pkg pop">
+                        <h4>Standard / Gold</h4>
+                        <div class="promo-pkg-price">PKR 31,000<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> European Software</li>
+                            <li><i class="fas fa-check"></i> Engine Alerts</li>
+                            <li><i class="fas fa-check"></i> Trip History</li>
+                        </ul>
+                        <button class="promo-pkg-btn or" onclick="closePromo(); openBookingModal('Standard / Gold Device')">Book Now</button>
+                    </div>
+                    <div class="promo-pkg">
+                        <h4>Premium / Platinum</h4>
+                        <div class="promo-pkg-price">PKR 36,500<span>/Total</span></div>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Voice Monitoring</li>
+                            <li><i class="fas fa-check"></i> Dedicated Manager</li>
+                            <li><i class="fas fa-check"></i> Access Shutdown</li>
+                        </ul>
+                        <button class="promo-pkg-btn" onclick="closePromo(); openBookingModal('Premium / Platinum Device')">Book Now</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Add-ons -->
             <div style="margin-top:24px;">
-                <p class="promo-section-title">{{ $gt('promo_addons_title', 'Add-on Devices') }}</p>
+                <p class="promo-section-title">Add-on Devices</p>
                 <div class="promo-addons">
-                    @forelse($promoAddons->take(6) as $addon)
-                    <div class="promo-addon" onclick="closePromo(); openBookingModal(@js($addon['name'] ?? 'Add-on'))">
-                        <h5>{{ $addon['name'] ?? 'Add-on' }}</h5>
-                        <div class="promo-addon-price">{{ $addon['price'] ?? '' }}</div>
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Dash Cam Tracker Add-on')">
+                        <h5>Dash Cam</h5>
+                        <div class="promo-addon-price">PKR 45,000</div>
                     </div>
-                    @empty
-                    <p class="muted">No add-ons available.</p>
-                    @endforelse
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('AI Dash Cam Add-on')">
+                        <h5>AI Dash Cam</h5>
+                        <div class="promo-addon-price">PKR 120,000</div>
+                    </div>
+                    <div class="promo-addon" onclick="closePromo(); openBookingModal('Temperature Sensor Add-on')">
+                        <h5>Temp Sensor</h5>
+                        <div class="promo-addon-price">PKR 6,500</div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

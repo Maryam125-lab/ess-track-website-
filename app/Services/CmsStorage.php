@@ -90,21 +90,7 @@ class CmsStorage
             ],
             'page_seo' => $pageSeo,
             'page_content' => [],
-            'blog_posts' => [
-                [
-                    'id' => 1,
-                    'slug' => 'why-ess-track-is-best-gps-tracking-pakistan',
-                    'title' => 'Why ESS-Track is the Best GPS Vehicle Tracking System in Pakistan',
-                    'excerpt' => 'Discover what makes ESS-Track the top choice for fleet owners across Pakistan.',
-                    'content' => '<p>ESS-Track by ESSPL — trusted since 2009.</p>',
-                    'image_url' => 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80',
-                    'author' => 'ESS-Track Team',
-                    'status' => 'published',
-                    'meta_title' => 'Why ESS-Track is the Best GPS Tracking in Pakistan',
-                    'meta_description' => 'Best GPS vehicle tracking in Pakistan.',
-                    'published_at' => '2025-11-10 10:00:00',
-                ],
-            ],
+            'blog_posts' => self::defaultBlogPosts(),
             'success_stories' => [],
             'promotions' => [
                 [
@@ -131,6 +117,50 @@ class CmsStorage
         ];
     }
 
+    public static function defaultBlogPosts(): array
+    {
+        return [
+            [
+                'id' => 1,
+                'slug' => 'why-ess-track-is-best-gps-tracking-pakistan',
+                'title' => 'Why ESS-Track is the Best GPS Vehicle Tracking System in Pakistan',
+                'excerpt' => 'Discover what makes ESS-Track the top choice for fleet owners, logistics companies, and individual vehicle owners across Pakistan.',
+                'content' => '<p>When searching for the <strong>best ESS Track</strong> solution in Pakistan, businesses need reliability, nationwide coverage, and 24/7 support. ESS-Track by ESSPL delivers all three, backed by 15+ years of experience since 2009.</p><p>Our 3G-2G hybrid tracking platform keeps your vehicles connected even in remote areas. Real-time location, speed alerts, geofencing, and engine immobilization give you complete control over your fleet.</p><p>Whether you manage a single car or hundreds of commercial vehicles, ESS-Track scales with your needs through Basic, Silver, and Gold packages.</p>',
+                'image_url' => 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80',
+                'author' => 'ESS-Track Team',
+                'status' => 'published',
+                'meta_title' => 'Why ESS-Track is the Best GPS Tracking in Pakistan',
+                'meta_description' => 'ESS-Track by ESSPL is Pakistan\'s best GPS vehicle tracking system with 24/7 monitoring and nationwide coverage.',
+                'published_at' => '2025-11-10 10:00:00',
+            ],
+            [
+                'id' => 2,
+                'slug' => 'fleet-management-tips-pakistan-2025',
+                'title' => '5 Fleet Management Tips for Pakistani Businesses in 2025',
+                'excerpt' => 'Practical strategies to reduce fuel costs, prevent theft, and improve driver accountability using GPS tracking.',
+                'content' => '<p>Effective fleet management starts with visibility. Pakistani logistics and delivery companies are increasingly adopting GPS tracking to stay competitive.</p><p><strong>Tip 1:</strong> Set geofence alerts for depots and customer zones.<br><strong>Tip 2:</strong> Monitor idle time to cut fuel waste.<br><strong>Tip 3:</strong> Review speed reports weekly.<br><strong>Tip 4:</strong> Use route history for dispute resolution.<br><strong>Tip 5:</strong> Choose a provider with local 24/7 support, like ESS-Track.</p>',
+                'image_url' => 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80',
+                'author' => 'ESS-Track Team',
+                'status' => 'published',
+                'meta_title' => 'Fleet Management Tips Pakistan 2025 | ESS-Track',
+                'meta_description' => 'Five proven fleet management tips for Pakistani businesses using GPS vehicle tracking.',
+                'published_at' => '2025-12-05 10:00:00',
+            ],
+            [
+                'id' => 3,
+                'slug' => 'how-gps-tracking-prevents-vehicle-theft',
+                'title' => 'How GPS Tracking Prevents Vehicle Theft in Pakistan',
+                'excerpt' => 'Learn how real-time tracking and instant alerts help recover stolen vehicles faster and deter criminals.',
+                'content' => '<p>Vehicle theft remains a serious concern across Pakistan\'s major cities. GPS tracking adds a critical layer of security that traditional alarms cannot match.</p><p>With ESS-Track, owners receive instant notifications when a vehicle moves outside designated areas or during unauthorized hours. Our monitoring team can assist with location sharing for law enforcement.</p><p>Engine immobilization features available on select packages add another deterrent, stopping thieves before they get far.</p>',
+                'image_url' => 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80',
+                'author' => 'ESS-Track Team',
+                'status' => 'published',
+                'meta_title' => 'GPS Tracking Prevents Vehicle Theft | ESS-Track',
+                'meta_description' => 'How ESS-Track GPS vehicle tracking helps prevent and recover stolen vehicles in Pakistan.',
+                'published_at' => '2026-01-20 10:00:00',
+            ],
+        ];
+    }
     public static function defaultChatFaqs(): array
     {
         return [
