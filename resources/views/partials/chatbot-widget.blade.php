@@ -17,9 +17,10 @@
             <button type="button" id="essChatClose" aria-label="Close chat"><i class="fas fa-times"></i></button>
         </div>
         <div id="essChatMessages"></div>
-        <div id="essLeadCard" class="ess-lead-card">
+        <div id="essLeadCard" class="ess-lead-card" style="display:none;">
             <div class="ess-lead-title">Please share your details</div>
             <input type="text" id="essLeadName" placeholder="Your name" autocomplete="name" maxlength="80">
+            <input type="email" id="essLeadEmail" placeholder="Email address" autocomplete="email" maxlength="120">
             <input type="tel" id="essLeadPhone" placeholder="Contact number" autocomplete="tel" maxlength="25">
             <button type="button" id="essLeadSubmit">Continue</button>
             <p>For package details, you can also contact ESSPL at <a href="tel:{{ $chatPhoneHref }}">{{ $chatPhone }}</a>.</p>
@@ -50,26 +51,49 @@
 </style>
 <script>
 (function(){
-    const panel=document.getElementById('essChatPanel'),toggle=document.getElementById('essChatToggle'),close=document.getElementById('essChatClose'),form=document.getElementById('essChatForm'),input=document.getElementById('essChatInput'),box=document.getElementById('essChatMessages'),quick=document.querySelector('.ess-chat-quick'),leadCard=document.getElementById('essLeadCard'),leadName=document.getElementById('essLeadName'),leadPhone=document.getElementById('essLeadPhone'),leadSubmit=document.getElementById('essLeadSubmit');
+    const panel=document.getElementById('essChatPanel'),toggle=document.getElementById('essChatToggle'),close=document.getElementById('essChatClose'),form=document.getElementById('essChatForm'),input=document.getElementById('essChatInput'),box=document.getElementById('essChatMessages'),quick=document.querySelector('.ess-chat-quick'),leadCard=document.getElementById('essLeadCard'),leadName=document.getElementById('essLeadName'),leadEmail=document.getElementById('essLeadEmail'),leadPhone=document.getElementById('essLeadPhone'),leadSubmit=document.getElementById('essLeadSubmit');
     if(!panel)return;
-    const storageKey='essTrackChatLeadEnglishFormV1';
+    const storageKey='essTrackChatLeadEnglishFormV2';
     let lead={};
     try{lead=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(e){lead={};}
     function addMsg(text,who){const d=document.createElement('div');d.className='ess-msg '+who;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;}
     function saveLead(){localStorage.setItem(storageKey,JSON.stringify(lead));}
     function validPhone(value){return /^[0-9+\-\s()]{7,25}$/.test(value.trim());}
+    function validEmail(value){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());}
+    function hasLead(){return !!(lead.name&&lead.email&&lead.phone);}
+    function showGreetingMode(){leadCard.style.display='none';quick.style.display='none';form.style.display='flex';}
     function showChatReady(){leadCard.style.display='none';quick.style.display='flex';form.style.display='flex';}
-    function greet(){if(box.children.length)return;addMsg('Hello! How are you today? I am here to help you with ESS-Track packages, pricing, installation, and contact details.', 'bot');if(lead.name&&lead.phone){showChatReady();addMsg('You can ask your question now. For package details, you can also call ESSPL at {{ $chatPhone }}.', 'bot');}}
+    function askLead(){
+        form.style.display='none';
+        quick.style.display='none';
+        leadCard.style.display='grid';
+        addMsg('Thank you. Please share your name, email address, and contact number so our team can guide you properly.', 'bot');
+    }
+    function greet(){
+        if(box.children.length)return;
+        addMsg('Hello! Welcome to ESS-Track by ESSPL. We help with GPS vehicle tracking, packages, installation, and support. How are you today?', 'bot');
+        if(hasLead()){
+            showChatReady();
+            addMsg('You can ask your question now. For package details, you can also call ESSPL at {{ $chatPhone }}.', 'bot');
+        }else{
+            showGreetingMode();
+        }
+    }
     toggle.onclick=()=>{panel.style.display=panel.style.display==='none'?'flex':'none';greet();};
     close.onclick=()=>panel.style.display='none';
     leadSubmit.onclick=()=>{
-        const name=leadName.value.trim();const phone=leadPhone.value.trim();
+        const name=leadName.value.trim();const email=leadEmail.value.trim();const phone=leadPhone.value.trim();
         if(name.length<3){addMsg('Please enter your name first.', 'bot');leadName.focus();return;}
+        if(!validEmail(email)){addMsg('Please enter a valid email address.', 'bot');leadEmail.focus();return;}
         if(!validPhone(phone)){addMsg('Please enter a valid contact number.', 'bot');leadPhone.focus();return;}
-        lead={name,phone,language:'english'};saveLead();addMsg(`${name} - ${phone}`,'user');addMsg(`Thank you, ${name}. You can ask me about packages, installation, promotions, or contact details. For package details, you can also call ESSPL at {{ $chatPhone }}.`, 'bot');showChatReady();
+        lead={name,email,phone,language:'english'};saveLead();addMsg('Details submitted.','user');addMsg(`Thank you, ${name}. You can ask me about packages, installation, promotions, or contact details. For package details, you can also call ESSPL at {{ $chatPhone }}.`, 'bot');showChatReady();input.focus();
     };
     async function send(text){
         if(!text.trim())return;addMsg(text,'user');input.value='';
+        if(!hasLead()){
+            askLead();
+            return;
+        }
         if(/package|packages|silver|gold|platinum|rental|device/i.test(text)){lead.package_interest=text.trim();saveLead();}
         addMsg('Typing...','bot');
         try{
@@ -79,7 +103,7 @@
     }
     form.onsubmit=e=>{e.preventDefault();send(input.value);};
     document.querySelectorAll('.ess-chat-quick button').forEach(b=>b.onclick=()=>send(b.dataset.q));
-    if(lead.name&&lead.phone){showChatReady();}
+    if(hasLead()){showChatReady();}else{showGreetingMode();}
     greet();
 })();
 </script>
