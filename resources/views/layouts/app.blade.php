@@ -47,6 +47,7 @@
         *{margin:0;padding:0;box-sizing:border-box;}
         html{scroll-behavior:smooth;}
         body{font-family:'Poppins',sans-serif;background:#fff;color:var(--dk);overflow-x:hidden;}
+        img,video,iframe{max-width:100%;height:auto;}
 
         /* ===== TOPBAR ===== */
         .topbar{background:var(--nv);padding:8px 48px;display:flex;justify-content:space-between;align-items:center;font-size:12px;position:fixed;width:100%;top:0;z-index:1000;color:rgba(255,255,255,.7);}
@@ -296,9 +297,69 @@
         .office-use { background: #cbd5e1; border: 2px dashed #94a3b8; padding: 25px; border-radius: 20px; margin-top: 30px; pointer-events: none; opacity: 0.8; position: relative; }
         .office-use::after { content: 'FOR OFFICE PURPOSE ONLY'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); font-size: 30px; font-weight: 900; color: rgba(0,0,0,0.05); }
         
+        @media(max-width:980px){
+            .topbar{position:static;padding:8px 18px;gap:8px;flex-wrap:wrap;}
+            .tbl,.tbr{gap:8px;min-width:0;}
+            .tbr{flex-wrap:wrap;justify-content:flex-end;}
+            nav{position:sticky;top:0;height:64px;padding:0 18px;}
+            .lmain{font-size:19px;}
+            .lsub{letter-spacing:2.5px;}
+            .lico{width:40px;height:40px;}
+            .nlinks{display:none;}
+            .hbtn{display:block;}
+            .mob{top:64px;padding:12px 18px 18px;max-height:calc(100vh - 64px);overflow-y:auto;}
+            section{padding:64px 0;}
+            .wrap{padding:0 20px;}
+            .fg4{grid-template-columns:1fr 1fr;gap:26px;}
+            .promo-overlay{align-items:flex-start;justify-content:flex-start;flex-direction:column;overflow-y:auto;padding:12px;}
+            .promo-left,.promo-right{width:100%;max-width:none;}
+            .promo-left{padding:24px 20px;}
+            .promo-right{overflow:visible;}
+            .promo-right-inner{padding:24px 16px;}
+            .promo-stats{grid-template-columns:1fr 1fr;}
+            .promo-pkg-grid{grid-template-columns:1fr;}
+            .promo-addons{grid-template-columns:1fr 1fr;}
+            .modal-overlay{align-items:flex-start;padding:10px;overflow-y:auto;}
+            .modal-content{max-height:none;border-radius:18px;}
+            .modal-header{padding:20px;gap:12px;}
+            .form-section{padding:20px !important;}
+            .form-grid{grid-template-columns:1fr;}
+            .modal-content [style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+            .modal-content table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
+            .modal-content table tbody{display:table;min-width:620px;width:100%;}
+            .sla-document{padding:28px 18px;font-size:14px;overflow-wrap:anywhere;}
+            .sla-document [style*="grid-template-columns"]{grid-template-columns:1fr !important;gap:22px !important;}
+            #slaOverlay{padding:70px 12px 24px;}
+            .wa-float{left:18px;bottom:18px;width:54px;height:54px;font-size:28px;}
+            #scrollTopBtn{right:18px;bottom:18px;}
+        }
+
         @media(max-width:660px){
             .premium-popup { left: 20px; right: 20px; flex-direction: column; text-align: center; }
-            .form-grid { grid-template-columns: 1fr; }
+            .topbar{font-size:11px;justify-content:center;text-align:center;}
+            .tbr{justify-content:center;}
+            .tbr span:last-child{display:none;}
+            .promo-badge{font-size:9.5px;letter-spacing:1.6px;margin-bottom:18px;}
+            .promo-left h2{font-size:24px;}
+            .promo-left p{font-size:12.5px;margin-bottom:20px;}
+            .promo-stat{padding:10px 8px;}
+            .promo-stat strong{font-size:17px;}
+            .promo-stat span{font-size:8.5px;}
+            .promo-toggle{width:100%;}
+            .promo-toggle-btn{flex:1;padding:8px 10px;}
+            .promo-pkg{min-height:auto;padding:18px 16px;}
+            .promo-pkg h4{margin-right:100px;}
+            .promo-pkg-price{font-size:18px;}
+            .promo-addons{grid-template-columns:1fr;}
+            .pkg-grid{grid-template-columns:1fr;gap:18px;}
+            .pkg-card{padding:28px 20px;border-radius:18px;}
+            .toggle-btn{padding:10px 18px;font-size:13px;}
+            .fg4{grid-template-columns:1fr;}
+            .fbot{padding:18px 20px;}
+            .bo,.bn,.bw{width:100%;justify-content:center;}
+            .modal-header h2{font-size:20px !important;}
+            .modal-header p{font-size:11px !important;}
+            .close-sla{right:12px;top:12px;padding:8px 14px;}
         }
     </style>
     @yield('styles')

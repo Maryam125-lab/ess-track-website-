@@ -9,7 +9,7 @@
     <style>
         :root{--nv:#0d1b2a;--or:#f47c20;--lt:#f7f8fa;--gy:#6b7280;--ok:#059669;--err:#dc2626;}
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--lt);color:#111827;min-height:100vh;}
+        body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--lt);color:#111827;min-height:100vh;overflow-x:hidden;}
         .admin-wrap{display:flex;min-height:100vh;}
         .sidebar{width:260px;background:var(--nv);color:#fff;padding:24px 0;flex-shrink:0;}
         .sidebar .brand{padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px;}
@@ -42,7 +42,35 @@
         input,textarea,select{width:100%;padding:10px 14px;border:1px solid #d1d5db;border-radius:8px;font-family:inherit;font-size:14px;}
         textarea{min-height:120px;resize:vertical;}
         .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-        @media(max-width:900px){.admin-wrap{flex-direction:column;}.sidebar{width:100%;}.grid-2{grid-template-columns:1fr;}}
+        @media(max-width:900px){
+            .admin-wrap{flex-direction:column;}
+            .sidebar{width:100%;padding:14px 0 10px;position:sticky;top:0;z-index:50;box-shadow:0 8px 24px rgba(13,27,42,.18);}
+            .sidebar .brand{padding:0 16px 12px;margin-bottom:10px;}
+            .sidebar .brand h1{font-size:17px;}
+            .sidebar .brand p{font-size:10px;}
+            .sidebar nav{display:flex;gap:8px;overflow-x:auto;padding:0 12px 4px;scrollbar-width:thin;}
+            .sidebar nav a{flex:0 0 auto;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 12px;font-size:13px;white-space:nowrap;}
+            .sidebar nav a:hover,.sidebar nav a.active{border-right:none;border-color:rgba(244,124,32,.55);}
+            .sidebar nav form{flex:0 0 auto;margin:0 !important;padding:0 !important;}
+            .sidebar nav form .btn{height:38px;white-space:nowrap;}
+            .topbar{position:sticky;top:0;z-index:40;padding:12px 16px;gap:8px;flex-wrap:wrap;}
+            .content{padding:18px 14px;}
+            .card{padding:18px;border-radius:10px;margin-bottom:18px;overflow-x:auto;}
+            .grid-2{grid-template-columns:1fr !important;}
+            table{display:block;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;}
+            th,td{padding:10px;font-size:13px;}
+            .btn{padding:9px 13px;font-size:13px;}
+            input,textarea,select{font-size:16px;}
+        }
+
+        @media(max-width:560px){
+            .topbar{align-items:flex-start;}
+            .topbar .muted{font-size:12px;overflow-wrap:anywhere;}
+            .content{padding:14px 10px;}
+            .card{padding:15px;}
+            h2{font-size:19px;}
+            .sidebar nav a{font-size:12px;padding:8px 10px;}
+        }
     </style>
     @yield('styles')
 </head>
