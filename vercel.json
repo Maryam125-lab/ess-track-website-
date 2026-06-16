@@ -35,7 +35,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend/public/index.php"
+      "dest": "/api/index.php"
     },
     {
       "src": "/(css|images)/(.*)",
