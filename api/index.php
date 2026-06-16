@@ -14,4 +14,13 @@ putenv("VIEW_COMPILED_PATH=/tmp/views");
 
 @mkdir('/tmp/views', 0777, true);
 
+if (isset($_GET['__path'])) {
+    $path = '/' . ltrim((string) $_GET['__path'], '/');
+    unset($_GET['__path']);
+
+    $query = http_build_query($_GET);
+    $_SERVER['REQUEST_URI'] = $path . ($query ? '?' . $query : '');
+    $_SERVER['PATH_INFO'] = $path;
+}
+
 require __DIR__ . '/../public/index.php';
