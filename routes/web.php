@@ -102,7 +102,7 @@ Route::get('/contact', function (SeoService $seo) {
 
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
-Route::post('/chat', [ChatController::class, 'message'])->name('chat.message');
+Route::post('/chat', [ChatController::class, 'message'])->middleware('throttle:chat')->name('chat.message');
 
 
 
@@ -116,13 +116,19 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::redirect('/admin', '/portal');
+Route::redirect('/admin/login', '/portal/login');
+Route::get('/admin/{path}', function (string $path) {
+    return redirect('/portal/' . ltrim($path, '/'));
+})->where('path', '.*');
+
+Route::prefix('portal')->name('admin.')->group(function () {
 
     Route::get('/', [AuthController::class, 'showLogin'])->name('entry');
 
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
-    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:portal-login')->name('login.submit');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

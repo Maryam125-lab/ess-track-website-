@@ -28,7 +28,7 @@
 
 @section('content')
 <div class="dash-hero">
-    <h1>Welcome back, ESS-Track Admin</h1>
+    <h1>Welcome back, ESS-Track Team</h1>
     <p>Manage orders, content, promotions & website — all in one place.</p>
 </div>
 

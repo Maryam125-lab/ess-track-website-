@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
         CmsStorage::ensureJsonStore();
 
         View::composer('layouts.app', function ($view) {
-            if (request()->is('admin', 'admin/*')) {
+            if (request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
                 return;
             }
 
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view) {
-            if (request()->is('admin', 'admin/*')) {
+            if (request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
                 return;
             }
 
@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        if (! app()->runningInConsole() && request() && ! request()->is('admin', 'admin/*')) {
+        if (! app()->runningInConsole() && request() && ! request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
             try {
                 app(AnalyticsService::class)->track(
                     request()->path(),

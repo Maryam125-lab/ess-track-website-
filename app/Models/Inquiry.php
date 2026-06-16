@@ -10,6 +10,16 @@ class Inquiry extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+        'vehicle_type',
+        'interested_package',
+        'message',
+    ];
+
     protected $casts = [
         'created_at' => 'datetime',
     ];

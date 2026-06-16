@@ -15,8 +15,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|max:150',
-            'password' => 'required|string',
+            'email' => 'required|email|max:150',
+            'password' => 'required|string|min:8|max:200',
         ]);
 
         $email = config('cms.admin_email');

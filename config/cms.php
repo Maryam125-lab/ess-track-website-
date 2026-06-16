@@ -2,7 +2,7 @@
 
 return [
 
-  'admin_email' => env('CMS_ADMIN_EMAIL', 'admin@esspl.com.pk'),
+  'admin_email' => env('CMS_PORTAL_EMAIL', env('CMS_ADMIN_EMAIL', 'portal@esspl.com.pk')),
 
   'admin_password' => env('CMS_ADMIN_PASSWORD', 'ESSTrack@2026'),
 

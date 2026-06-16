@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title', 'Admin') — ESS-Track CMS</title>
+    <title>@yield('title', 'Dashboard') — ESS-Track CMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root{--nv:#0d1b2a;--or:#f47c20;--lt:#f7f8fa;--gy:#6b7280;--ok:#059669;--err:#dc2626;}
@@ -80,7 +80,7 @@
     <aside class="sidebar">
         <div class="brand">
             <h1>ESS-Track CMS</h1>
-            <p>Admin Portal</p>
+            <p>Management Portal</p>
         </div>
         <nav>
             <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-gauge"></i> Dashboard</a>

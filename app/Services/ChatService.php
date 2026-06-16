@@ -331,6 +331,10 @@ class ChatService
                 'user_message' => $entry['user_message'],
                 'bot_reply' => $entry['bot_reply'],
                 'source' => $entry['source'],
+                'lead_name' => $entry['lead_name'],
+                'lead_email' => $entry['lead_email'],
+                'lead_phone' => $entry['lead_phone'],
+                'package_interest' => $entry['package_interest'],
                 'created_at' => $entry['created_at'],
             ]);
 
