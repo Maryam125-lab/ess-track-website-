@@ -52,7 +52,13 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('portal-login', function (Request $request) {
             $email = strtolower((string) $request->input('email', ''));
 
-            return Limit::perMinute(5)->by($request->ip() . '|' . $email);
+            return Limit::perMinute(15)
+                ->by($request->ip() . '|' . $email)
+                ->response(function () {
+                    return redirect()
+                        ->route('admin.login')
+                        ->with('error', 'Too many login attempts. Please wait a minute and try again.');
+                });
         });
 
         RateLimiter::for('otp', function (Request $request) {
