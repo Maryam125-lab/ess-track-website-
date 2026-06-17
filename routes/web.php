@@ -13,6 +13,8 @@ use App\Http\Controllers\SuccessStoriesController;
 use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\PublicApiController;
+use App\Http\Middleware\VerifyCsrfToken;
 
 use App\Http\Controllers\Admin\AuthController;
 
@@ -103,6 +105,17 @@ Route::get('/contact', function (SeoService $seo) {
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::post('/chat', [ChatController::class, 'message'])->middleware('throttle:chat')->name('chat.message');
+
+if (getenv('VERCEL')) {
+    Route::prefix('api')
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->group(function () {
+            Route::options('/{path?}', fn () => response('', 204))->where('path', '.*');
+            Route::post('/send-otp', [PublicApiController::class, 'sendOtp'])->middleware('throttle:otp');
+            Route::post('/verify-otp', [PublicApiController::class, 'verifyOtp'])->middleware('throttle:otp');
+            Route::post('/inquiries', [PublicApiController::class, 'storeInquiry'])->middleware('throttle:inquiries');
+        });
+}
 
 
 
