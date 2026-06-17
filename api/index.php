@@ -5,11 +5,13 @@ if (!getenv('APP_KEY')) {
     $_ENV['APP_KEY'] = 'base64:fHKF0x55LT2sEnin5nM5WI9DztXu36lySsCYpKa8mvs=';
 }
 
-putenv("APP_CONFIG_CACHE=/tmp/config.php");
-putenv("APP_EVENTS_CACHE=/tmp/events.php");
-putenv("APP_PACKAGES_CACHE=/tmp/packages.php");
-putenv("APP_ROUTES_CACHE=/tmp/routes.php");
-putenv("APP_SERVICES_CACHE=/tmp/services.php");
+$cacheKey = preg_replace('/[^A-Za-z0-9_]/', '_', getenv('VERCEL_GIT_COMMIT_SHA') ?: getenv('VERCEL_URL') ?: 'runtime');
+
+putenv("APP_CONFIG_CACHE=/tmp/config_{$cacheKey}.php");
+putenv("APP_EVENTS_CACHE=/tmp/events_{$cacheKey}.php");
+putenv("APP_PACKAGES_CACHE=/tmp/packages_{$cacheKey}.php");
+putenv("APP_ROUTES_CACHE=/tmp/routes_{$cacheKey}.php");
+putenv("APP_SERVICES_CACHE=/tmp/services_{$cacheKey}.php");
 putenv("VIEW_COMPILED_PATH=/tmp/views");
 
 @mkdir('/tmp/views', 0777, true);
