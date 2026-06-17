@@ -34,10 +34,6 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.php?__path=/api/$1"
-    },
-    {
       "src": "/(css|images)/(.*)",
       "dest": "/public/$1/$2"
     },
