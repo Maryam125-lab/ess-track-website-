@@ -106,14 +106,16 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 
 Route::post('/chat', [ChatController::class, 'message'])->middleware('throttle:chat')->name('chat.message');
 
-Route::prefix('api')
-    ->withoutMiddleware([VerifyCsrfToken::class])
-    ->group(function () {
-        Route::options('/{path?}', fn () => response('', 204))->where('path', '.*');
-        Route::post('/send-otp', [PublicApiController::class, 'sendOtp'])->middleware('throttle:otp');
-        Route::post('/verify-otp', [PublicApiController::class, 'verifyOtp'])->middleware('throttle:otp');
-        Route::post('/inquiries', [PublicApiController::class, 'storeInquiry'])->middleware('throttle:inquiries');
-    });
+foreach (['api', 'public-api'] as $apiPrefix) {
+    Route::prefix($apiPrefix)
+        ->withoutMiddleware([VerifyCsrfToken::class])
+        ->group(function () {
+            Route::options('/{path?}', fn () => response('', 204))->where('path', '.*');
+            Route::post('/send-otp', [PublicApiController::class, 'sendOtp'])->middleware('throttle:otp');
+            Route::post('/verify-otp', [PublicApiController::class, 'verifyOtp'])->middleware('throttle:otp');
+            Route::post('/inquiries', [PublicApiController::class, 'storeInquiry'])->middleware('throttle:inquiries');
+        });
+}
 
 
 
