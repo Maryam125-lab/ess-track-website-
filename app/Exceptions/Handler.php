@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -41,6 +44,14 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (TokenMismatchException $e, Request $request) {
+            if ($request->is('portal/*') || $request->is('admin/*')) {
+                return redirect()
+                    ->route('admin.login')
+                    ->with('error', 'Your session expired. Please sign in again.');
+            }
+        });
+
         // Use Laravel's standard production-safe reporting and rendering.
     }
 }
