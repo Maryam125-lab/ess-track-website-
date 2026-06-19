@@ -3,8 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -43,14 +41,6 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            echo "<h1>Original Exception inside Handler:</h1>";
-            echo "<pre>";
-            echo "Message: " . $e->getMessage() . "\n";
-            echo "File: " . $e->getFile() . ":" . $e->getLine() . "\n\n";
-            echo $e->getTraceAsString();
-            echo "</pre>";
-            die();
-        });
+        // Use Laravel's standard production-safe reporting and rendering.
     }
 }

@@ -119,6 +119,7 @@ class AnalyticsService
         $path = trim($path, '/');
 
         return str_starts_with($path, 'admin')
+            || str_starts_with($path, 'portal')
             || $path === 'chat'
             || $path === 'sitemap.xml';
     }
