@@ -11,6 +11,8 @@ class CmsStorage
 
     private static ?array $jsonCache = null;
 
+    private static array $tableCache = [];
+
     public static function usesDatabase(): bool
     {
         if (self::$dbAvailable !== null) {
@@ -23,12 +25,31 @@ class CmsStorage
 
         try {
             DB::connection()->getPdo();
-            self::$dbAvailable = Schema::hasTable('cms_site_settings');
+            self::$dbAvailable = config('cms.database_schema_ready', false)
+                ? true
+                : Schema::hasTable('cms_site_settings');
         } catch (\Throwable $e) {
             self::$dbAvailable = false;
         }
 
         return self::$dbAvailable;
+    }
+
+    public static function hasTable(string $table): bool
+    {
+        if (! self::usesDatabase()) {
+            return false;
+        }
+
+        if (config('cms.database_schema_ready', false)) {
+            return true;
+        }
+
+        if (! array_key_exists($table, self::$tableCache)) {
+            self::$tableCache[$table] = Schema::hasTable($table);
+        }
+
+        return self::$tableCache[$table];
     }
 
     public static function jsonPath(): string
@@ -178,6 +199,10 @@ class CmsStorage
 
     public static function ensureJsonStore(): void
     {
+        if (! config('cms.use_json_storage', false)) {
+            return;
+        }
+
         if (! file_exists(self::jsonPath())) {
             self::writeJson(self::defaultStore());
 

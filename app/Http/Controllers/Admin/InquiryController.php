@@ -10,7 +10,7 @@ class InquiryController extends Controller
     public function index(OrderRepository $orders)
     {
         return view('admin.inquiries.index', [
-            'inquiries' => $orders->inquiries(),
+            'inquiries' => $orders->paginatedInquiries(),
         ]);
     }
 

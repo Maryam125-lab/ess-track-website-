@@ -10,7 +10,7 @@ class OrderController extends Controller
     public function index(OrderRepository $orders)
     {
         return view('admin.orders.index', [
-            'orders' => $orders->serviceOrders(),
+            'orders' => $orders->paginatedServiceOrders(),
         ]);
     }
 

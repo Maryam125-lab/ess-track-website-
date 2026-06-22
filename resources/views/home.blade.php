@@ -17,8 +17,7 @@
 <section style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center;">
     <!-- Background Video -->
     <div id="videoSlider" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
-        <video autoplay muted loop playsinline class="hero-video active" id="video1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
-            <source src="{{ $pc('hero_video_url', asset('images/hero-video.mp4')) }}" type="video/mp4">
+        <video muted loop playsinline preload="none" poster="{{ asset('images/hero.png') }}" class="hero-video active" id="video1" data-src="{{ $pc('hero_video_url', asset('images/hero-video.mp4')) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
         </video>
     </div>
     
@@ -271,8 +270,23 @@
 </style>
 @section('scripts')
 <script>
-    // Simple video play logic if needed, though autoplay is handled by HTML
-    document.getElementById('video1').play();
+    window.addEventListener('load', function () {
+        var video = document.getElementById('video1');
+        if (!video || !video.dataset.src) return;
+
+        var loadVideo = function () {
+            if (video.src) return;
+            video.src = video.dataset.src;
+            video.load();
+            video.play().catch(function () {});
+        };
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadVideo, { timeout: 2000 });
+        } else {
+            setTimeout(loadVideo, 500);
+        }
+    }, { once: true });
 </script>
 @endsection
 @endsection

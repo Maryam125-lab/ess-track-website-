@@ -10,4 +10,6 @@ return [
 
     'use_json_storage' => env('CMS_USE_JSON', env('APP_ENV', 'production') === 'local'),
 
+    'database_schema_ready' => env('CMS_DATABASE_SCHEMA_READY', env('APP_ENV') === 'production'),
+
 ];

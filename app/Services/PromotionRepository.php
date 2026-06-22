@@ -141,7 +141,7 @@ class PromotionRepository
     protected function hasTable(string $table): bool
     {
         try {
-            return \Illuminate\Support\Facades\Schema::hasTable($table);
+            return CmsStorage::hasTable($table);
         } catch (\Throwable $e) {
             return false;
         }

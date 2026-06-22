@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Inquiry;
 use App\Models\ServiceOrder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class OrderRepository
 {
@@ -29,6 +29,50 @@ class OrderRepository
             ->sortByDesc('created_at')
             ->values()
             ->all();
+    }
+
+    public function paginatedServiceOrders(int $perPage = 25): LengthAwarePaginator
+    {
+        if ($this->usesDatabase()) {
+            $paginator = ServiceOrder::orderByDesc('created_at')->paginate($perPage);
+            $paginator->setCollection($paginator->getCollection()->map(
+                fn ($row) => $this->formatServiceOrder($row->toArray())
+            ));
+
+            return $paginator;
+        }
+
+        return $this->arrayPaginator($this->serviceOrders(), $perPage);
+    }
+
+    public function paginatedInquiries(int $perPage = 25): LengthAwarePaginator
+    {
+        if ($this->usesDatabase()) {
+            $paginator = Inquiry::orderByDesc('created_at')->paginate($perPage);
+            $paginator->setCollection($paginator->getCollection()->map(
+                fn ($row) => $this->formatInquiry($row->toArray())
+            ));
+
+            return $paginator;
+        }
+
+        return $this->arrayPaginator($this->inquiries(), $perPage);
+    }
+
+    public function counts(): array
+    {
+        if ($this->usesDatabase()) {
+            $row = DB::selectOne(
+                'SELECT (SELECT COUNT(*) FROM service_orders) AS orders_count, (SELECT COUNT(*) FROM inquiries) AS inquiries_count'
+            );
+
+            return [
+                'orders' => (int) ($row->orders_count ?? 0),
+                'inquiries' => (int) ($row->inquiries_count ?? 0),
+            ];
+        }
+
+        return ['orders' => count($this->serviceOrders()), 'inquiries' => count($this->inquiries())];
     }
 
     public function allOrders(): array
@@ -75,9 +119,7 @@ class OrderRepository
     protected function usesDatabase(): bool
     {
         try {
-            DB::connection()->getPdo();
-
-            return Schema::hasTable('inquiries') || Schema::hasTable('service_orders');
+            return CmsStorage::usesDatabase();
         } catch (\Throwable $e) {
             return false;
         }
@@ -89,7 +131,7 @@ class OrderRepository
             return self::$inquiryCache;
         }
 
-        if ($this->usesDatabase() && Schema::hasTable('inquiries')) {
+        if ($this->usesDatabase() && CmsStorage::hasTable('inquiries')) {
             return self::$inquiryCache = Inquiry::orderByDesc('created_at')->limit(200)->get()->toArray();
         }
 
@@ -102,7 +144,7 @@ class OrderRepository
             return self::$orderCache;
         }
 
-        if ($this->usesDatabase() && Schema::hasTable('service_orders')) {
+        if ($this->usesDatabase() && CmsStorage::hasTable('service_orders')) {
             return self::$orderCache = ServiceOrder::orderByDesc('created_at')->limit(200)->get()->toArray();
         }
 
@@ -111,7 +153,7 @@ class OrderRepository
 
     protected function findInquiry(int $id): ?array
     {
-        if ($this->usesDatabase() && Schema::hasTable('inquiries')) {
+        if ($this->usesDatabase() && CmsStorage::hasTable('inquiries')) {
             $row = Inquiry::find($id);
 
             return $row ? $row->toArray() : null;
@@ -128,7 +170,7 @@ class OrderRepository
 
     protected function findServiceOrder(int $id): ?array
     {
-        if ($this->usesDatabase() && Schema::hasTable('service_orders')) {
+        if ($this->usesDatabase() && CmsStorage::hasTable('service_orders')) {
             $row = ServiceOrder::find($id);
 
             return $row ? $row->toArray() : null;
@@ -194,5 +236,16 @@ class OrderRepository
             'created_at' => $row['created_at'] ?? now()->toDateTimeString(),
             'raw' => $row,
         ];
+    }
+
+    protected function arrayPaginator(array $items, int $perPage): LengthAwarePaginator
+    {
+        $page = LengthAwarePaginator::resolveCurrentPage();
+        $slice = array_slice($items, ($page - 1) * $perPage, $perPage);
+
+        return new LengthAwarePaginator($slice, count($items), $perPage, $page, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+            'query' => request()->query(),
+        ]);
     }
 }

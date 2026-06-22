@@ -12,6 +12,10 @@ use Illuminate\Support\Str;
 
 class CmsRepository
 {
+    private ?array $settingsCache = null;
+
+    private array $pageContentCache = [];
+
     public function __construct()
     {
         CmsStorage::ensureJsonStore();
@@ -21,11 +25,15 @@ class CmsRepository
 
     public function getSettings(): array
     {
-        if (CmsStorage::usesDatabase()) {
-            return CmsSiteSetting::pluck('value', 'key')->toArray();
+        if ($this->settingsCache !== null) {
+            return $this->settingsCache;
         }
 
-        return CmsStorage::readJson()['site_settings'] ?? [];
+        if (CmsStorage::usesDatabase()) {
+            return $this->settingsCache = CmsSiteSetting::pluck('value', 'key')->toArray();
+        }
+
+        return $this->settingsCache = CmsStorage::readJson()['site_settings'] ?? [];
     }
 
     public function saveSettings(array $data): void
@@ -35,23 +43,55 @@ class CmsRepository
                 CmsSiteSetting::updateOrCreate(['key' => $key], ['value' => $value]);
             }
 
+            $this->settingsCache = null;
             return;
         }
 
         $store = CmsStorage::readJson();
         $store['site_settings'] = array_merge($store['site_settings'] ?? [], $data);
         CmsStorage::writeJson($store);
+        $this->settingsCache = null;
     }
 
     public function pageContent(string $pageKey): array
     {
-        if (CmsStorage::usesDatabase() && Schema::hasTable('cms_page_contents')) {
-            return CmsPageContent::where('page_key', $pageKey)
-                ->pluck('value', 'field_key')
-                ->toArray();
+        return $this->pageContents([$pageKey])[$pageKey] ?? [];
+    }
+
+    public function pageContents(array $pageKeys): array
+    {
+        $pageKeys = array_values(array_unique(array_filter($pageKeys)));
+        $missing = array_values(array_filter(
+            $pageKeys,
+            fn (string $key) => ! array_key_exists($key, $this->pageContentCache)
+        ));
+
+        if ($missing === []) {
+            return array_intersect_key($this->pageContentCache, array_flip($pageKeys));
         }
 
-        return CmsStorage::readJson()['page_content'][$pageKey] ?? [];
+        if (CmsStorage::usesDatabase()) {
+            foreach ($missing as $key) {
+                $this->pageContentCache[$key] = [];
+            }
+
+            $rows = CmsPageContent::whereIn('page_key', $missing)
+                ->get(['page_key', 'field_key', 'value'])
+                ->groupBy('page_key');
+
+            foreach ($rows as $key => $items) {
+                $this->pageContentCache[$key] = $items->pluck('value', 'field_key')->toArray();
+            }
+
+            return array_intersect_key($this->pageContentCache, array_flip($pageKeys));
+        }
+
+        $content = CmsStorage::readJson()['page_content'] ?? [];
+        foreach ($missing as $key) {
+            $this->pageContentCache[$key] = $content[$key] ?? [];
+        }
+
+        return array_intersect_key($this->pageContentCache, array_flip($pageKeys));
     }
 
     public function savePageContent(string $pageKey, array $fields, array $data): void
@@ -74,12 +114,33 @@ class CmsRepository
                 }
             }
 
+            unset($this->pageContentCache[$pageKey]);
             return;
         }
 
         $store = CmsStorage::readJson();
         $store['page_content'][$pageKey] = array_merge($store['page_content'][$pageKey] ?? [], $data);
         CmsStorage::writeJson($store);
+        unset($this->pageContentCache[$pageKey]);
+    }
+
+    public function contentCounts(): array
+    {
+        if (CmsStorage::usesDatabase()) {
+            $row = \Illuminate\Support\Facades\DB::selectOne(
+                'SELECT (SELECT COUNT(*) FROM blog_posts) AS blog_count, (SELECT COUNT(*) FROM success_stories) AS story_count'
+            );
+
+            return [
+                'blogs' => (int) ($row->blog_count ?? 0),
+                'stories' => (int) ($row->story_count ?? 0),
+            ];
+        }
+
+        return [
+            'blogs' => count($this->allBlogPosts()),
+            'stories' => count($this->allSuccessStories()),
+        ];
     }
 
     /* ── Page SEO ── */

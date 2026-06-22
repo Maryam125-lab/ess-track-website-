@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\AnalyticsService;
 use App\Services\CmsRepository;
 use App\Services\CmsStorage;
 use App\Services\PromotionRepository;
@@ -13,7 +12,8 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        //
+        $this->app->scoped(CmsRepository::class, fn () => new CmsRepository());
+        $this->app->scoped(PromotionRepository::class, fn () => new PromotionRepository());
     }
 
     public function boot()
@@ -35,41 +35,39 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
+            if (request()->attributes->get('public_site_data_shared')) {
+                return;
+            }
+
+            request()->attributes->set('public_site_data_shared', true);
+
             $cms = app(CmsRepository::class);
             $settings = $cms->getSettings();
             $contact = $this->siteContact($settings);
 
             $routeName = request()->route()?->getName();
             $pageKey = in_array($routeName, ['home', 'about', 'services', 'tracker', 'contact'], true) ? $routeName : null;
-            $globalContent = $cms->pageContent('global');
-            $servicesContent = $cms->pageContent('services');
+            $content = $cms->pageContents(array_values(array_filter(['global', 'services', $pageKey])));
+            $globalContent = $content['global'] ?? [];
+            $servicesContent = $content['services'] ?? [];
             $servicePackages = $this->decodeJsonList($servicesContent['packages_json'] ?? '[]');
             $serviceAddons = $this->decodeJsonList($servicesContent['addons_json'] ?? '[]');
 
-            $view->with([
+            $data = [
                 'siteSettings' => $settings,
                 'siteContact' => $contact,
                 'siteSetting' => fn ($key, $default = '') => $settings[$key] ?? $default,
                 'siteWhatsappLink' => $this->whatsappLink($contact['whatsapp_url'], $contact['whatsapp_message']),
-                'pageContent' => $pageKey ? $cms->pageContent($pageKey) : [],
+                'pageContent' => $pageKey ? ($content[$pageKey] ?? []) : [],
                 'globalContent' => $globalContent,
                 'globalText' => fn ($key, $default = '') => $globalContent[$key] ?? $default,
                 'servicePackages' => $servicePackages,
                 'serviceAddons' => $serviceAddons,
-            ]);
-        });
+            ];
 
-        if (! app()->runningInConsole() && request() && ! request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
-            try {
-                app(AnalyticsService::class)->track(
-                    request()->path(),
-                    null,
-                    request()->headers->get('referer')
-                );
-            } catch (\Throwable $e) {
-                //
-            }
-        }
+            View::share($data);
+            $view->with($data);
+        });
     }
 
     protected function decodeJsonList(string $value): array

@@ -9,7 +9,7 @@
         <h2>Contact Form Inquiries</h2>
         <p class="muted">Leads from the Contact Us page — callback requests & package interest</p>
     </div>
-    <span class="badge badge-published">{{ count($inquiries) }} Total</span>
+    <span class="badge badge-published">{{ $inquiries->total() }} Total</span>
 </div>
 
 <div class="card" style="padding:0;overflow:hidden;">
@@ -50,4 +50,5 @@
         </tbody>
     </table>
 </div>
+<div style="margin-top:18px;">{{ $inquiries->links() }}</div>
 @endsection

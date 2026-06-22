@@ -9,7 +9,7 @@
         <h2>Service Agreement Orders</h2>
         <p class="muted">Customers who signed & placed order via booking modal (package selected)</p>
     </div>
-    <span class="badge badge-published">{{ count($orders) }} Total</span>
+    <span class="badge badge-published">{{ $orders->total() }} Total</span>
 </div>
 
 <div class="card" style="padding:0;overflow:hidden;">
@@ -51,4 +51,5 @@
         </tbody>
     </table>
 </div>
+<div style="margin-top:18px;">{{ $orders->links() }}</div>
 @endsection

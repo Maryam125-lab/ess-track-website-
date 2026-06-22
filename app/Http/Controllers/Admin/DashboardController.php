@@ -11,13 +11,14 @@ class DashboardController extends Controller
 {
     public function index(CmsRepository $cms, OrderRepository $orders, AnalyticsService $analytics)
     {
-        $stats = $analytics->dashboardStats($orders);
+        $stats = $analytics->summaryStats($orders);
+        $contentCounts = $cms->contentCounts();
 
         return view('admin.dashboard', [
-            'blogCount' => count($cms->allBlogPosts()),
-            'storyCount' => count($cms->allSuccessStories()),
-            'orderCount' => count($orders->serviceOrders()),
-            'inquiryCount' => count($orders->inquiries()),
+            'blogCount' => $contentCounts['blogs'],
+            'storyCount' => $contentCounts['stories'],
+            'orderCount' => $stats['total_orders'],
+            'inquiryCount' => $stats['total_inquiries'],
             'viewsToday' => $stats['views_today'],
             'storageMode' => $cms->storageMode(),
         ]);
