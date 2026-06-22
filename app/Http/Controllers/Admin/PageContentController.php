@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\CmsRepository;
+use App\Services\MediaStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
@@ -212,7 +213,7 @@ class PageContentController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $pageKey, CmsRepository $cms)
+    public function update(Request $request, string $pageKey, CmsRepository $cms, MediaStorageService $media)
     {
         abort_unless(isset($this->pages[$pageKey]), 404);
 
@@ -223,9 +224,14 @@ class PageContentController extends Controller
             foreach ($items as $label => [$fieldKey, $type, $default]) {
                 if ($request->hasFile($fieldKey . '_file')) {
                     $file = $request->file($fieldKey . '_file');
-                    $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
-                    $file->move(public_path('images/uploads'), $fileName);
-                    $data[$fieldKey] = 'images/uploads/' . $fileName;
+                    $request->validate([
+                        $fieldKey . '_file' => [
+                            'file',
+                            'mimetypes:image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm',
+                            'max:' . config('media.max_upload_kb'),
+                        ],
+                    ]);
+                    $data[$fieldKey] = $media->store($file);
                 }
 
                 if (! array_key_exists($fieldKey, $data)) {

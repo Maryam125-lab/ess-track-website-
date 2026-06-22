@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 class ChatService
 {
-    public function reply(string $message, PromotionRepository $promotions, array $lead = []): array
+    public function reply(string $message, PromotionRepository $promotions, array $lead = [], array $history = []): array
     {
         $message = trim($message);
 
@@ -22,6 +22,15 @@ class ChatService
             $this->logChat($message, $blocked, 'blocked', $lead);
 
             return $this->response($blocked, 'blocked');
+        }
+
+        if (config('chatbot.ai_enabled') && config('chatbot.gemini_api_key')) {
+            $ai = $this->askAi($message, $promotions, $history);
+            if ($ai) {
+                $this->logChat($message, $ai, 'ai', $lead);
+
+                return $this->response($ai, 'ai');
+            }
         }
 
         $direct = $this->directReply($message, $promotions);
@@ -43,13 +52,6 @@ class ChatService
             $this->logChat($message, $knowledge, 'knowledge', $lead);
 
             return $this->response($knowledge, 'knowledge');
-        }
-
-        $ai = $this->askAi($message, $promotions);
-        if ($ai) {
-            $this->logChat($message, $ai, 'ai', $lead);
-
-            return $this->response($ai, 'ai');
         }
 
         $contact = $this->contactDetails();
@@ -204,7 +206,7 @@ class ChatService
         return null;
     }
 
-    protected function askAi(string $message, PromotionRepository $promotions): ?string
+    protected function askAi(string $message, PromotionRepository $promotions, array $history = []): ?string
     {
         $key = config('chatbot.gemini_api_key');
         if (! $key) {
@@ -220,17 +222,27 @@ class ChatService
             $context .= "\nQ: {$f['question']} A: {$f['answer']}";
         }
 
-        $prompt = "You are ESS-Track assistant for a GPS vehicle tracking company in Pakistan.\n"
-            . "RULES: Only use the context below. Be honest. Never invent prices or guarantees. "
-            . "If unsure, tell user to call {$contact['phone']}. Reply only in clear, friendly English.\n\n"
-            . "CONTEXT:\n{$context}\n\nUSER: {$message}";
+        $historyText = collect($history)->take(-8)->map(function ($item) {
+            $role = ($item['role'] ?? '') === 'assistant' ? 'ASSISTANT' : 'USER';
+
+            return $role . ': ' . trim((string) ($item['text'] ?? ''));
+        })->filter()->implode("\n");
+
+        $prompt = "You are the ESS-Track customer support assistant for a GPS vehicle tracking company in Pakistan.\n"
+            . "RULES: Answer only ESS-Track, GPS tracking, packages, installation, promotions and support questions. "
+            . "Use only the verified context below. Never invent prices, guarantees or capabilities. "
+            . "Reply in natural, concise English. Do not repeat greetings or praise ESSPL in every response. "
+            . "Ask one useful follow-up only when needed. If unsure, tell the user to call {$contact['phone']}.\n\n"
+            . "VERIFIED CONTEXT:\n{$context}\n\n"
+            . ($historyText ? "RECENT CONVERSATION:\n{$historyText}\n\n" : '')
+            . "USER: {$message}";
 
         try {
-            $resp = Http::timeout(15)->post(
+            $resp = Http::timeout(10)->retry(1, 200)->post(
                 'https://generativelanguage.googleapis.com/v1beta/models/' . config('chatbot.gemini_model') . ':generateContent?key=' . $key,
                 [
                     'contents' => [['parts' => [['text' => $prompt]]]],
-                    'generationConfig' => ['temperature' => 0.3, 'maxOutputTokens' => 500],
+                    'generationConfig' => ['temperature' => 0.35, 'maxOutputTokens' => 350],
                 ]
             );
 

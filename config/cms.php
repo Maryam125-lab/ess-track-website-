@@ -2,9 +2,9 @@
 
 return [
 
-  'admin_email' => env('CMS_PORTAL_EMAIL', env('CMS_ADMIN_EMAIL', 'portal@esspl.com.pk')),
+    'portal_bootstrap_email' => env('CMS_PORTAL_EMAIL', 'portal@esspl.com.pk'),
 
-  'admin_password' => env('CMS_ADMIN_PASSWORD', 'ESSTrack@2026'),
+    'portal_bootstrap_password' => env('CMS_PORTAL_PASSWORD', env('CMS_ADMIN_PASSWORD')),
 
     'json_store' => storage_path('app/cms/store.json'),
 

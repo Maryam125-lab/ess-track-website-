@@ -8,7 +8,7 @@
     <h2>General Site Settings</h2>
     <p class="muted" style="margin-bottom:20px;">Company info used across the website and SEO schema.</p>
 
-    <form method="POST" action="{{ route('admin.settings.update') }}">
+    <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
         @csrf
         <div class="grid-2">
             <div class="form-group">
@@ -47,6 +47,8 @@
         <div class="form-group">
             <label>Default OG Image</label>
             <input type="text" name="default_og_image" value="{{ old('default_og_image', $settings['default_og_image'] ?? '') }}" placeholder="/images/og-default.jpg">
+            <input type="file" name="default_og_image_file" accept="image/*" style="margin-top:8px;">
+            <p class="muted" style="margin-top:6px;">Upload an image or keep using a URL. Uploaded images are stored persistently.</p>
         </div>
         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>
     </form>

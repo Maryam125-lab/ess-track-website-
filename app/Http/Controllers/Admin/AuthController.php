@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PortalUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -19,12 +21,16 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|max:200',
         ]);
 
-        $email = config('cms.admin_email');
-        $password = config('cms.admin_password');
+        $user = PortalUser::where('email', strtolower($request->email))
+            ->where('is_active', true)
+            ->first();
 
-        if ($request->email === $email && $request->password === $password) {
+        if ($user && Hash::check($request->password, $user->password_hash)) {
+            $request->session()->regenerate();
             $request->session()->put('admin_authenticated', true);
-            $request->session()->put('admin_email', $request->email);
+            $request->session()->put('admin_user_id', $user->id);
+            $request->session()->put('admin_email', $user->email);
+            $user->forceFill(['last_login_at' => now()])->save();
 
             return redirect()->route('admin.dashboard')->with('success', 'Successfully logged in.');
         }
@@ -34,7 +40,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->forget(['admin_authenticated', 'admin_email']);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('admin.login')->with('success', 'Logged out successfully.');
     }

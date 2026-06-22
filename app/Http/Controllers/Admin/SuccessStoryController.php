@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\CmsRepository;
+use App\Services\MediaStorageService;
 use Illuminate\Http\Request;
 
 class SuccessStoryController extends Controller
@@ -18,10 +19,10 @@ class SuccessStoryController extends Controller
         return view('admin.success-stories.form', ['story' => null]);
     }
 
-    public function store(Request $request, CmsRepository $cms)
+    public function store(Request $request, CmsRepository $cms, MediaStorageService $media)
     {
         $data = $this->validated($request);
-        $data = $this->applyImageUpload($request, $data);
+        $data = $this->applyImageUpload($request, $data, $media);
         $data['status'] = $data['status'] ?? 'published';
         $data['slug'] = $cms->uniqueStorySlug($data['title']);
         $cms->saveSuccessStory($data);
@@ -40,10 +41,10 @@ class SuccessStoryController extends Controller
         return view('admin.success-stories.form', ['story' => $story]);
     }
 
-    public function update(Request $request, int $id, CmsRepository $cms)
+    public function update(Request $request, int $id, CmsRepository $cms, MediaStorageService $media)
     {
         $data = $this->validated($request);
-        $data = $this->applyImageUpload($request, $data);
+        $data = $this->applyImageUpload($request, $data, $media);
 
         if ($request->boolean('regenerate_slug')) {
             $data['slug'] = $cms->uniqueStorySlug($data['title'], $id);
@@ -68,7 +69,7 @@ class SuccessStoryController extends Controller
             'excerpt' => 'nullable|string|max:500',
             'content' => 'nullable|string',
             'image_url' => 'nullable|string|max:500',
-            'image_file' => 'nullable|image|max:4096',
+            'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:' . config('media.max_upload_kb')],
             'client_name' => 'nullable|string|max:150',
             'industry' => 'nullable|string|max:100',
             'status' => 'required|in:draft,published',
@@ -82,13 +83,10 @@ class SuccessStoryController extends Controller
         return $data;
     }
 
-    protected function applyImageUpload(Request $request, array $data): array
+    protected function applyImageUpload(Request $request, array $data, MediaStorageService $media): array
     {
         if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
-            $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9_.-]/', '_', $file->getClientOriginalName());
-            $file->move(public_path('images/uploads'), $fileName);
-            $data['image_url'] = 'images/uploads/' . $fileName;
+            $data['image_url'] = $media->store($request->file('image_file'));
         }
 
         return $data;

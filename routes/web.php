@@ -14,6 +14,7 @@ use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PublicApiController;
+use App\Http\Controllers\MediaController;
 use App\Http\Middleware\VerifyCsrfToken;
 
 use App\Http\Controllers\Admin\AuthController;
@@ -126,6 +127,9 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/success-stories', [SuccessStoriesController::class, 'index'])->name('success-stories.index');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/media/{uuid}', [MediaController::class, 'show'])
+    ->whereUuid('uuid')
+    ->name('media.show');
 
 
 

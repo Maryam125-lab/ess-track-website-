@@ -4,9 +4,11 @@ return [
 
     'enabled' => env('CHATBOT_ENABLED', true),
 
+    'ai_enabled' => env('CHATBOT_AI_ENABLED', true),
+
     'gemini_api_key' => env('GEMINI_API_KEY', ''),
 
-    'gemini_model' => env('GEMINI_MODEL', 'gemini-1.5-flash'),
+    'gemini_model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
 
     'company_phone' => '021-34330887',
 
