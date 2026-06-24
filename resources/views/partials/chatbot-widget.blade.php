@@ -55,7 +55,6 @@
     if(!panel)return;
     const storageKey='essTrackChatLeadEnglishFormV2';
     let lead={};
-    let conversationHistory=[];
     try{lead=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(e){lead={};}
     function addMsg(text,who){const d=document.createElement('div');d.className='ess-msg '+who;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;}
     function saveLead(){localStorage.setItem(storageKey,JSON.stringify(lead));}
@@ -96,14 +95,10 @@
             return;
         }
         if(/package|packages|silver|gold|platinum|rental|device/i.test(text)){lead.package_interest=text.trim();saveLead();}
-        const priorHistory=conversationHistory.slice(-8);
-        conversationHistory.push({role:'user',text:text.trim()});
         addMsg('Typing...','bot');
         try{
-            const r=await fetch('{{ route('chat.message') }}',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json'},body:JSON.stringify({message:text,lead,history:priorHistory})});
-            const j=await r.json();box.lastChild.remove();
-            const reply=j.reply||'Please call {{ $chatPhone }} for accurate package details.';
-            addMsg(reply,'bot');conversationHistory.push({role:'assistant',text:reply});
+            const r=await fetch('{{ route('chat.message') }}',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}','Accept':'application/json'},body:JSON.stringify({message:text,lead})});
+            const j=await r.json();box.lastChild.remove();addMsg(j.reply||'Please call {{ $chatPhone }} for accurate package details.','bot');
         }catch(e){box.lastChild.remove();addMsg('Connection error. Please call {{ $chatPhone }} or WhatsApp us.','bot');}
     }
     form.onsubmit=e=>{e.preventDefault();send(input.value);};

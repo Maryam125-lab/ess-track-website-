@@ -17,16 +17,11 @@ class TrackPageView
             ! $request->ajax() &&
             $response->isSuccessful()
         ) {
-            $path = '/' . ltrim($request->path(), '/');
-            $referrer = $request->headers->get('referer');
-
-            app()->terminating(function () use ($path, $referrer) {
-                try {
-                    app(AnalyticsService::class)->track($path, null, $referrer);
-                } catch (\Throwable $e) {
-                    report($e);
-                }
-            });
+            app(AnalyticsService::class)->track(
+                '/' . ltrim($request->path(), '/'),
+                null,
+                $request->headers->get('referer')
+            );
         }
 
         return $response;

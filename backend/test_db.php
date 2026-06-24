@@ -28,4 +28,4 @@ try {
     $conn->close();
 } catch (Exception $e) {
     echo "Database connection failed: " . $e->getMessage() . "\n";
-}
+} 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\CmsRepository;
-use App\Services\MediaStorageService;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -14,7 +13,7 @@ class SettingsController extends Controller
         return view('admin.settings.index', ['settings' => $cms->getSettings()]);
     }
 
-    public function update(Request $request, CmsRepository $cms, MediaStorageService $media)
+    public function update(Request $request, CmsRepository $cms)
     {
         $data = $request->validate([
             'company_name' => 'required|string|max:255',
@@ -25,13 +24,7 @@ class SettingsController extends Controller
             'facebook' => 'nullable|url|max:300',
             'whatsapp' => 'nullable|url|max:300',
             'default_og_image' => 'nullable|string|max:500',
-            'default_og_image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:' . config('media.max_upload_kb')],
         ]);
-
-        unset($data['default_og_image_file']);
-        if ($request->hasFile('default_og_image_file')) {
-            $data['default_og_image'] = $media->store($request->file('default_og_image_file'));
-        }
 
         $data = array_map(fn ($value) => is_string($value) ? $this->cleanText($value) : $value, $data);
 

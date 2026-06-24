@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title', 'Dashboard') — ESS-Track CMS</title>
+    <title>@yield('title', 'Dashboard') - ESS-Track CMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root{--nv:#0d1b2a;--or:#f47c20;--lt:#f7f8fa;--gy:#6b7280;--ok:#059669;--err:#dc2626;}
@@ -95,6 +95,7 @@
             <a href="{{ route('admin.sitemap.index') }}" class="{{ request()->routeIs('admin.sitemap.*') ? 'active' : '' }}"><i class="fas fa-sitemap"></i> Sitemap</a>
             <a href="{{ route('admin.seo.index') }}" class="{{ request()->routeIs('admin.seo.*') ? 'active' : '' }}"><i class="fas fa-search"></i> SEO Settings</a>
             <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"><i class="fas fa-cog"></i> Site Settings</a>
+            <a href="{{ route('admin.password.edit') }}" class="{{ request()->routeIs('admin.password.*') ? 'active' : '' }}"><i class="fas fa-key"></i> Change Password</a>
             <a href="{{ route('home') }}" target="_blank"><i class="fas fa-external-link-alt"></i> View Website</a>
             <form action="{{ route('admin.logout') }}" method="POST" style="margin-top:20px;padding:0 24px;">
                 @csrf
@@ -119,3 +120,4 @@
 </div>
 </body>
 </html>
+

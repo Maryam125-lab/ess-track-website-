@@ -14,7 +14,7 @@
     $phoneHref = $contact['phone_href'] ?? preg_replace('/[^0-9+]/', '', $phonePrimary);
 @endphp
 <!-- HERO SECTION -->
-<section style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center;">
+<section class="video-hero" style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center;">
     <!-- Background Video -->
     <div id="videoSlider" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
         <video muted loop playsinline preload="none" poster="{{ asset('images/hero.png') }}" class="hero-video active" id="video1" data-src="{{ $pc('hero_video_url', asset('images/hero-video.mp4')) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
@@ -24,8 +24,8 @@
     <!-- Dark Overlay -->
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(13,27,42,0.85) 0%, rgba(13,27,42,0.7) 50%, rgba(244,124,32,0.15) 100%); z-index: 1;"></div>
 
-    <div id="heroContent" class="wrap" style="display: flex; align-items: center; gap: 50px; position: relative; z-index: 3; padding-top: 140px; padding-bottom: 100px; width: 100%;">
-        <div style="flex: 1.2;" data-aos="fade-right">
+    <div id="heroContent" class="wrap hero-content-wrap" style="display: flex; align-items: center; gap: 50px; position: relative; z-index: 3; padding-top: 140px; padding-bottom: 100px; width: 100%;">
+        <div class="hero-copy" style="flex: 1.2;" data-aos="fade-right">
             <div class="lbl" style="color: var(--or);">{{ $pc('hero_label', 'Expert Tracking Solutions') }}</div>
             <h1 class="ttl" style="margin-bottom: 22px; color: #fff; font-size: clamp(32px, 4vw, 54px);">{!! $pc('hero_title_html', 'Precision <span style="color:var(--or);">Vehicle Tracking</span> System Expert') !!}</h1>
             <p class="dsc" style="margin-bottom: 40px; font-size: 17px; color: rgba(255,255,255,0.75); max-width: 550px;">{{ $pc('hero_description', 'ESS-TRACK BY ESSPL provides state-of-the-art surveillance and tracking facilities across Pakistan, utilizing advanced 3G-2G communication platforms.') }}</p>
@@ -51,10 +51,10 @@
                 </div>
             </div>
         </div>
-        <div style="flex: 0.8; display: flex; justify-content: flex-end;" data-aos="fade-left">
-            <div style="position: relative; width: 100%; max-width: 420px;">
+        <div class="hero-feature-col" style="flex: 0.8; display: flex; justify-content: flex-end;" data-aos="fade-left">
+            <div class="hero-feature-stack" style="position: relative; width: 100%; max-width: 420px;">
                 <!-- Floating Info Card -->
-                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.15); padding: 30px; border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.25);" data-aos="zoom-in" data-aos-delay="300">
+                <div class="hero-info-card" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.15); padding: 30px; border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.25);" data-aos="zoom-in" data-aos-delay="300">
                     <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
                         <div style="width: 50px; height: 50px; background: rgba(244,124,32,0.2); color: var(--or); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="fas fa-shield-check"></i></div>
                         <div>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <!-- Floating Badge -->
-                <div style="position: absolute; top: -15px; right: -15px; background: var(--or); color: #fff; padding: 14px 22px; border-radius: 14px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 25px rgba(244,124,32,0.4);" data-aos="zoom-in" data-aos-delay="600">
+                <div class="hero-rating-badge" style="position: absolute; top: -15px; right: -15px; background: var(--or); color: #fff; padding: 14px 22px; border-radius: 14px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 25px rgba(244,124,32,0.4);" data-aos="zoom-in" data-aos-delay="600">
                     <i class="fas fa-star" style="margin-right: 6px;"></i> Top Rated
                 </div>
             </div>
@@ -132,7 +132,7 @@
     <div style="position: absolute; top: 0; right: 0; width: 40%; height: 100%; background: linear-gradient(to left, rgba(244,124,32,0.05), transparent);"></div>
     <div class="wrap">
         <div style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap;">
-            <div style="flex: 1.2;" data-aos="fade-right">
+            <div class="hero-copy" style="flex: 1.2;" data-aos="fade-right">
                 <div class="lbl" style="color: var(--or);">{{ $pc('support_label', '24/7 Command Center') }}</div>
                 <h2 class="ttl" style="color: #fff; margin-bottom: 25px;">{!! $pc('support_title_html', 'Always Guarding <br>What Matters To You') !!}</h2>
                 <p class="dsc" style="color: rgba(255,255,255,0.7); margin-bottom: 35px;">{{ $pc('support_description', "Our dedicated support team is always ready. In case of any violation or theft attempt, we reach out to you immediately to ensure your vehicle's safety.") }}</p>
@@ -247,6 +247,21 @@
         100% { opacity: 0; transform: translateY(12px); }
     }
 
+    @media(max-width:768px) {
+        .video-hero { min-height: auto !important; }
+        .video-hero .hero-content-wrap { align-items: stretch !important; overflow: visible !important; }
+        .video-hero .hero-copy,
+        .video-hero .hero-feature-col,
+        .video-hero .hero-feature-stack,
+        .video-hero .hero-info-card,
+        .video-hero .hero-rating-badge {
+            transform: none !important;
+        }
+        .video-hero .hero-feature-col { display: flex !important; justify-content: center !important; width: 100% !important; min-width: 0 !important; }
+        .video-hero .hero-feature-stack { max-width: 100% !important; }
+        .video-hero .hero-info-card { padding: 22px !important; border-radius: 18px !important; }
+        .video-hero .hero-rating-badge { top: -12px !important; right: 8px !important; padding: 10px 14px !important; font-size: 12px !important; }
+    }
     /* Video Hero Responsive */
     @media(max-width:768px) {
         .video-hero .wrap {

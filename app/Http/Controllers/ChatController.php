@@ -16,16 +16,8 @@ class ChatController extends Controller
             'lead.email' => 'nullable|email|max:150',
             'lead.phone' => 'nullable|string|max:30',
             'lead.package_interest' => 'nullable|string|max:100',
-            'history' => 'nullable|array|max:10',
-            'history.*.role' => 'required|in:user,assistant',
-            'history.*.text' => 'required|string|max:1000',
         ]);
 
-        return response()->json($chat->reply(
-            $request->message,
-            $promotions,
-            $request->input('lead', []),
-            $request->input('history', [])
-        ));
+        return response()->json($chat->reply($request->message, $promotions, $request->input('lead', [])));
     }
 }

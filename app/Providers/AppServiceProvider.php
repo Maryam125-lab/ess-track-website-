@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\AnalyticsService;
 use App\Services\CmsRepository;
 use App\Services\CmsStorage;
 use App\Services\PromotionRepository;
@@ -12,8 +13,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->scoped(CmsRepository::class, fn () => new CmsRepository());
-        $this->app->scoped(PromotionRepository::class, fn () => new PromotionRepository());
+        //
     }
 
     public function boot()
@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
         CmsStorage::ensureJsonStore();
 
         View::composer('layouts.app', function ($view) {
-            if (request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
+            if (request()->is('admin', 'admin/*')) {
                 return;
             }
 
@@ -31,15 +31,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view) {
-            if (request()->is('portal', 'portal/*', 'admin', 'admin/*')) {
+            if (request()->is('admin', 'admin/*')) {
                 return;
             }
-
-            if (request()->attributes->get('public_site_data_shared')) {
-                return;
-            }
-
-            request()->attributes->set('public_site_data_shared', true);
 
             $cms = app(CmsRepository::class);
             $settings = $cms->getSettings();
@@ -47,27 +41,35 @@ class AppServiceProvider extends ServiceProvider
 
             $routeName = request()->route()?->getName();
             $pageKey = in_array($routeName, ['home', 'about', 'services', 'tracker', 'contact'], true) ? $routeName : null;
-            $content = $cms->pageContents(array_values(array_filter(['global', 'services', $pageKey])));
-            $globalContent = $content['global'] ?? [];
-            $servicesContent = $content['services'] ?? [];
+            $globalContent = $cms->pageContent('global');
+            $servicesContent = $cms->pageContent('services');
             $servicePackages = $this->decodeJsonList($servicesContent['packages_json'] ?? '[]');
             $serviceAddons = $this->decodeJsonList($servicesContent['addons_json'] ?? '[]');
 
-            $data = [
+            $view->with([
                 'siteSettings' => $settings,
                 'siteContact' => $contact,
                 'siteSetting' => fn ($key, $default = '') => $settings[$key] ?? $default,
                 'siteWhatsappLink' => $this->whatsappLink($contact['whatsapp_url'], $contact['whatsapp_message']),
-                'pageContent' => $pageKey ? ($content[$pageKey] ?? []) : [],
+                'pageContent' => $pageKey ? $cms->pageContent($pageKey) : [],
                 'globalContent' => $globalContent,
                 'globalText' => fn ($key, $default = '') => $globalContent[$key] ?? $default,
                 'servicePackages' => $servicePackages,
                 'serviceAddons' => $serviceAddons,
-            ];
-
-            View::share($data);
-            $view->with($data);
+            ]);
         });
+
+        if (! app()->runningInConsole() && request() && ! request()->is('admin', 'admin/*')) {
+            try {
+                app(AnalyticsService::class)->track(
+                    request()->path(),
+                    null,
+                    request()->headers->get('referer')
+                );
+            } catch (\Throwable $e) {
+                //
+            }
+        }
     }
 
     protected function decodeJsonList(string $value): array

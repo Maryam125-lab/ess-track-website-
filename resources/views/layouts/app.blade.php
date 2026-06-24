@@ -362,7 +362,23 @@
             .close-sla{right:12px;top:12px;padding:8px 14px;}
         }
     </style>
-    @yield('styles')
+    <style>
+        @media (max-width: 980px) {
+            html, body { max-width: 100%; overflow-x: hidden; }
+            .topbar { position: static !important; padding: 8px 14px !important; gap: 8px !important; flex-wrap: wrap !important; justify-content: center !important; text-align: center !important; }
+            .tbl, .tbr { min-width: 0 !important; }
+            .tbr { justify-content: center !important; max-width: 100% !important; overflow: hidden !important; }
+            nav { position: sticky !important; top: 0 !important; height: 64px !important; padding: 0 18px !important; }
+            .nlinks { display: none !important; }
+            .hbtn { display: block !important; }
+            .mob { top: 64px !important; max-height: calc(100vh - 64px) !important; overflow-y: auto !important; }
+            [data-aos] { transform: none !important; opacity: 1 !important; }
+        }
+        @media (max-width: 660px) {
+            .tbr { display: none !important; }
+            .wrap { padding-left: 20px !important; padding-right: 20px !important; }
+        }
+    </style>    @yield('styles')
 </head>
 <body>
 

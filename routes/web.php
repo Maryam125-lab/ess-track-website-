@@ -155,6 +155,10 @@ Route::prefix('portal')->name('admin.')->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/password', [AuthController::class, 'showPasswordForm'])->name('password.edit');
+
+        Route::post('/password', [AuthController::class, 'updatePassword'])->name('password.update');
+
 
 
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -252,4 +256,5 @@ Route::prefix('portal')->name('admin.')->group(function () {
     });
 
 });
+
 

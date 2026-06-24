@@ -20,11 +20,11 @@
 <!-- CONTACT SECTION -->
 <section style="background: #fff; padding-bottom: 120px;">
     <div class="wrap">
-        <div style="display: flex; gap: 60px; margin-top: -60px; flex-wrap: wrap;">
+        <div class="contact-grid" style="display: flex; gap: 60px; margin-top: -60px; flex-wrap: wrap;">
             
             <!-- Contact Info -->
-            <div style="flex: 0.8; min-width: 300px;" data-aos="fade-right">
-                <div style="background: var(--nv); color: #fff; padding: 50px; border-radius: 30px; height: 100%; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.2);">
+            <div class="contact-info-col" style="flex: 0.8; min-width: 300px;" data-aos="fade-right">
+                <div class="contact-info-card" style="background: var(--nv); color: #fff; padding: 50px; border-radius: 30px; height: 100%; box-shadow: 0 30px 60px rgba(13, 27, 42, 0.2);">
                     <h3 style="font-size: 24px; margin-bottom: 30px;">{{ $pc('info_title', 'Contact Information') }}</h3>
                     
                     <div style="margin-bottom: 35px; display: flex; align-items: flex-start; gap: 20px;">
@@ -62,14 +62,14 @@
             </div>
             
             <!-- Contact Form -->
-            <div style="flex: 1.2; min-width: 300px;" data-aos="fade-left">
-                <div style="background: #fff; padding: 50px; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05);">
+            <div class="contact-form-col" style="flex: 1.2; min-width: 300px;" data-aos="fade-left">
+                <div class="contact-form-card" style="background: #fff; padding: 50px; border-radius: 30px; box-shadow: 0 40px 100px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05);">
                     <h3 style="font-size: 24px; color: var(--nv); margin-bottom: 10px;">{{ $pc('form_title', 'Send Us a Message') }}</h3>
                     <p style="font-size: 14px; color: var(--gy); margin-bottom: 35px;">{{ $pc('form_intro', 'Fill out the form and our team will get back to you within 24 hours.') }}</p>
                     
                     <form id="contactForm">
                         @csrf
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="contact-name-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                             <div>
                                 <label style="display: block; font-size: 13px; font-weight: 700; color: var(--nv); margin-bottom: 8px; text-transform: uppercase;">First Name</label>
                                 <input type="text" name="first_name" placeholder="Your first name" required oninput="this.value=this.value.replace(/[^A-Za-z\s]/g,'')" style="width: 100%; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
@@ -87,7 +87,7 @@
 
                         <div style="margin-bottom: 20px;">
                             <label style="display: block; font-size: 13px; font-weight: 700; color: var(--nv); margin-bottom: 8px; text-transform: uppercase;">Phone Number</label>
-                            <div style="display: flex; gap: 10px;">
+                            <div class="contact-phone-row" style="display: flex; gap: 10px;">
                                 <input type="tel" name="phone" id="contactPhone" placeholder="e.g. 03001234567" required oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="flex: 1; padding: 12px 18px; border-radius: 10px; border: 1px solid var(--lt); background: var(--of); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--or)'" onblur="this.style.borderColor='var(--lt)'">
                                 <button type="button" id="btnSendOtp" onclick="handleContactOtp()" class="bn" style="padding: 0 20px; font-size: 12px; white-space: nowrap;">Get OTP</button>
                             </div>
@@ -96,7 +96,7 @@
                         <!-- OTP Field (Hidden) -->
                         <div id="contactOtpWrapper" style="display: none; margin-bottom: 20px; background: #f0f4f8; padding: 20px; border-radius: 15px; border: 1px solid #cbd5e1;">
                             <label style="display: block; font-size: 12px; font-weight: 800; color: var(--nv); margin-bottom: 10px; text-transform: uppercase;">Enter 4-Digit OTP:</label>
-                            <div style="display: flex; gap: 10px;">
+                            <div class="contact-phone-row" style="display: flex; gap: 10px;">
                                 <input type="text" id="contactOtpInput" maxlength="4" placeholder="____" style="flex: 1; text-align: center; letter-spacing: 10px; font-size: 20px; font-weight: 900; padding: 10px; border: 2px solid var(--nv); border-radius: 10px;">
                                 <button type="button" onclick="verifyContactOtp()" class="bo" style="padding: 0 25px;">Verify</button>
                             </div>
@@ -157,6 +157,49 @@
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.641604169!2d67.0664!3d24.8719!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33ef3b8398b1b%3A0xa193d9282362b53b!2sKawish%20Crown!5e0!3m2!1sen!2s!4v1714000000000!5m2!1sen!2s" width="100%" height="100%" style="border:0; position: absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
 </section>
+@section('styles')
+<style>
+    @media (max-width: 760px) {
+        .contact-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 22px !important;
+            margin-top: -42px !important;
+        }
+        .contact-info-col,
+        .contact-form-col {
+            flex: none !important;
+            min-width: 0 !important;
+            width: 100% !important;
+            transform: none !important;
+        }
+        .contact-info-col[data-aos],
+        .contact-form-col[data-aos] {
+            transform: none !important;
+            opacity: 1 !important;
+        }
+        .contact-info-card,
+        .contact-form-card {
+            width: 100% !important;
+            padding: 24px 18px !important;
+            border-radius: 18px !important;
+        }
+        .contact-name-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+        }
+        .contact-phone-row {
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .contact-phone-row .bn {
+            width: 100% !important;
+            min-height: 44px !important;
+            justify-content: center !important;
+        }
+    }
+</style>
+@endsection
 @section('scripts')
 <script>
     const contactBackendUrl = "{{ env('VITE_BACKEND_API_URL') }}" || "/api";

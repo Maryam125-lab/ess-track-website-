@@ -38,6 +38,39 @@ class AuthController extends Controller
         return back()->with('error', 'Invalid email or password.')->withInput();
     }
 
+    public function showPasswordForm()
+    {
+        return view('admin.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string', 'min:8', 'max:200'],
+            'password' => ['required', 'string', 'min:10', 'max:200', 'confirmed'],
+        ]);
+
+        $user = PortalUser::whereKey($request->session()->get('admin_user_id'))
+            ->where('is_active', true)
+            ->first();
+
+        if (! $user) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login')->with('error', 'Please sign in again.');
+        }
+
+        if (! Hash::check($request->current_password, $user->password_hash)) {
+            return back()->with('error', 'Current password is incorrect.');
+        }
+
+        $user->forceFill([
+            'password_hash' => Hash::make($request->password),
+        ])->save();
+
+        return back()->with('success', 'Password updated successfully.');
+    }
     public function logout(Request $request)
     {
         $request->session()->invalidate();
@@ -46,3 +79,4 @@ class AuthController extends Controller
         return redirect()->route('admin.login')->with('success', 'Logged out successfully.');
     }
 }
+

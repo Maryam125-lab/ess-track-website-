@@ -48,7 +48,7 @@
             @csrf
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="portal@esspl.com.pk">
+                <input type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="admin@esspl.com.pk">
             </div>
             <div class="form-group">
                 <label>Password</label>
@@ -57,7 +57,7 @@
                     <button type="button" class="show-btn" id="togglePassword">Show</button>
                 </div>
             </div>
-            <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login to Portal</button>
+            <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login to Admin</button>
         </form>
     </div>
 

@@ -14,6 +14,7 @@ class PortalAuthenticationTest extends TestCase
     {
         parent::setUp();
 
+        Schema::dropIfExists('portal_users');
         Schema::create('portal_users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -59,5 +60,54 @@ class PortalAuthenticationTest extends TestCase
         ])->assertRedirect('/portal/login')->assertSessionHas('error');
 
         $this->assertFalse((bool) session('admin_authenticated'));
+    }
+
+    public function test_portal_user_can_change_password(): void
+    {
+        $user = PortalUser::create([
+            'name' => 'Portal User',
+            'email' => 'portal@example.com',
+            'password_hash' => Hash::make('OldPassword123!'),
+            'is_active' => true,
+        ]);
+
+        $this->withSession([
+            'admin_authenticated' => true,
+            'admin_user_id' => $user->id,
+            'admin_email' => $user->email,
+        ])->post('/portal/password', [
+            'current_password' => 'OldPassword123!',
+            'password' => 'NewPassword123!',
+            'password_confirmation' => 'NewPassword123!',
+        ])->assertSessionHas('success');
+
+        $this->assertTrue(Hash::check('NewPassword123!', $user->fresh()->password_hash));
+
+        $this->post('/portal/login', [
+            'email' => 'portal@example.com',
+            'password' => 'NewPassword123!',
+        ])->assertRedirect('/portal/dashboard');
+    }
+
+    public function test_password_change_rejects_wrong_current_password(): void
+    {
+        $user = PortalUser::create([
+            'name' => 'Portal User',
+            'email' => 'portal@example.com',
+            'password_hash' => Hash::make('OldPassword123!'),
+            'is_active' => true,
+        ]);
+
+        $this->withSession([
+            'admin_authenticated' => true,
+            'admin_user_id' => $user->id,
+            'admin_email' => $user->email,
+        ])->post('/portal/password', [
+            'current_password' => 'WrongPassword123!',
+            'password' => 'NewPassword123!',
+            'password_confirmation' => 'NewPassword123!',
+        ])->assertSessionHas('error');
+
+        $this->assertTrue(Hash::check('OldPassword123!', $user->fresh()->password_hash));
     }
 }
