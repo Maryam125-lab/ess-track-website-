@@ -123,6 +123,64 @@ class CmsCrudTest extends TestCase
         $this->get('/services')->assertOk()->assertDontSee($title)->assertDontSee($code);
     }
 
+    public function test_package_builder_changes_public_services_page(): void
+    {
+        $packageName = 'Automated Fleet Test Package';
+
+        $this->post('/portal/pages/services', [
+            'packages_json' => json_encode([
+                [
+                    'type' => 'rental',
+                    'badge' => 'Tested',
+                    'name' => $packageName,
+                    'price' => 'PKR 12,345',
+                    'unit' => '/Total',
+                    'popular' => true,
+                    'breakdown' => [['Setup', 'PKR 12,345']],
+                    'features' => ['Visible package feature'],
+                ],
+            ]),
+            'addons_json' => json_encode([
+                ['name' => 'Automated Add-on', 'price' => 'PKR 999', 'description' => 'Visible add-on'],
+            ]),
+            'custom_title' => 'Automated Custom Solution',
+            'custom_items' => 'Automated dashboard, Automated reports',
+            'custom_button' => 'Automated Quote',
+        ])->assertSessionHas('success');
+
+        $this->get('/services')
+            ->assertOk()
+            ->assertSee($packageName)
+            ->assertSee('PKR 12,345')
+            ->assertSee('Automated Add-on')
+            ->assertSee('Automated Custom Solution');
+    }
+
+    public function test_global_page_content_changes_shared_public_navigation(): void
+    {
+        $navLabel = 'Automated Contact Label';
+
+        $this->post('/portal/pages/global', [
+            'nav_home' => 'Home',
+            'nav_tracker' => 'Vehicle Tracker',
+            'nav_packages' => 'Packages',
+            'nav_about' => 'About Us',
+            'nav_blog' => 'Blog',
+            'nav_success_stories' => 'Success Stories',
+            'nav_contact' => $navLabel,
+            'footer_description' => 'Automated footer description.',
+            'footer_pages_title' => 'Pages',
+            'footer_packages_title' => 'Our Packages',
+            'footer_contact_title' => 'Contact Info',
+            'footer_rights_text' => 'All rights reserved.',
+        ])->assertSessionHas('success');
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee($navLabel)
+            ->assertSee('Automated footer description.');
+    }
+
     private function actingAsPortalUser(): void
     {
         $user = PortalUser::create([
