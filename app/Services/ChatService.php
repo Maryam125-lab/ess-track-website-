@@ -32,6 +32,12 @@ class ChatService
 
                 return $this->response($ai, 'ai');
             }
+        } else {
+            error_log('Gemini chatbot not configured: ' . json_encode([
+                'ai_enabled' => (bool) config('chatbot.ai_enabled'),
+                'has_key' => (bool) config('chatbot.gemini_api_key'),
+                'model' => config('chatbot.gemini_model'),
+            ]));
         }
 
         $direct = $this->directReply($message, $promotions);
@@ -257,11 +263,20 @@ class ChatService
                 'error' => $resp->json('error.message'),
                 'model' => config('chatbot.gemini_model'),
             ]);
+            error_log('Gemini chatbot request failed: ' . json_encode([
+                'status' => $resp->status(),
+                'error' => $resp->json('error.message'),
+                'model' => config('chatbot.gemini_model'),
+            ]));
         } catch (\Throwable $e) {
             Log::warning('Gemini chatbot request exception', [
                 'message' => $e->getMessage(),
                 'model' => config('chatbot.gemini_model'),
             ]);
+            error_log('Gemini chatbot request exception: ' . json_encode([
+                'message' => $e->getMessage(),
+                'model' => config('chatbot.gemini_model'),
+            ]));
             return null;
         }
 
