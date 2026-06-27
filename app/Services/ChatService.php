@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\ChatbotFaq;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class ChatService
@@ -251,7 +252,16 @@ class ChatService
 
                 return $text ? trim($text) : null;
             }
+            Log::warning('Gemini chatbot request failed', [
+                'status' => $resp->status(),
+                'error' => $resp->json('error.message'),
+                'model' => config('chatbot.gemini_model'),
+            ]);
         } catch (\Throwable $e) {
+            Log::warning('Gemini chatbot request exception', [
+                'message' => $e->getMessage(),
+                'model' => config('chatbot.gemini_model'),
+            ]);
             return null;
         }
 
