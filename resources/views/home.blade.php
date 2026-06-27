@@ -12,12 +12,16 @@
     $contact = $siteContact ?? [];
     $phonePrimary = $contact['phone_primary'] ?? ($siteSettings['phone_primary'] ?? '021-34330887-88');
     $phoneHref = $contact['phone_href'] ?? preg_replace('/[^0-9+]/', '', $phonePrimary);
+    $heroVideoUrl = $pc('hero_video_url', asset('images/hero-video.mp4'));
+    if ($heroVideoUrl && ! preg_match('/^(https?:)?\/\//', $heroVideoUrl) && ! str_starts_with($heroVideoUrl, '/')) {
+        $heroVideoUrl = asset($heroVideoUrl);
+    }
 @endphp
 <!-- HERO SECTION -->
 <section class="video-hero" style="position: relative; overflow: hidden; min-height: 100vh; display: flex; align-items: center;">
     <!-- Background Video -->
     <div id="videoSlider" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
-        <video muted loop playsinline preload="none" poster="{{ asset('images/hero.png') }}" class="hero-video active" id="video1" data-src="{{ $pc('hero_video_url', asset('images/hero-video.mp4')) }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
+        <video muted loop playsinline autoplay preload="metadata" poster="{{ asset('images/hero-video-poster.jpg') }}" class="hero-video active" id="video1" src="{{ $heroVideoUrl }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.5s ease-in-out; opacity: 1; object-position: center top;">
         </video>
     </div>
     
@@ -287,20 +291,8 @@
 <script>
     window.addEventListener('load', function () {
         var video = document.getElementById('video1');
-        if (!video || !video.dataset.src) return;
-
-        var loadVideo = function () {
-            if (video.src) return;
-            video.src = video.dataset.src;
-            video.load();
-            video.play().catch(function () {});
-        };
-
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadVideo, { timeout: 2000 });
-        } else {
-            setTimeout(loadVideo, 500);
-        }
+        if (!video) return;
+        video.play().catch(function () {});
     }, { once: true });
 </script>
 @endsection
